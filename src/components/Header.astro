@@ -1,0 +1,181 @@
+---
+const navItems = [
+  { name: "INICIO", href: "/" },
+  { name: "NOSOTROS", href: "#nosotros", dropdown: true },
+  { name: "SERVICIOS", href: "#servicios", dropdown: true },
+  { name: "PROYECTOS", href: "#proyectos", dropdown: true },
+  { name: "EMPRESAS DEL GRUPO", href: "#empresas", dropdown: true },
+  { name: "CONTACTO", href: "#contacto" },
+];
+---
+
+<header
+  class="
+    absolute
+    left-0 top-0
+    z-50
+    w-full
+    px-4 pt-5
+    font-['Montserrat']
+    md:px-8
+    lg:px-12
+  "
+>
+  <nav
+    class="
+      mx-auto
+      flex h-[72px]
+      max-w-[1320px]
+      items-center
+      justify-between
+      rounded-[50px]
+      border border-white/70
+      bg-white/95
+      px-5
+      shadow-[0_10px_35px_rgba(15,45,70,0.10)]
+      backdrop-blur-xl
+      md:px-7
+      lg:px-8
+    "
+  >
+
+    <!-- LOGO -->
+    <a
+      href="/"
+      class="flex shrink-0 items-center"
+      aria-label="Reddcom"
+    >
+      <img
+        src="/logo/reddcom-logo.png"
+        alt="Reddcom"
+        class="
+          w-[100px]
+          object-contain
+          lg:w-[140px]
+        "
+      />
+    </a>
+
+    <!-- MENU DESKTOP -->
+    <div
+      class="
+        hidden
+        items-center
+        gap-6
+        lg:flex
+        xl:gap-8
+      "
+    >
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="
+              group
+              flex items-center
+              gap-1
+              whitespace-nowrap
+              text-[10px]
+              font-medium
+              tracking-[-0.01em]
+              text-[#26394c]
+              no-underline
+              transition-colors
+              duration-200
+              hover:text-[#087fc1]
+              xl:text-[11px]
+            "
+          >
+            {item.name}
+
+            {item.dropdown && (
+              <svg
+                class="
+                  h-[11px]
+                  w-[11px]
+                  transition-transform
+                  duration-200
+                  group-hover:rotate-180
+                "
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  d="M6 8L10 12L14 8"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            )}
+          </a>
+        ))
+      }
+    </div>
+
+    <!-- BOTÓN CONTACTO / CTA -->
+    <a
+      href="#contacto"
+      class="
+        hidden
+        h-[42px]
+        items-center
+        gap-3
+        rounded-full
+        bg-[#102f4d]
+        px-5
+        text-[10px]
+        font-semibold
+        text-white
+        no-underline
+        shadow-sm
+        transition-all
+        duration-300
+
+        hover:-translate-y-[1px]
+        hover:bg-[#087fc1]
+
+        xl:flex
+      "
+    >
+      Contáctanos
+
+      <span
+        class="
+          flex h-5 w-5
+          items-center
+          justify-center
+          rounded-full
+          bg-white/15
+          text-[13px]
+        "
+      >
+        →
+      </span>
+    </a>
+
+    <!-- MOBILE -->
+    <button
+      id="menuButton"
+      type="button"
+      aria-label="Abrir menú"
+      class="
+        flex
+        h-10 w-10
+        flex-col
+        items-center
+        justify-center
+        gap-[5px]
+        rounded-full
+        bg-[#102f4d]
+        lg:hidden
+      "
+    >
+      <span class="h-[1.5px] w-[18px] bg-white"></span>
+      <span class="h-[1.5px] w-[18px] bg-white"></span>
+      <span class="h-[1.5px] w-[18px] bg-white"></span>
+    </button>
+
+  </nav>
+</header>

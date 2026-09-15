@@ -1,0 +1,332 @@
+---
+import heroImage from "../assets/Landing/reddcom-hero.png";
+---
+
+<section
+  class="
+    relative
+    min-h-[760px]
+    overflow-hidden
+    bg-cover
+    bg-[position:62%_center]
+    md:bg-[position:64%_center]
+    lg:min-h-[780px]
+    lg:bg-[position:66%_center]
+  "
+  style={`background-image: url('${heroImage.src}')`}
+>
+  <!-- DEGRADADO IZQUIERDO -->
+  <div
+    class="
+      absolute inset-0
+      bg-[linear-gradient(90deg,rgba(247,250,252,0.98)_0%,rgba(247,250,252,0.93)_24%,rgba(247,250,252,0.65)_42%,rgba(247,250,252,0.15)_59%,rgba(247,250,252,0)_72%)]
+    "
+  ></div>
+
+  <!-- DEGRADADO SUPERIOR -->
+  <div
+    class="
+      absolute inset-x-0 top-0 h-48
+      bg-gradient-to-b
+      from-white/30
+      to-transparent
+    "
+  ></div>
+
+  <!-- CONTENIDO -->
+  <div
+    class="
+      relative z-10
+      mx-auto
+      flex min-h-[760px]
+      max-w-[1320px]
+      items-center
+      px-6
+      pb-20
+      pt-36
+
+      md:px-8
+
+      lg:min-h-[780px]
+      lg:px-12
+      lg:pt-40
+    "
+  >
+    <div class="max-w-[610px]">
+
+      <!-- LABEL -->
+      <div class="mb-6 flex items-center gap-4">
+        <span
+          class="
+            h-px w-9
+            bg-[#087fc1]
+          "
+        ></span>
+
+        <span
+          class="
+            font-['Montserrat']
+            text-[10px]
+            font-semibold
+            tracking-[0.32em]
+            text-[#39709b]
+
+            md:text-[11px]
+          "
+        >
+          TELECOMUNICACIONES QUE CONECTAN
+        </span>
+      </div>
+
+      <!-- TITULO -->
+      <h1
+        class="
+          max-w-[600px]
+          font-['Montserrat']
+          text-[48px]
+          font-semibold
+          leading-[1.02]
+          tracking-[-0.045em]
+          text-[#123d68]
+
+          sm:text-[58px]
+          md:text-[66px]
+          lg:text-[72px]
+        "
+      >
+        Infraestructura
+        <br />
+
+        para un mejor
+
+        <span
+          class="
+            block
+            font-medium
+            text-[#72a4c9]
+          "
+        >
+          mañana.
+        </span>
+      </h1>
+
+      <!-- DESCRIPCIÓN -->
+      <p
+        class="
+          mt-7
+          max-w-[520px]
+          font-['Montserrat']
+          text-[13px]
+          font-normal
+          leading-7
+          text-[#405a70]
+
+          md:text-[14px]
+        "
+      >
+        Diseño, construcción y mantenimiento de redes telefónicas
+        y soluciones de telecomunicaciones que conectan personas,
+        empresas y comunidades.
+      </p>
+
+      <!-- BOTONES -->
+      <div
+        class="
+          mt-9
+          flex
+          flex-col
+          gap-3
+
+          sm:flex-row
+        "
+      >
+        <!-- PRINCIPAL -->
+        <a
+          href="#servicios"
+          class="
+            group
+            inline-flex
+            h-[52px]
+            items-center
+            justify-center
+            gap-5
+            rounded-full
+            bg-[#0b4778]
+            px-7
+            font-['Montserrat']
+            text-[11px]
+            font-semibold
+            text-white
+            no-underline
+            shadow-[0_10px_30px_rgba(11,71,120,0.18)]
+            transition-all
+            duration-300
+
+            hover:-translate-y-0.5
+            hover:bg-[#087fc1]
+          "
+        >
+          Conoce nuestros servicios
+
+          <span
+            class="
+              flex
+              h-7 w-7
+              items-center
+              justify-center
+              rounded-full
+              bg-white/15
+              text-base
+              transition-transform
+              duration-300
+
+              group-hover:translate-x-1
+            "
+          >
+            →
+          </span>
+        </a>
+
+        <!-- SECUNDARIO -->
+        <a
+          href="#nosotros"
+          class="
+            inline-flex
+            h-[52px]
+            items-center
+            justify-center
+            rounded-full
+            border
+            border-[#173f64]/30
+            bg-white/30
+            px-7
+            font-['Montserrat']
+            text-[11px]
+            font-semibold
+            text-[#173f64]
+            no-underline
+            backdrop-blur-sm
+            transition-all
+            duration-300
+
+            hover:border-[#087fc1]
+            hover:bg-white/70
+            hover:text-[#087fc1]
+          "
+        >
+          Conoce Reddcom
+        </a>
+      </div>
+    </div>
+
+    <!-- TEXTO LATERAL -->
+    <div
+      class="
+        absolute
+        right-12
+        top-1/2
+        hidden
+        -translate-y-1/2
+        flex-col
+        font-['Montserrat']
+        text-[9px]
+        font-semibold
+        leading-[1.9]
+        tracking-[0.3em]
+        text-[#315f84]/70
+
+        xl:flex
+      "
+    >
+      <span>MÁS CONEXIONES</span>
+      <span>MÁS OPORTUNIDADES</span>
+
+      <span
+        class="
+          mt-4
+          h-px w-10
+          bg-[#087fc1]/70
+        "
+      ></span>
+    </div>
+
+    <!-- BOTTOM -->
+    <div
+      class="
+        absolute
+        bottom-8
+        left-6
+        right-6
+        hidden
+        items-end
+        justify-between
+
+        md:flex
+        md:left-8
+        md:right-8
+
+        lg:left-12
+        lg:right-12
+      "
+    >
+      <!-- INDICADOR -->
+      <div
+        class="
+          flex
+          items-center
+          gap-7
+          font-['Montserrat']
+          text-[9px]
+          font-semibold
+          tracking-wider
+          text-[#476b88]
+        "
+      >
+        <span class="text-[#087fc1]">
+          01
+        </span>
+
+        <span class="h-px w-14 bg-[#087fc1]"></span>
+
+        <span>02</span>
+
+        <span>03</span>
+      </div>
+
+      <!-- SCROLL -->
+      <a
+        href="#nosotros"
+        class="
+          group
+          flex
+          items-center
+          gap-3
+          font-['Montserrat']
+          text-[9px]
+          font-medium
+          text-white
+          no-underline
+        "
+      >
+        <span
+          class="
+            flex
+            h-9 w-9
+            items-center
+            justify-center
+            rounded-full
+            border border-white/70
+            backdrop-blur-sm
+            transition
+            group-hover:bg-white
+            group-hover:text-[#123d68]
+          "
+        >
+          ↓
+        </span>
+
+        Explorar
+      </a>
+    </div>
+  </div>
+</section>
