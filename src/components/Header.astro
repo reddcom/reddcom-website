@@ -1,8 +1,24 @@
 ---
 const navItems = [
   { name: "INICIO", href: "/" },
-  { name: "NOSOTROS", href: "#nosotros", dropdown: true },
-  { name: "SERVICIOS", href: "#servicios", dropdown: true },
+ {
+    name: "NOSOTROS",
+    children: [
+      {
+        name: "Misión y Visión",
+        href: "/nosotros/mision-vision",
+      },
+    ],
+  },
+  {
+	name: "SERVICIOS",
+	children: [
+		{
+			name: "Redes HFC",
+			href: "/Servicios/redes-hfc",
+		},
+	],
+},
   { name: "PROYECTOS", href: "#proyectos", dropdown: true },
   { name: "EMPRESAS DEL GRUPO", href: "#empresas", dropdown: true },
   { name: "CONTACTO", href: "#contacto" },
@@ -57,62 +73,165 @@ const navItems = [
     </a>
 
     <!-- MENU DESKTOP -->
-    <div
-      class="
-        hidden
-        items-center
-        gap-6
-        lg:flex
-        xl:gap-8
-      "
-    >
-      {
-        navItems.map((item) => (
-          <a
-            href={item.href}
-            class="
-              group
-              flex items-center
-              gap-1
-              whitespace-nowrap
-              text-[10px]
-              font-medium
-              tracking-[-0.01em]
-              text-[#26394c]
-              no-underline
-              transition-colors
-              duration-200
-              hover:text-[#087fc1]
-              xl:text-[11px]
-            "
-          >
-            {item.name}
+   <!-- MENU DESKTOP -->
+<div
+  class="
+    hidden
+    items-center
+    gap-6
+    lg:flex
+    xl:gap-8
+  "
+>
+  {
+    navItems.map((item) => (
+      <div class="group relative">
 
-            {item.dropdown && (
-              <svg
+        {
+          item.children ? (
+            <>
+              <!-- ITEM CON DROPDOWN -->
+              <button
+                type="button"
                 class="
-                  h-[11px]
-                  w-[11px]
-                  transition-transform
+                  flex
+                  items-center
+                  gap-1
+                  whitespace-nowrap
+                  border-0
+                  bg-transparent
+                  py-6
+                  text-[10px]
+                  font-medium
+                  tracking-[-0.01em]
+                  text-[#26394c]
+                  transition-colors
                   duration-200
-                  group-hover:rotate-180
+                  hover:text-[#087fc1]
+                  xl:text-[11px]
                 "
-                viewBox="0 0 20 20"
-                fill="none"
               >
-                <path
-                  d="M6 8L10 12L14 8"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            )}
-          </a>
-        ))
-      }
-    </div>
+                {item.name}
+
+                <svg
+                  class="
+                    h-[11px]
+                    w-[11px]
+                    transition-transform
+                    duration-200
+                    group-hover:rotate-180
+                  "
+                  viewBox="0 0 20 20"
+                  fill="none"
+                >
+                  <path
+                    d="M6 8L10 12L14 8"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+
+
+              <!-- DROPDOWN -->
+              <div
+                class="
+                  invisible
+                  absolute
+                  left-0
+                  top-full
+                  z-[999]
+                  min-w-[220px]
+                  opacity-0
+                  transition-all
+                  duration-200
+
+                  group-hover:visible
+                  group-hover:opacity-100
+                "
+              >
+                <!--
+                  Este padding crea un puente para que
+                  no se pierda el hover
+                -->
+                <div class="pt-2">
+
+                  <div
+                    class="
+                      rounded-[14px]
+                      border
+                      border-[#102f4d]/10
+                      bg-white
+                      p-2
+                      shadow-[0_15px_40px_rgba(16,47,77,0.16)]
+                    "
+                  >
+                    {
+                      item.children.map((child) => (
+                        <a
+                          href={child.href}
+                          class="
+                            flex
+                            items-center
+                            justify-between
+                            rounded-[10px]
+                            px-4
+                            py-3
+                            text-[11px]
+                            font-medium
+                            text-[#26394c]
+                            no-underline
+                            transition-colors
+                            duration-200
+
+                            hover:bg-[#f2f8fc]
+                            hover:text-[#087fc1]
+                          "
+                        >
+                          <span>{child.name}</span>
+
+                         
+                        </a>
+                      ))
+                    }
+                  </div>
+
+                </div>
+              </div>
+            </>
+          ) : (
+
+  
+            <a
+              href={item.href}
+              class="
+                flex
+                items-center
+                whitespace-nowrap
+                py-6
+                text-[10px]
+                font-medium
+                tracking-[-0.01em]
+                text-[#26394c]
+                no-underline
+                transition-colors
+                duration-200
+                hover:text-[#087fc1]
+                xl:text-[11px]
+              "
+            >
+              {item.name}
+            </a>
+
+          )
+        }
+
+      </div>
+    ))
+  }
+</div>
 
     <!-- BOTÓN CONTACTO / CTA -->
     <a
