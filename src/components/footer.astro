@@ -1,0 +1,685 @@
+---
+import logoblanco from "../assets/Footer/logo-blanco.png";
+import tuercablanca from "../assets/Footer/tuerca-blanca.png";
+
+const currentYear = new Date().getFullYear();
+
+const navigation = [
+  { name: "Inicio", href: "#top" },
+  { name: "Nuestra empresa", href: "#nosotros" },
+  { name: "Servicios", href: "#servicios" },
+  { name: "Proyectos", href: "#proyectos" },
+  { name: "Empresas del grupo", href: "#empresas" },
+  { name: "Contacto", href: "#contacto" },
+];
+
+const services = [
+  { name: "Redes HFC", href: "#servicios" },
+  { name: "Fibra óptica", href: "#servicios" },
+  { name: "Construcción", href: "#servicios" },
+  { name: "Mantenimiento", href: "#servicios" },
+  { name: "Diseño e ingeniería", href: "#servicios" },
+  { name: "Soluciones a medida", href: "#servicios" },
+];
+---
+
+<footer
+  class="
+    relative
+    overflow-hidden
+    bg-[#062f50]
+    font-['Montserrat']
+    text-white
+  "
+>
+  <!-- =====================================================
+       TUERCA / ENGRANAJE DECORATIVO
+  ====================================================== -->
+  <img
+    src={tuercablanca.src}
+    alt=""
+    aria-hidden="true"
+    class="
+      pointer-events-none
+      absolute
+      -right-[120px]
+      top-[-25px]
+      hidden
+      w-[430px]
+      select-none
+      opacity-[0.10]
+      lg:block
+      xl:w-[470px]
+    "
+  />
+
+
+  <!-- =====================================================
+       CONTENEDOR
+  ====================================================== -->
+  <div
+    class="
+      relative
+      z-10
+      mx-auto
+      max-w-[1400px]
+      px-6
+      pb-5
+      pt-16
+      md:px-8
+      lg:px-12
+      lg:pt-20
+    "
+  >
+
+    <!-- ===================================================
+         PARTE SUPERIOR
+    ==================================================== -->
+    <div
+      class="
+        grid
+        gap-12
+        md:grid-cols-2
+        lg:grid-cols-12
+        lg:gap-10
+      "
+    >
+
+      <!-- =================================================
+           REDDCOM
+      ================================================== -->
+      <div
+        class="
+          lg:col-span-4
+          lg:border-r
+          lg:border-white/20
+          lg:pr-12
+        "
+      >
+        <a
+          href="#top"
+          aria-label="Ir al inicio"
+          class="inline-block"
+        >
+          <img
+            src={logoblanco.src}
+            alt="Reddcom"
+            class="
+              h-auto
+              w-[230px]
+              object-contain
+              md:w-[260px]
+            "
+          />
+        </a>
+
+        <p
+          class="
+            mt-8
+            max-w-[340px]
+            text-[12px]
+            font-light
+            leading-[1.85]
+            text-white/60
+            md:text-[13px]
+          "
+        >
+          Impulsamos el desarrollo a través de infraestructura
+          de telecomunicaciones confiable, segura y de alta calidad.
+        </p>
+
+
+        <!-- ===============================================
+             REDES SOCIALES
+        ================================================ -->
+        <div class="mt-8 flex items-center gap-7">
+
+          <!-- LinkedIn -->
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            class="
+              text-white
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:text-[#19a9e5]
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="h-[22px] w-[22px]"
+            >
+              <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.47-.9 1.64-1.85 3.37-1.85 3.61 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.41a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.1 20.45H3.54V8.98H7.1v11.47Z" />
+            </svg>
+          </a>
+
+
+          <!-- Facebook -->
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            class="
+              text-white
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:text-[#19a9e5]
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="h-[22px] w-[22px]"
+            >
+              <path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.03 1.79-4.7 4.53-4.7 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07Z" />
+            </svg>
+          </a>
+
+
+          <!-- Instagram -->
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            class="
+              text-white
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:text-[#19a9e5]
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              class="h-[22px] w-[22px]"
+            >
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="5"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="4"
+              />
+              <circle
+                cx="17.5"
+                cy="6.5"
+                r="1"
+                fill="currentColor"
+                stroke="none"
+              />
+            </svg>
+          </a>
+
+
+          <!-- YouTube -->
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+            class="
+              text-white
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:text-[#19a9e5]
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="h-[24px] w-[24px]"
+            >
+              <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.55 3.6 12 3.6 12 3.6s-7.55 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.85.5 9.4.5 9.4.5s7.55 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z" />
+            </svg>
+          </a>
+
+        </div>
+      </div>
+
+
+      <!-- =================================================
+           NAVEGACIÓN
+      ================================================== -->
+      <div class="lg:col-span-2 lg:pl-4">
+
+        <h3
+          class="
+            text-[10px]
+            font-semibold
+            uppercase
+            tracking-[0.32em]
+            text-white
+          "
+        >
+          Navegación
+        </h3>
+
+        <div class="mt-4 h-[2px] w-7 bg-[#19a9e5]"></div>
+
+        <nav class="mt-7 flex flex-col gap-[14px]">
+
+          {
+            navigation.map((item) => (
+              <a
+                href={item.href}
+                class="
+                  w-fit
+                  text-[11px]
+                  font-light
+                  text-white/70
+                  no-underline
+                  transition-all
+                  duration-300
+
+                  hover:translate-x-1
+                  hover:text-[#19a9e5]
+                "
+              >
+                {item.name}
+              </a>
+            ))
+          }
+
+        </nav>
+
+      </div>
+
+
+      <!-- =================================================
+           SERVICIOS
+      ================================================== -->
+      <div class="lg:col-span-2">
+
+        <h3
+          class="
+            text-[10px]
+            font-semibold
+            uppercase
+            tracking-[0.32em]
+            text-white
+          "
+        >
+          Servicios
+        </h3>
+
+        <div class="mt-4 h-[2px] w-7 bg-[#19a9e5]"></div>
+
+
+        <div class="mt-7 flex flex-col gap-[14px]">
+
+          {
+            services.map((service) => (
+              <a
+                href={service.href}
+                class="
+                  w-fit
+                  text-[11px]
+                  font-light
+                  text-white/70
+                  no-underline
+                  transition-all
+                  duration-300
+
+                  hover:translate-x-1
+                  hover:text-[#19a9e5]
+                "
+              >
+                {service.name}
+              </a>
+            ))
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           CONTACTO
+      ================================================== -->
+      <div
+        id="contacto"
+        class="
+          lg:col-span-4
+          lg:pl-5
+        "
+      >
+
+        <h3
+          class="
+            text-[10px]
+            font-semibold
+            uppercase
+            tracking-[0.32em]
+            text-white
+          "
+        >
+          Contáctanos
+        </h3>
+
+        <div class="mt-4 h-[2px] w-7 bg-[#19a9e5]"></div>
+
+
+        <div class="mt-7 flex flex-col gap-6">
+
+          <!-- TELÉFONO -->
+          <a
+            href="tel:+50425500000"
+            class="
+              group
+              flex
+              items-center
+              gap-5
+              text-white/75
+              no-underline
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="
+                h-[19px]
+                w-[19px]
+                shrink-0
+                text-white
+                transition-colors
+                group-hover:text-[#19a9e5]
+              "
+            >
+              <path d="M6.62 10.79a15.5 15.5 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.4 11.4 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.57 1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
+            </svg>
+
+            <span class="text-[12px]">
+              +504 2550-XXXX
+            </span>
+          </a>
+
+
+          <!-- CORREO -->
+          <a
+            href="mailto:info@reddcom.hn"
+            class="
+              group
+              flex
+              items-center
+              gap-5
+              text-white/75
+              no-underline
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="
+                h-[19px]
+                w-[19px]
+                shrink-0
+                text-white
+                transition-colors
+                group-hover:text-[#19a9e5]
+              "
+            >
+              <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z" />
+            </svg>
+
+            <span class="text-[12px]">
+              info@reddcom.hn
+            </span>
+          </a>
+
+
+          <!-- UBICACIÓN -->
+          <div
+            class="
+              flex
+              items-start
+              gap-5
+              text-white/75
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="
+                mt-[2px]
+                h-[20px]
+                w-[20px]
+                shrink-0
+                text-white
+              "
+            >
+              <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
+            </svg>
+
+            <p
+              class="
+                text-[12px]
+                leading-[1.8]
+              "
+            >
+              San Pedro Sula, Honduras
+              <br />
+              Cortés, Honduras
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         FRASE INFERIOR
+    ==================================================== -->
+    <div class="mt-14">
+
+      <div class="mb-5 h-[2px] w-10 bg-[#19a9e5]"></div>
+
+      <div
+        class="
+          flex
+          flex-wrap
+          items-center
+          gap-x-4
+          gap-y-2
+
+          text-[8px]
+          font-medium
+          uppercase
+          tracking-[0.4em]
+          text-white/70
+
+          md:gap-x-6
+        "
+      >
+        <span>Personas</span>
+
+        <span class="text-[#19a9e5]">•</span>
+
+        <span>Tecnología</span>
+
+        <span class="text-[#19a9e5]">•</span>
+
+        <span>Infraestructura</span>
+
+        <span class="text-[#19a9e5]">•</span>
+
+        <span>Conectividad</span>
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         LÍNEA
+    ==================================================== -->
+    <div
+      class="
+        mt-9
+        h-px
+        w-full
+        bg-white/25
+      "
+    ></div>
+
+
+    <!-- ===================================================
+         FOOTER BOTTOM
+    ==================================================== -->
+    <div
+      class="
+        flex
+        flex-col
+        gap-5
+        py-6
+
+        md:flex-row
+        md:items-center
+        md:justify-between
+      "
+    >
+
+      <p
+        class="
+          text-[9px]
+          font-light
+          text-white/60
+        "
+      >
+        © {currentYear} REDDCOM. Todos los derechos reservados.
+      </p>
+
+
+      <div
+        class="
+          flex
+          flex-wrap
+          items-center
+          gap-4
+
+          text-[9px]
+          text-white/60
+
+          md:gap-5
+        "
+      >
+
+        <a
+          href="/politica-de-privacidad"
+          class="
+            no-underline
+            transition-colors
+            hover:text-white
+          "
+        >
+          Política de privacidad
+        </a>
+
+
+        <span
+          class="
+            hidden
+            h-3
+            w-px
+            bg-white/30
+            sm:block
+          "
+        ></span>
+
+
+        <a
+          href="/terminos"
+          class="
+            no-underline
+            transition-colors
+            hover:text-white
+          "
+        >
+          Términos de uso
+        </a>
+
+
+        <span
+          class="
+            hidden
+            h-7
+            w-px
+            bg-white/30
+            md:block
+          "
+        ></span>
+
+
+        <!-- VOLVER ARRIBA -->
+        <a
+          href="#top"
+          class="
+            group
+            flex
+            items-center
+            gap-3
+
+            text-white/75
+            no-underline
+
+            transition-colors
+            hover:text-white
+          "
+        >
+
+          <span
+            class="
+              flex
+              h-9
+              w-9
+              items-center
+              justify-center
+
+              rounded-full
+              border
+              border-white/70
+
+              text-[17px]
+
+              transition-all
+              duration-300
+
+              group-hover:-translate-y-1
+              group-hover:border-[#19a9e5]
+              group-hover:bg-[#19a9e5]
+            "
+          >
+            ↑
+          </span>
+
+          <span>
+            Volver arriba
+          </span>
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</footer>
