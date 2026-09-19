@@ -1,59 +1,805 @@
 ---
 import MainLayout from "../../layout/MainLayout.astro";
+
+const valores = [
+  {
+    nombre: "Responsabilidad",
+    icono: `
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M8.5 12.5L11 15L16 9"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M4 7.5L8 4L12 6L16 4L20 7.5V13C20 17 16.8 20 12 21C7.2 20 4 17 4 13V7.5Z"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+      </svg>
+    `,
+  },
+  {
+    nombre: "Ética",
+    icono: `
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 3V20M6 6H18M8 6L5 12H11L8 6ZM16 6L13 12H19L16 6Z"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M8 20H16"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+        />
+      </svg>
+    `,
+  },
+  {
+    nombre: "Disciplina",
+    icono: `
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect
+          x="5"
+          y="3"
+          width="14"
+          height="18"
+          rx="2"
+          stroke="currentColor"
+          stroke-width="1.7"
+        />
+        <path
+          d="M8 8H16M8 12H16M8 16H13"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+        />
+      </svg>
+    `,
+  },
+  {
+    nombre: "Dedicación",
+    icono: `
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+          stroke="currentColor"
+          stroke-width="1.7"
+        />
+        <path
+          d="M12 2V5M12 19V22M22 12H19M5 12H2M19 5L17 7M7 17L5 19M19 19L17 17M7 7L5 5"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+        />
+      </svg>
+    `,
+  },
+  {
+    nombre: "Compromiso",
+    icono: `
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle
+          cx="12"
+          cy="12"
+          r="8"
+          stroke="currentColor"
+          stroke-width="1.7"
+        />
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+          stroke="currentColor"
+          stroke-width="1.7"
+        />
+        <path
+          d="M12 12L20 4M16 4H20V8"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    `,
+  },
+  {
+    nombre: "Objetividad",
+    icono: `
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M5 20V14M10 20V10M15 20V6M20 20V3"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+        <path
+          d="M4 11L9 8L13 9L20 3"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    `,
+  },
+  {
+    nombre: "Motivación",
+    icono: `
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M9 18H15M10 21H14"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+        />
+        <path
+          d="M8.5 15.5C6.9 14.4 6 12.6 6 10.5A6 6 0 0 1 18 10.5C18 12.6 17.1 14.4 15.5 15.5C14.6 16.1 14 16.8 14 18H10C10 16.8 9.4 16.1 8.5 15.5Z"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linejoin="round"
+        />
+      </svg>
+    `,
+  },
+];
 ---
 
 <MainLayout
-	title="Misión y Visión | Reddcom"
-	description="Conoce la misión y visión de Reddcom."
+  title="Misión y Visión | Reddcom"
+  description="Conoce la misión, visión y valores que guían el trabajo de Reddcom."
 >
+  <section
+    class="
+      overflow-hidden
+      bg-[#f7f9fb]
+      pt-[105px]
+      font-['Montserrat']
+    "
+  >
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+    <div class="relative">
 
-	<section
-		class="
-			min-h-screen
-			bg-[#f7f9fb]
-			px-6
-			pb-24
-			pt-36
-			font-['Montserrat']
-			md:px-8
-			lg:px-12
-		"
-	>
-		<div class="mx-auto max-w-[1320px]">
+      <!-- IMAGEN DE FONDO -->
+      <div
+        class="
+          absolute
+          inset-x-0
+          top-0
+          h-[520px]
+          overflow-hidden
+          lg:h-[610px]
+        "
+      >
+        <img
+          src="/images/mision-vision/reddcom-honduras.png"
+          alt="Visión y desarrollo de Reddcom"
+          class="
+            h-full
+            w-full
+            object-cover
+            object-center
+          "
+        />
 
-			<span
-				class="
-					text-[10px]
-					font-semibold
-					tracking-[0.32em]
-					text-[#1595d3]
-				"
-			>
-				NUESTRO PROPÓSITO
-			</span>
+        <!-- DEGRADADO IZQUIERDO -->
+        <div
+          class="
+            absolute
+            inset-0
+            bg-gradient-to-r
+            from-white
+            via-white/90
+            to-white/0
+            lg:via-white/55
+          "
+        ></div>
 
-			<h1
-				class="
-					mt-5
-					max-w-[750px]
-					text-[44px]
-					font-semibold
-					leading-[1.05]
-					tracking-[-0.04em]
-					text-[#102f4d]
-					md:text-[60px]
-				"
-			>
-				Misión y
-				<span class="text-[#1595d3]">
-					Visión.
-				</span>
-			</h1>
+        <!-- DEGRADADO INFERIOR -->
+        <div
+          class="
+            absolute
+            inset-x-0
+            bottom-0
+            h-[160px]
+            bg-gradient-to-t
+            from-[#f7f9fb]
+            to-transparent
+          "
+        ></div>
+      </div>
 
-			<!-- Aquí pondremos el diseño de
-			     Misión + Visión + Valores -->
+      <!-- CONTENIDO HERO -->
+      <div
+        class="
+          relative
+          z-10
+          mx-auto
+          max-w-[1320px]
+          px-6
+          md:px-8
+          lg:px-12
+        "
+      >
+        <div
+          class="
+            flex
+            min-h-[380px]
+            items-start
+            justify-between
+            pt-16
+            lg:min-h-[420px]
+            lg:pt-20
+          "
+        >
+          <!-- TEXTO IZQUIERDO -->
+          <div class="max-w-[570px]">
 
-		</div>
-	</section>
+            <div class="flex items-center gap-5">
+              <span
+                class="
+                  h-[2px]
+                  w-[48px]
+                  bg-[#1595d3]
+                "
+              ></span>
 
+              <span
+                class="
+                  text-[9px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.38em]
+                  text-[#102f4d]
+                "
+              >
+                Nuestro propósito
+              </span>
+            </div>
+
+            <h1
+              class="
+                mt-7
+                text-[48px]
+                font-semibold
+                leading-[0.98]
+                tracking-[-0.05em]
+                text-[#102f4d]
+                md:text-[64px]
+                lg:text-[72px]
+              "
+            >
+              Misión y
+
+              <span class="block text-[#1595d3]">
+                Visión
+              </span>
+            </h1>
+
+            <p
+              class="
+                mt-6
+                max-w-[430px]
+                text-[14px]
+                leading-[1.65]
+                text-[#526577]
+                md:text-[16px]
+              "
+            >
+              Nuestros principios nos guían y nos impulsan a seguir
+              construyendo conexiones que generan un mejor futuro.
+            </p>
+          </div>
+
+          <!-- TEXTO DECORATIVO -->
+          <div
+            class="
+              mt-3
+              hidden
+              max-w-[180px]
+              lg:block
+            "
+          >
+            <span
+              class="
+                mb-5
+                block
+                h-[2px]
+                w-[55px]
+                bg-[#1595d3]
+              "
+            ></span>
+
+            <p
+              class="
+                text-[9px]
+                font-semibold
+                uppercase
+                leading-[1.8]
+                tracking-[0.35em]
+                text-[#102f4d]
+              "
+            >
+              Infraestructura<br />
+              que conecta<br />
+              el futuro
+            </p>
+          </div>
+        </div>
+
+        <!-- =====================================================
+             MISIÓN + VISIÓN ESCALONADAS
+        ====================================================== -->
+        <div
+          class="
+            relative
+            z-20
+            grid
+            items-start
+            pb-10
+            lg:grid-cols-[49%_53%]
+            lg:pb-24
+          "
+        >
+          <!-- =================================================
+               MISIÓN
+          ================================================== -->
+          <article
+            class="
+              relative
+              z-20
+              min-h-[360px]
+              overflow-hidden
+              bg-white
+              px-8
+              py-10
+              shadow-[0_25px_70px_rgba(16,47,77,0.10)]
+              md:px-12
+              lg:min-h-[390px]
+              lg:px-14
+              lg:py-12
+            "
+          >
+            <!-- NÚMERO 01 -->
+            <span
+              class="
+                pointer-events-none
+                absolute
+                left-7
+                top-4
+                text-[110px]
+                font-semibold
+                leading-none
+                tracking-[-0.08em]
+                text-[#102f4d]/[0.07]
+                md:text-[135px]
+              "
+            >
+              01
+            </span>
+
+            <!-- CONTENIDO MISIÓN -->
+            <div
+              class="
+                relative
+                z-10
+                md:ml-[130px]
+              "
+            >
+              <span
+                class="
+                  block
+                  h-[2px]
+                  w-[58px]
+                  bg-[#1595d3]
+                "
+              ></span>
+
+              <p
+                class="
+                  mt-5
+                  text-[10px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.35em]
+                  text-[#1595d3]
+                "
+              >
+                Misión
+              </p>
+
+              <h2
+                class="
+                  mt-5
+                  max-w-[430px]
+                  text-[24px]
+                  font-semibold
+                  leading-[1.18]
+                  tracking-[-0.03em]
+                  text-[#102f4d]
+                  md:text-[27px]
+                "
+              >
+                Construimos conexiones para el desarrollo regional.
+              </h2>
+
+              <p
+                class="
+                  mt-5
+                  max-w-[470px]
+                  text-[13px]
+                  leading-[1.7]
+                  text-[#526577]
+                  md:text-[14px]
+                "
+              >
+                Ser una empresa multidisciplinaria dispuesta a brindar
+                Servicios de Construcción, Adecuación, expansión, enlaces
+                y Mantenimiento de sitios en el Área de telefonía móvil
+                remota a nivel regional centroamericano.
+              </p>
+
+              <div class="mt-8 flex items-center gap-5">
+                <span
+                  class="
+                    h-[2px]
+                    w-[65px]
+                    bg-[#1595d3]
+                  "
+                ></span>
+
+                <span
+                  class="
+                    text-[8px]
+                    font-semibold
+                    uppercase
+                    leading-[1.8]
+                    tracking-[0.35em]
+                    text-[#087fc1]
+                  "
+                >
+                  Conectamos<br />
+                  oportunidades
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- =================================================
+               VISIÓN
+          ================================================== -->
+          <article
+            class="
+              relative
+              z-30
+              min-h-[360px]
+              overflow-hidden
+              bg-[#073b68]
+              px-8
+              py-10
+              text-white
+              shadow-[0_30px_70px_rgba(7,59,104,0.18)]
+              md:px-12
+
+              lg:-ml-5
+              lg:mt-[105px]
+              lg:min-h-[330px]
+              lg:px-14
+              lg:py-12
+            "
+          >
+            <!-- DECORACIÓN CIRCULAR -->
+            <div
+              class="
+                pointer-events-none
+                absolute
+                -right-[100px]
+                top-[30px]
+                h-[330px]
+                w-[330px]
+                rounded-full
+                border
+                border-white/10
+              "
+            ></div>
+
+            <div
+              class="
+                pointer-events-none
+                absolute
+                -right-[45px]
+                top-[85px]
+                h-[220px]
+                w-[220px]
+                rounded-full
+                border
+                border-white/10
+              "
+            ></div>
+
+            <!-- NÚMERO 02 -->
+            <span
+              class="
+                pointer-events-none
+                absolute
+                left-8
+                top-5
+                text-[110px]
+                font-semibold
+                leading-none
+                tracking-[-0.08em]
+                text-white/[0.12]
+                md:text-[135px]
+              "
+            >
+              02
+            </span>
+
+            <!-- CONTENIDO VISIÓN -->
+            <div
+              class="
+                relative
+                z-10
+                md:ml-[130px]
+              "
+            >
+              <span
+                class="
+                  block
+                  h-[2px]
+                  w-[58px]
+                  bg-[#24a9e6]
+                "
+              ></span>
+
+              <p
+                class="
+                  mt-5
+                  text-[10px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.35em]
+                  text-[#49b9ec]
+                "
+              >
+                Visión
+              </p>
+
+              <h2
+                class="
+                  mt-5
+                  max-w-[440px]
+                  text-[24px]
+                  font-semibold
+                  leading-[1.2]
+                  tracking-[-0.03em]
+                  text-white
+                  md:text-[27px]
+                "
+              >
+                Ser líderes a nivel regional.
+              </h2>
+
+              <p
+                class="
+                  mt-5
+                  max-w-[440px]
+                  text-[14px]
+                  leading-[1.75]
+                  text-white/75
+                "
+              >
+                Ser una empresa líder a nivel regional manteniendo la
+                excelencia, y establecernos como la principal opción de
+                nuestros clientes.
+              </p>
+
+              <div class="mt-8 flex items-center gap-5">
+                <span
+                  class="
+                    h-[2px]
+                    w-[65px]
+                    bg-[#24a9e6]
+                  "
+                ></span>
+
+                <span
+                  class="
+                    text-[8px]
+                    font-semibold
+                    uppercase
+                    leading-[1.8]
+                    tracking-[0.35em]
+                    text-[#61c5ef]
+                  "
+                >
+                  Un mejor<br />
+                  mañana
+                </span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         VALORES
+    ====================================================== -->
+    <section
+      class="
+        relative
+        bg-white
+        px-6
+        py-20
+        md:px-8
+        lg:px-12
+      "
+    >
+      <!-- DECORACIÓN -->
+      <div
+        class="
+          pointer-events-none
+          absolute
+          -right-[160px]
+          top-[20px]
+          hidden
+          h-[400px]
+          w-[400px]
+          rounded-full
+          border
+          border-[#1595d3]/5
+          lg:block
+        "
+      ></div>
+
+      <div
+        class="
+          relative
+          mx-auto
+          max-w-[1320px]
+        "
+      >
+        <!-- ETIQUETA -->
+        <div class="flex items-center gap-5">
+          <span
+            class="
+              h-[2px]
+              w-[48px]
+              bg-[#1595d3]
+            "
+          ></span>
+
+          <span
+            class="
+              text-[9px]
+              font-semibold
+              uppercase
+              tracking-[0.38em]
+              text-[#102f4d]
+            "
+          >
+            Nuestros valores
+          </span>
+        </div>
+
+        <div
+          class="
+            mt-8
+            grid
+            gap-12
+            lg:grid-cols-[280px_1fr]
+            lg:items-center
+          "
+        >
+          <!-- TITULO -->
+          <div>
+            <h2
+              class="
+                text-[42px]
+                font-semibold
+                leading-[1]
+                tracking-[-0.05em]
+                text-[#102f4d]
+                md:text-[52px]
+              "
+            >
+              Lo que
+
+              <span class="block text-[#1595d3]">
+                nos define
+              </span>
+            </h2>
+
+            <p
+              class="
+                mt-5
+                max-w-[270px]
+                text-[12px]
+                leading-[1.65]
+                text-[#647486]
+              "
+            >
+              Valores que guían nuestro trabajo y reflejan el compromiso
+              de nuestro equipo.
+            </p>
+          </div>
+
+          <!-- LISTA DE VALORES -->
+          <div
+            class="
+              grid
+              grid-cols-2
+              gap-y-10
+              sm:grid-cols-3
+              md:grid-cols-4
+              lg:grid-cols-7
+              lg:gap-0
+            "
+          >
+            {
+              valores.map((valor, index) => (
+                <div
+                  class:list={[
+                    "flex flex-col items-center px-3 text-center",
+                    index !== 0
+                      ? "lg:border-l lg:border-[#102f4d]/10"
+                      : "",
+                  ]}
+                >
+                  <!-- ICONO -->
+                  <div
+                    class="
+                      flex
+                      h-[62px]
+                      w-[62px]
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-[#e9f6fc]
+                      text-[#087fc1]
+                    "
+                  >
+                    <div
+                      class="
+                        h-[30px]
+                        w-[30px]
+                        [&>svg]:h-full
+                        [&>svg]:w-full
+                      "
+                      set:html={valor.icono}
+                    ></div>
+                  </div>
+
+                  <!-- NOMBRE -->
+                  <h3
+                    class="
+                      mt-4
+                      text-[11px]
+                      font-semibold
+                      text-[#102f4d]
+                      md:text-[12px]
+                    "
+                  >
+                    {valor.nombre}
+                  </h3>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
 </MainLayout>
