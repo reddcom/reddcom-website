@@ -497,284 +497,378 @@ console.log("VACANTES ACTIVAS:", plazasOrdenadas.length);
               {
                 plazasOrdenadas.map((item) => (
 
-                  <article
-                    class="
-                      group
-                      relative
-                      flex
-                      min-h-[350px]
-                      flex-col
-                      overflow-hidden
-                      rounded-[24px]
-                      border
-                      border-[#102f4d]/10
-                      bg-[#f9fbfc]
-                      p-7
+               <article
+  class="
+    group
+    relative
+    flex
+    min-h-[370px]
+    flex-col
+    overflow-hidden
+    rounded-[24px]
+    border
+    border-[#0b4d7a]/10
+    bg-white
+    shadow-[0_14px_40px_rgba(16,47,77,0.08)]
 
-                      transition-all
-                      duration-300
+    transition-all
+    duration-300
 
-                      hover:-translate-y-1
-                      hover:border-[#1595d3]/30
-                      hover:bg-white
-                      hover:shadow-[0_20px_50px_rgba(16,47,77,0.10)]
+    hover:-translate-y-1
+    hover:shadow-[0_22px_55px_rgba(16,47,77,0.15)]
+  "
+>
 
-                      md:p-8
-                    "
-                  >
+  <!-- ==========================================
+       CABECERA AZUL
+  =========================================== -->
 
-                    <!-- LÍNEA SUPERIOR -->
+  <div
+    class="
+      relative
+      overflow-hidden
+      bg-gradient-to-r
+      from-[#073b68]
+      to-[#087fc1]
+      px-7
+      pb-7
+      pt-6
+      text-white
+    "
+  >
 
-                    <span
-                      class="
-                        absolute
-                        left-0
-                        top-0
-                        h-[3px]
-                        w-0
-                        bg-[#1595d3]
+    <!-- DECORACIÓN -->
 
-                        transition-all
-                        duration-300
+    <div
+      class="
+        pointer-events-none
+        absolute
+        -right-[55px]
+        -top-[65px]
+        h-[160px]
+        w-[160px]
+        rounded-full
+        border
+        border-white/10
+      "
+    ></div>
 
-                        group-hover:w-full
-                      "
-                    ></span>
-
-
-                    <!-- ESTADO / ÁREA -->
-
-                    <div
-                      class="
-                        flex
-                        items-center
-                        justify-between
-                        gap-4
-                      "
-                    >
-
-                      <span
-                        class="
-                          inline-flex
-                          items-center
-                          gap-2
-                          rounded-full
-                          bg-[#e8f6fc]
-                          px-3
-                          py-2
-                          text-[8px]
-                          font-semibold
-                          uppercase
-                          tracking-[0.16em]
-                          text-[#087fc1]
-                        "
-                      >
-
-                        <span
-                          class="
-                            h-[6px]
-                            w-[6px]
-                            rounded-full
-                            bg-[#1595d3]
-                          "
-                        ></span>
-
-                        Activa
-
-                      </span>
+    <div
+      class="
+        pointer-events-none
+        absolute
+        -right-[10px]
+        -top-[20px]
+        h-[85px]
+        w-[85px]
+        rounded-full
+        border
+        border-white/10
+      "
+    ></div>
 
 
-                      <span
-                        class="
-                          text-right
-                          text-[9px]
-                          font-medium
-                          text-[#647486]
-                        "
-                      >
-                        {item.data.area}
-                      </span>
+    <!-- ESTADO + ÁREA -->
 
-                    </div>
+    <div
+      class="
+        relative
+        z-10
+        flex
+        items-center
+        justify-between
+        gap-4
+      "
+    >
 
+      <span
+        class="
+          inline-flex
+          items-center
+          gap-2
+          rounded-full
+          bg-white/12
+          px-3
+          py-2
+          text-[8px]
+          font-semibold
+          uppercase
+          tracking-[0.18em]
+          text-[#7bd1f3]
+        "
+      >
+        <span
+          class="
+            h-[6px]
+            w-[6px]
+            rounded-full
+            bg-[#61c9f1]
+          "
+        ></span>
 
-                    <!-- PUESTO -->
-
-                    <h3
-                      class="
-                        mt-7
-                        text-[23px]
-                        font-semibold
-                        leading-[1.2]
-                        tracking-[-0.03em]
-                        text-[#102f4d]
-                      "
-                    >
-                      {item.data.titulo}
-                    </h3>
-
-
-                    <!-- DATOS -->
-
-                    <div
-                      class="
-                        mt-5
-                        flex
-                        flex-wrap
-                        gap-x-5
-                        gap-y-3
-                      "
-                    >
-
-                      <!-- UBICACIÓN -->
-
-                      <span
-                        class="
-                          flex
-                          items-center
-                          gap-2
-                          text-[11px]
-                          text-[#647486]
-                        "
-                      >
-
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          class="
-                            h-4
-                            w-4
-                            shrink-0
-                            text-[#1595d3]
-                          "
-                        >
-                          <path
-                            d="M20 10C20 15 12 21 12 21C12 21 4 15 4 10C4 5.6 7.6 2 12 2C16.4 2 20 5.6 20 10Z"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                            stroke-linejoin="round"
-                          />
-
-                          <circle
-                            cx="12"
-                            cy="10"
-                            r="2.5"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                          />
-                        </svg>
-
-                        {item.data.ubicacion}
-
-                      </span>
+        Activa
+      </span>
 
 
-                      <!-- TIPO -->
+      <span
+        class="
+          text-[9px]
+          font-medium
+          text-white/65
+        "
+      >
+        {item.data.area}
+      </span>
 
-                      <span
-                        class="
-                          flex
-                          items-center
-                          gap-2
-                          text-[11px]
-                          text-[#647486]
-                        "
-                      >
-
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          class="
-                            h-4
-                            w-4
-                            shrink-0
-                            text-[#1595d3]
-                          "
-                        >
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="9"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                          />
-
-                          <path
-                            d="M12 7V12L15 14"
-                            stroke="currentColor"
-                            stroke-width="1.6"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-
-                        {item.data.tipo}
-
-                      </span>
-
-                    </div>
+    </div>
 
 
-                    <!-- DESCRIPCIÓN -->
+    <!-- PUESTO -->
 
-                    <p
-                      class="
-                        mt-6
-                        text-[12px]
-                        leading-[1.75]
-                        text-[#647486]
-                      "
-                    >
-                      {item.data.descripcion}
-                    </p>
+    <h3
+      class="
+        relative
+        z-10
+        mt-7
+        max-w-[310px]
+        text-[25px]
+        font-semibold
+        leading-[1.15]
+        tracking-[-0.035em]
+        text-white
+      "
+    >
+      {item.data.titulo}
+    </h3>
+
+  </div>
 
 
-                    <!-- BOTÓN -->
+  <!-- ==========================================
+       CUERPO
+  =========================================== -->
 
-                    <div class="mt-auto pt-8">
+  <div
+    class="
+      flex
+      flex-1
+      flex-col
+      px-7
+      pb-7
+      pt-6
+    "
+  >
 
-                      <a
-                        href={`/oportunidades/${item.id}`}
-                        class="
-                          inline-flex
-                          items-center
-                          gap-4
-                          text-[10px]
-                          font-semibold
-                          text-[#087fc1]
-                          no-underline
+    <!-- DATOS -->
 
-                          transition-colors
-                          duration-200
+    <div
+      class="
+        flex
+        flex-wrap
+        gap-x-6
+        gap-y-3
+      "
+    >
 
-                          hover:text-[#102f4d]
-                        "
-                      >
-                        Ver oportunidad
+      <!-- UBICACIÓN -->
 
-                        <span
-                          class="
-                            flex
-                            h-7
-                            w-7
-                            items-center
-                            justify-center
-                            rounded-full
-                            bg-[#e8f6fc]
+      <span
+        class="
+          flex
+          items-center
+          gap-2
+          text-[11px]
+          font-medium
+          text-[#526577]
+        "
+      >
 
-                            transition-transform
-                            duration-300
+        <span
+          class="
+            flex
+            h-7
+            w-7
+            items-center
+            justify-center
+            rounded-full
+            bg-[#e8f6fc]
+            text-[#1595d3]
+          "
+        >
 
-                            group-hover:translate-x-1
-                          "
-                        >
-                          →
-                        </span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            class="h-[14px] w-[14px]"
+          >
+            <path
+              d="M20 10C20 15 12 21 12 21C12 21 4 15 4 10C4 5.6 7.6 2 12 2C16.4 2 20 5.6 20 10Z"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linejoin="round"
+            />
 
-                      </a>
+            <circle
+              cx="12"
+              cy="10"
+              r="2.5"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+          </svg>
 
-                    </div>
+        </span>
 
-                  </article>
+        {item.data.ubicacion}
+
+      </span>
+
+
+      <!-- TIPO -->
+
+      <span
+        class="
+          flex
+          items-center
+          gap-2
+          text-[11px]
+          font-medium
+          text-[#526577]
+        "
+      >
+
+        <span
+          class="
+            flex
+            h-7
+            w-7
+            items-center
+            justify-center
+            rounded-full
+            bg-[#e8f6fc]
+            text-[#1595d3]
+          "
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            class="h-[14px] w-[14px]"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+
+            <path
+              d="M12 7V12L15.5 14"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+            />
+          </svg>
+
+        </span>
+
+        {item.data.tipo}
+
+      </span>
+
+    </div>
+
+
+    <!-- DESCRIPCIÓN -->
+
+    <p
+      class="
+        mt-6
+        max-w-[340px]
+        text-[12px]
+        leading-[1.8]
+        text-[#526577]
+      "
+    >
+      {item.data.descripcion}
+    </p>
+
+
+    <!-- SEPARADOR -->
+
+    <div
+      class="
+        mt-auto
+        pt-7
+      "
+    >
+
+      <div
+        class="
+          mb-5
+          h-px
+          w-full
+          bg-[#102f4d]/10
+        "
+      ></div>
+
+
+      <!-- BOTÓN -->
+
+      <a
+        href={`/oportunidades/${item.id}`}
+        class="
+          flex
+          h-[46px]
+          w-full
+          items-center
+          justify-between
+          rounded-full
+          bg-[#eef7fb]
+          px-5
+          text-[10px]
+          font-semibold
+          text-[#087fc1]
+          no-underline
+
+          transition-all
+          duration-300
+
+          hover:bg-[#1595d3]
+          hover:text-white
+        "
+      >
+        Ver oportunidad
+
+        <span
+          class="
+            flex
+            h-7
+            w-7
+            items-center
+            justify-center
+            rounded-full
+            bg-white
+            text-[15px]
+            text-[#087fc1]
+
+            transition-transform
+            duration-300
+
+            group-hover:translate-x-1
+          "
+        >
+          →
+        </span>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</article>
 
                 ))
               }
