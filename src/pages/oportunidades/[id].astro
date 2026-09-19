@@ -1,0 +1,823 @@
+---
+import MainLayout from "../../layout/MainLayout.astro";
+import { getCollection, render } from "astro:content";
+
+/* =========================================================
+   GENERAR UNA PÁGINA POR CADA VACANTE
+========================================================= */
+
+export async function getStaticPaths() {
+  const empleos = await getCollection("empleos");
+
+  return empleos
+    .filter((empleo) => empleo.data.activo === true)
+    .map((empleo) => ({
+      params: {
+        id: empleo.id,
+      },
+      props: {
+        empleo,
+      },
+    }));
+}
+
+/* =========================================================
+   OBTENER VACANTE ACTUAL
+========================================================= */
+
+const { empleo } = Astro.props;
+
+const { Content } = await render(empleo);
+
+/* =========================================================
+   CORREO DE POSTULACIÓN
+========================================================= */
+
+const correoRRHH = "rrhh.auxiliart2@reddcomca.com";
+
+const asunto = encodeURIComponent(
+  `Postulación - ${empleo.data.titulo}`
+);
+
+const cuerpoCorreo = encodeURIComponent(
+  `Hola,
+
+Deseo postularme a la vacante de ${empleo.data.titulo}.
+
+Nombre completo:
+Teléfono:
+Ciudad:
+
+Adjunto mi currículum para su consideración.
+
+Saludos.`
+);
+
+const enlaceCorreo =
+  `mailto:${correoRRHH}?subject=${asunto}&body=${cuerpoCorreo}`;
+---
+
+<MainLayout
+  title={`${empleo.data.titulo} | Oportunidades Laborales | Reddcom`}
+  description={empleo.data.descripcion}
+>
+  <main
+    class="
+      min-h-screen
+      bg-[#f7f9fb]
+      font-['Montserrat']
+    "
+  >
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section
+      class="
+        relative
+        overflow-hidden
+        bg-[#073b68]
+        px-6
+        pb-20
+        pt-[160px]
+        text-white
+        md:px-8
+        lg:px-12
+        lg:pb-24
+        lg:pt-[180px]
+      "
+    >
+
+      <!-- DECORACIÓN -->
+
+      <div
+        class="
+          pointer-events-none
+          absolute
+          -right-[180px]
+          top-[20px]
+          h-[520px]
+          w-[520px]
+          rounded-full
+          border
+          border-white/10
+        "
+      ></div>
+
+      <div
+        class="
+          pointer-events-none
+          absolute
+          -right-[40px]
+          top-[150px]
+          h-[280px]
+          w-[280px]
+          rounded-full
+          border
+          border-white/10
+        "
+      ></div>
+
+      <div
+        class="
+          pointer-events-none
+          absolute
+          right-[190px]
+          top-[250px]
+          h-[7px]
+          w-[7px]
+          rounded-full
+          bg-[#3db7ea]
+        "
+      ></div>
+
+
+      <div
+        class="
+          relative
+          z-10
+          mx-auto
+          max-w-[1180px]
+        "
+      >
+
+        <!-- VOLVER -->
+
+        <a
+          href="/Oportunidades-Laborales"
+          class="
+            inline-flex
+            items-center
+            gap-3
+            text-[9px]
+            font-semibold
+            uppercase
+            tracking-[0.20em]
+            text-white/60
+            no-underline
+
+            transition-colors
+            duration-200
+
+            hover:text-[#61c5ef]
+          "
+        >
+          <span class="text-[15px]">←</span>
+
+          Oportunidades laborales
+        </a>
+
+
+        <!-- ESTADO -->
+
+        <div class="mt-10">
+
+          <span
+            class="
+              inline-flex
+              items-center
+              gap-2
+              rounded-full
+              bg-white/10
+              px-4
+              py-2
+              text-[8px]
+              font-semibold
+              uppercase
+              tracking-[0.18em]
+              text-[#70cef2]
+            "
+          >
+            <span
+              class="
+                h-[6px]
+                w-[6px]
+                rounded-full
+                bg-[#61c5ef]
+              "
+            ></span>
+
+            Vacante activa
+          </span>
+
+        </div>
+
+
+        <!-- TITULO -->
+
+        <h1
+          class="
+            mt-7
+            max-w-[850px]
+            text-[44px]
+            font-semibold
+            leading-[1.02]
+            tracking-[-0.05em]
+            text-white
+            md:text-[58px]
+            lg:text-[68px]
+          "
+        >
+          {empleo.data.titulo}
+        </h1>
+
+
+        <!-- INFORMACIÓN -->
+
+        <div
+          class="
+            mt-8
+            flex
+            flex-wrap
+            gap-x-8
+            gap-y-4
+          "
+        >
+
+          <!-- UBICACIÓN -->
+
+          <div
+            class="
+              flex
+              items-center
+              gap-3
+              text-[12px]
+              text-white/70
+            "
+          >
+
+            <span
+              class="
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
+                rounded-full
+                bg-white/10
+                text-[#61c5ef]
+              "
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M20 10C20 15 12 21 12 21C12 21 4 15 4 10C4 5.6 7.6 2 12 2C16.4 2 20 5.6 20 10Z"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                />
+
+                <circle
+                  cx="12"
+                  cy="10"
+                  r="2.5"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                />
+              </svg>
+            </span>
+
+            {empleo.data.ubicacion}
+
+          </div>
+
+
+          <!-- TIPO -->
+
+          <div
+            class="
+              flex
+              items-center
+              gap-3
+              text-[12px]
+              text-white/70
+            "
+          >
+
+            <span
+              class="
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
+                rounded-full
+                bg-white/10
+                text-[#61c5ef]
+              "
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                class="h-4 w-4"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                />
+
+                <path
+                  d="M12 7V12L15.5 14"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+
+            {empleo.data.tipo}
+
+          </div>
+
+
+          <!-- ÁREA -->
+
+          <div
+            class="
+              flex
+              items-center
+              gap-3
+              text-[12px]
+              text-white/70
+            "
+          >
+
+            <span
+              class="
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
+                rounded-full
+                bg-white/10
+                text-[#61c5ef]
+              "
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                class="h-4 w-4"
+              >
+                <path
+                  d="M9 6V5C9 3.9 9.9 3 11 3H13C14.1 3 15 3.9 15 5V6"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+
+                <rect
+                  x="4"
+                  y="6"
+                  width="16"
+                  height="14"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+
+                <path
+                  d="M4 11H20"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+              </svg>
+            </span>
+
+            {empleo.data.area}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTENIDO
+    ====================================================== -->
+
+    <section
+      class="
+        px-6
+        py-16
+        md:px-8
+        lg:px-12
+        lg:py-20
+      "
+    >
+
+      <div
+        class="
+          mx-auto
+          grid
+          max-w-[1180px]
+          gap-8
+          lg:grid-cols-[1fr_320px]
+          lg:items-start
+        "
+      >
+
+        <!-- =================================================
+             INFORMACIÓN DE LA VACANTE
+        ================================================== -->
+
+        <article
+          class="
+            rounded-[26px]
+            border
+            border-[#102f4d]/10
+            bg-white
+            p-7
+            shadow-[0_15px_45px_rgba(16,47,77,0.05)]
+            md:p-10
+            lg:p-12
+          "
+        >
+
+          <!-- INTRO -->
+
+          <div
+            class="
+              border-b
+              border-[#102f4d]/10
+              pb-8
+            "
+          >
+
+            <div class="flex items-center gap-4">
+
+              <span
+                class="
+                  h-[2px]
+                  w-[40px]
+                  bg-[#1595d3]
+                "
+              ></span>
+
+              <span
+                class="
+                  text-[8px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.32em]
+                  text-[#1595d3]
+                "
+              >
+                Sobre la oportunidad
+              </span>
+
+            </div>
+
+
+            <p
+              class="
+                mt-6
+                max-w-[700px]
+                text-[14px]
+                leading-[1.8]
+                text-[#526577]
+              "
+            >
+              {empleo.data.descripcion}
+            </p>
+
+          </div>
+
+
+          <!-- CONTENIDO DEL .MD -->
+
+          <div
+            class="
+              contenido-vacante
+              mt-8
+            "
+          >
+            <Content />
+          </div>
+
+        </article>
+
+
+        <!-- =================================================
+             POSTULACIÓN
+        ================================================== -->
+
+        <aside
+          class="
+            lg:sticky
+            lg:top-[120px]
+          "
+        >
+
+          <div
+            class="
+              relative
+              overflow-hidden
+              rounded-[26px]
+              bg-[#073b68]
+              p-7
+              text-white
+              shadow-[0_18px_45px_rgba(7,59,104,0.15)]
+            "
+          >
+
+            <!-- DECORACIÓN -->
+
+            <div
+              class="
+                pointer-events-none
+                absolute
+                -right-[60px]
+                -top-[60px]
+                h-[160px]
+                w-[160px]
+                rounded-full
+                border
+                border-white/10
+              "
+            ></div>
+
+
+            <span
+              class="
+                relative
+                z-10
+                text-[8px]
+                font-semibold
+                uppercase
+                tracking-[0.30em]
+                text-[#61c5ef]
+              "
+            >
+              ¿Te interesa?
+            </span>
+
+
+            <h2
+              class="
+                relative
+                z-10
+                mt-5
+                text-[25px]
+                font-semibold
+                leading-[1.15]
+                tracking-[-0.035em]
+                text-white
+              "
+            >
+              Forma parte de nuestro equipo.
+            </h2>
+
+
+            <p
+              class="
+                relative
+                z-10
+                mt-4
+                text-[12px]
+                leading-[1.75]
+                text-white/65
+              "
+            >
+              Si tu perfil cumple con los requisitos de esta
+              oportunidad, envíanos tu currículum.
+            </p>
+
+
+            <!-- CORREO -->
+
+            <div
+              class="
+                relative
+                z-10
+                mt-7
+                border-t
+                border-white/15
+                pt-6
+              "
+            >
+
+              <span
+                class="
+                  text-[8px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.20em]
+                  text-white/40
+                "
+              >
+                Recursos Humanos
+              </span>
+
+              <p
+                class="
+                  mt-2
+                  break-all
+                  text-[11px]
+                  text-white/75
+                "
+              >
+                rrhh.auxiliart2@reddcomca.com
+              </p>
+
+            </div>
+
+
+            <!-- BOTÓN -->
+
+            <a
+              href={enlaceCorreo}
+              class="
+                relative
+                z-10
+                mt-7
+                flex
+                h-[52px]
+                w-full
+                items-center
+                justify-between
+                rounded-full
+                bg-[#1595d3]
+                px-5
+                text-[10px]
+                font-semibold
+                text-white
+                no-underline
+
+                transition-all
+                duration-300
+
+                hover:-translate-y-[1px]
+                hover:bg-[#20a8e6]
+                hover:shadow-[0_10px_25px_rgba(0,0,0,0.15)]
+              "
+            >
+              Postularme
+
+              <span
+                class="
+                  flex
+                  h-8
+                  w-8
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-white
+                  text-[16px]
+                  text-[#087fc1]
+                "
+              >
+                →
+              </span>
+            </a>
+
+
+            <p
+              class="
+                relative
+                z-10
+                mt-4
+                text-[9px]
+                leading-[1.6]
+                text-white/40
+              "
+            >
+              Al seleccionar “Postularme” se abrirá tu aplicación
+              de correo para que puedas adjuntar tu currículum.
+            </p>
+
+          </div>
+
+        </aside>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         VOLVER A OPORTUNIDADES
+    ====================================================== -->
+
+    <section
+      class="
+        px-6
+        pb-24
+        md:px-8
+        lg:px-12
+      "
+    >
+
+      <div class="mx-auto max-w-[1180px]">
+
+        <a
+          href="/Oportunidades-Laborales"
+          class="
+            inline-flex
+            items-center
+            gap-4
+            text-[10px]
+            font-semibold
+            text-[#087fc1]
+            no-underline
+
+            transition-colors
+            duration-200
+
+            hover:text-[#102f4d]
+          "
+        >
+          <span
+            class="
+              flex
+              h-8
+              w-8
+              items-center
+              justify-center
+              rounded-full
+              bg-[#e8f6fc]
+            "
+          >
+            ←
+          </span>
+
+          Ver todas las oportunidades
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+</MainLayout>
+
+
+<style>
+  .contenido-vacante :global(h2) {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #102f4d;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .contenido-vacante :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .contenido-vacante :global(h3) {
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+    color: #102f4d;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .contenido-vacante :global(p) {
+    margin-bottom: 1rem;
+    color: #647486;
+    font-size: 0.82rem;
+    line-height: 1.8;
+  }
+
+  .contenido-vacante :global(ul) {
+    margin-top: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .contenido-vacante :global(li) {
+    position: relative;
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    color: #526577;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .contenido-vacante :global(li)::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #1595d3;
+  }
+
+  .contenido-vacante :global(strong) {
+    color: #102f4d;
+    font-weight: 600;
+  }
+</style>

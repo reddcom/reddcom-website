@@ -1,5 +1,5 @@
 ---
-titulo: "Técnico HFC"
+titulo: "Técnico Fo"
 ubicacion: "San Pedro Sula"
 area: "Operaciones"
 tipo: "Tiempo completo"
@@ -14,7 +14,7 @@ Buscamos una persona responsable y comprometida para formar parte de nuestro equ
 
 ## Requisitos
 
-- Experiencia en redes HFC.
+- Experiencia en redes FO.
 - Disponibilidad de horario.
 - Responsabilidad.
 - Trabajo en equipo.
