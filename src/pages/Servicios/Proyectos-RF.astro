@@ -1,0 +1,725 @@
+---
+import MainLayout from "../../layout/MainLayout.astro";
+
+
+
+const serviciosRF = [
+  {
+    numero: "01",
+    titulo: "Diseño RF",
+    descripcion:
+      "Diseñamos soluciones de radiofrecuencia adaptadas a las necesidades de cobertura, capacidad y desempeño de cada proyecto.",
+  },
+  {
+    numero: "02",
+    titulo: "Implementación",
+    descripcion:
+      "Ejecutamos proyectos de infraestructura RF bajo criterios técnicos, operativos y de seguridad.",
+  },
+  {
+    numero: "03",
+    titulo: "Optimización",
+    descripcion:
+      "Analizamos el desempeño de la red para identificar oportunidades de mejora en cobertura, calidad y capacidad.",
+  },
+  {
+    numero: "04",
+    titulo: "Soporte técnico",
+    descripcion:
+      "Brindamos acompañamiento técnico durante las diferentes etapas de implementación y operación de la red.",
+  },
+];
+
+const etapas = [
+  {
+    numero: "01",
+    titulo: "Planificación",
+    texto:
+      "Evaluamos los requerimientos técnicos y definimos el alcance de la solución.",
+  },
+  {
+    numero: "02",
+    titulo: "Diseño",
+    texto:
+      "Desarrollamos la propuesta RF considerando cobertura, capacidad e infraestructura disponible.",
+  },
+  {
+    numero: "03",
+    titulo: "Implementación",
+    texto:
+      "Ejecutamos la solución de acuerdo con los parámetros técnicos establecidos.",
+  },
+  {
+    numero: "04",
+    titulo: "Optimización",
+    texto:
+      "Verificamos el desempeño y realizamos los ajustes necesarios para mejorar la red.",
+  },
+];
+---
+
+<MainLayout
+  title="Proyectos RF | REDDCOM"
+  description="Diseño, implementación y optimización de soluciones de radiofrecuencia para redes de telecomunicaciones."
+>
+  <main>
+  
+
+    <!-- INTRODUCCIÓN -->
+    <section class="rf-intro">
+      <div class="rf-container rf-intro__grid">
+        <div>
+          <span class="section-label">PROYECTOS RF</span>
+
+          <h2>
+            Conectividad diseñada para
+            <span>llegar más lejos.</span>
+          </h2>
+        </div>
+
+        <div class="rf-intro__text">
+          <p>
+            En REDDCOM desarrollamos proyectos de radiofrecuencia enfocados en
+            mejorar la cobertura, capacidad y desempeño de las redes de
+            telecomunicaciones.
+          </p>
+
+          <p>
+            Integramos planificación, diseño, implementación y optimización
+            para ofrecer soluciones adaptadas a los requerimientos técnicos
+            de cada proyecto.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="rf-services" id="soluciones">
+      <div class="rf-container">
+        <div class="section-heading">
+          <div>
+            <span class="section-label">NUESTRAS CAPACIDADES</span>
+            <h2>Soluciones RF de principio a fin.</h2>
+          </div>
+
+          <p>
+            Acompañamos cada proyecto desde su planificación hasta la
+            optimización de la red.
+          </p>
+        </div>
+
+        <div class="rf-services__grid">
+          {
+            serviciosRF.map((servicio) => (
+              <article class="service-card">
+                <div class="service-card__top">
+                  <span class="service-card__number">
+                    {servicio.numero}
+                  </span>
+
+                  <span class="service-card__arrow">↗</span>
+                </div>
+
+                <div>
+                  <h3>{servicio.titulo}</h3>
+                  <p>{servicio.descripcion}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+  
+
+    <!-- PROCESO -->
+    <section class="rf-process">
+      <div class="rf-container">
+        <div class="section-heading">
+          <div>
+            <span class="section-label">NUESTRO PROCESO</span>
+            <h2>De la planificación a la optimización.</h2>
+          </div>
+
+          <p>
+            Un proceso estructurado para desarrollar soluciones técnicas
+            adaptadas a cada red.
+          </p>
+        </div>
+
+        <div class="process-grid">
+          {
+            etapas.map((etapa) => (
+              <article class="process-card">
+                <span class="process-card__number">{etapa.numero}</span>
+
+                <div class="process-card__line"></div>
+
+                <h3>{etapa.titulo}</h3>
+
+                <p>{etapa.texto}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="rf-cta">
+      <div class="rf-container">
+        <div class="rf-cta__box">
+          <div>
+            <span class="section-label section-label--light">
+              HABLEMOS DE TU PROYECTO
+            </span>
+
+            <h2>
+              Construyamos una solución
+              <span>para cada conexión.</span>
+            </h2>
+          </div>
+
+          <a href="/contacto" class="rf-button rf-button--light">
+            Contáctanos
+            <span>↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</MainLayout>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :root {
+    --rf-blue: #0c4774;
+    --rf-light-blue: #76a9d3;
+    --rf-dark: #082f4e;
+    --rf-bg: #f5f8fa;
+    --rf-text: #526b80;
+    --rf-border: #dce6ed;
+  }
+
+  .rf-container {
+    width: min(1240px, calc(100% - 48px));
+    margin: 0 auto;
+  }
+
+  /* HERO */
+
+  .rf-hero {
+    position: relative;
+    min-height: 720px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    border-radius: 0 0 38px 38px;
+    background: #0c4774;
+  }
+
+  .rf-hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .rf-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(3, 30, 51, 0.9) 0%,
+        rgba(4, 42, 70, 0.65) 43%,
+        rgba(4, 42, 70, 0.12) 78%
+      ),
+      linear-gradient(
+        0deg,
+        rgba(3, 25, 43, 0.35),
+        transparent 55%
+      );
+  }
+
+  .rf-hero__content {
+    position: relative;
+    z-index: 2;
+    padding-bottom: 90px;
+    color: white;
+  }
+
+  .rf-eyebrow {
+    display: inline-block;
+    margin-bottom: 22px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+    opacity: 0.8;
+  }
+
+  .rf-hero h1 {
+    margin: 0;
+    max-width: 750px;
+    font-size: clamp(64px, 8vw, 112px);
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+    font-weight: 500;
+  }
+
+  .rf-hero h1 span {
+    color: #8ebce0;
+  }
+
+  .rf-hero p {
+    max-width: 610px;
+    margin: 30px 0 34px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .rf-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+    padding: 15px 20px 15px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 999px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    transition:
+      transform 0.25s ease,
+      background 0.25s ease;
+  }
+
+  .rf-button span {
+    display: grid;
+    place-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: white;
+    color: #0c4774;
+  }
+
+  .rf-button:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .rf-hero__number {
+    position: absolute;
+    z-index: 2;
+    right: 48px;
+    bottom: 48px;
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    color: white;
+    font-size: 12px;
+  }
+
+  /* INTRO */
+
+  .rf-intro {
+    padding: 130px 0;
+    background: white;
+  }
+
+  .rf-intro__grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 120px;
+    align-items: start;
+  }
+
+  .section-label {
+    display: block;
+    margin-bottom: 25px;
+    color: #6994b5;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+  }
+
+  .rf-intro h2,
+  .section-heading h2,
+  .rf-feature h2,
+  .rf-cta h2 {
+    margin: 0;
+    color: #0c4774;
+    font-size: clamp(40px, 5vw, 65px);
+    line-height: 1.03;
+    letter-spacing: -0.045em;
+    font-weight: 500;
+  }
+
+  .rf-intro h2 span,
+  .rf-feature h2 span,
+  .rf-cta h2 span {
+    color: #82acd0;
+  }
+
+  .rf-intro__text {
+    padding-top: 35px;
+  }
+
+  .rf-intro__text p {
+    margin: 0 0 20px;
+    color: #61788c;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* SERVICES */
+
+  .rf-services {
+    padding: 120px 0;
+    background: #f4f7f9;
+  }
+
+  .section-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 80px;
+    align-items: flex-end;
+    margin-bottom: 60px;
+  }
+
+  .section-heading h2 {
+    max-width: 680px;
+    font-size: clamp(38px, 4vw, 56px);
+  }
+
+  .section-heading > p {
+    max-width: 360px;
+    margin: 0 0 5px;
+    color: #718597;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .rf-services__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .service-card {
+    min-height: 330px;
+    padding: 34px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #dce6ed;
+    border-radius: 28px;
+    background: white;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(15, 63, 97, 0.08);
+  }
+
+  .service-card__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .service-card__number {
+    color: #83a6c1;
+    font-size: 12px;
+  }
+
+  .service-card__arrow {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #d8e3eb;
+    border-radius: 50%;
+    color: #0c4774;
+    font-size: 18px;
+  }
+
+  .service-card h3 {
+    margin: 0 0 15px;
+    color: #0c4774;
+    font-size: 29px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .service-card p {
+    max-width: 470px;
+    margin: 0;
+    color: #718597;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* FEATURE */
+
+  .rf-feature {
+    padding: 120px 0;
+    background: white;
+  }
+
+  .rf-feature__card {
+    min-height: 650px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    overflow: hidden;
+    border-radius: 36px;
+    background: #0b456f;
+  }
+
+  .rf-feature__image {
+    min-height: 650px;
+  }
+
+  .rf-feature__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .rf-feature__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 70px;
+    color: white;
+  }
+
+  .section-label--light {
+    color: #9ec4df;
+  }
+
+  .rf-feature h2 {
+    color: white;
+    font-size: clamp(42px, 4vw, 61px);
+  }
+
+  .rf-feature__content > p {
+    margin: 28px 0 50px;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  .rf-feature__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    padding-top: 32px;
+  }
+
+  .rf-feature__stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rf-feature__stats strong {
+    font-size: 34px;
+    font-weight: 500;
+  }
+
+  .rf-feature__stats span {
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 12px;
+  }
+
+  /* PROCESS */
+
+  .rf-process {
+    padding: 120px 0 140px;
+    background: #f4f7f9;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  .process-card {
+    padding: 30px 5px;
+  }
+
+  .process-card__number {
+    color: #79a2c2;
+    font-size: 12px;
+  }
+
+  .process-card__line {
+    width: 100%;
+    height: 1px;
+    margin: 25px 0 30px;
+    background: #cedce6;
+  }
+
+  .process-card h3 {
+    margin: 0 0 14px;
+    color: #0c4774;
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  .process-card p {
+    margin: 0;
+    color: #718597;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* CTA */
+
+  .rf-cta {
+    padding: 0 0 80px;
+    background: #f4f7f9;
+  }
+
+  .rf-cta__box {
+    padding: 75px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 50px;
+    border-radius: 35px;
+    background: #0a4169;
+  }
+
+  .rf-cta h2 {
+    max-width: 750px;
+    color: white;
+  }
+
+  .rf-button--light {
+    flex-shrink: 0;
+  }
+
+  /* RESPONSIVE */
+
+  @media (max-width: 900px) {
+    .rf-container {
+      width: min(100% - 30px, 1240px);
+    }
+
+    .rf-hero {
+      min-height: 650px;
+      border-radius: 0 0 25px 25px;
+    }
+
+    .rf-hero__content {
+      padding-bottom: 70px;
+    }
+
+    .rf-hero__number {
+      display: none;
+    }
+
+    .rf-intro {
+      padding: 85px 0;
+    }
+
+    .rf-intro__grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .rf-intro__text {
+      padding-top: 0;
+    }
+
+    .section-heading {
+      display: block;
+    }
+
+    .section-heading > p {
+      margin-top: 25px;
+    }
+
+    .rf-services__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .rf-feature__card {
+      grid-template-columns: 1fr;
+    }
+
+    .rf-feature__image {
+      min-height: 400px;
+    }
+
+    .rf-feature__content {
+      padding: 50px 30px;
+    }
+
+    .process-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .rf-cta__box {
+      padding: 50px 30px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .rf-hero {
+      min-height: 600px;
+    }
+
+    .rf-hero h1 {
+      font-size: 58px;
+    }
+
+    .rf-hero p {
+      font-size: 15px;
+    }
+
+    .rf-services,
+    .rf-feature,
+    .rf-process {
+      padding: 80px 0;
+    }
+
+    .service-card {
+      min-height: 290px;
+      padding: 28px;
+    }
+
+    .process-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .rf-feature__stats {
+      gap: 20px;
+    }
+
+    .rf-cta {
+      padding-bottom: 30px;
+    }
+
+    .rf-cta__box {
+      border-radius: 25px;
+    }
+  }
+</style>
