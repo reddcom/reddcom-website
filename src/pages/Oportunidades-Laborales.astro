@@ -1,5 +1,5 @@
-
 ---
+
 import MainLayout from "../layout/MainLayout.astro";
 import { getCollection } from "astro:content";
 
@@ -27,7 +27,11 @@ const plazasOrdenadas: Plaza[] = todasLasPlazas
       segunda.data.fechaPublicacion.getTime() -
       primera.data.fechaPublicacion.getTime()
   );
+  
+console.log("VACANTES ENCONTRADAS:", todasLasPlazas.length);
+console.log("VACANTES ACTIVAS:", plazasOrdenadas.length); 
 ---
+
 
 <MainLayout
   title="Oportunidades Laborales | Reddcom"
@@ -920,7 +924,7 @@ const plazasOrdenadas: Plaza[] = todasLasPlazas
                     md:text-[28px]
                   "
                 >
-                  No hay oportunidades disponibles
+                  No hay Vacantes disponibles
                 </h3>
 
 

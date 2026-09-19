@@ -10,7 +10,7 @@ activo: true
 
 ## Descripción del puesto
 
-Forma parte de nuestro equipo técnico.
+Buscamos una persona responsable y comprometida para formar parte de nuestro equipo.
 
 ## Requisitos
 
