@@ -1,80 +1,948 @@
 ---
 import MainLayout from "../../layout/MainLayout.astro";
+
+import mapaCentroamerica from "../../assets/nuestra-empresa/mapa-centroamerica-azul.png";
+
+import iconCalendario from "../../assets/nuestra-empresa/iconos/calendario.png";
+import iconEquipo from "../../assets/nuestra-empresa/iconos/paises-equipo.png";
+import iconCertificacion from "../../assets/nuestra-empresa/iconos/certificacion.png";
+import iconCrecimiento from "../../assets/nuestra-empresa/iconos/crecimiento.png";
+import iconCalidad from "../../assets/nuestra-empresa/iconos/calidad.png";
+import iconExperiencia from "../../assets/nuestra-empresa/iconos/experiencia.png";
+import iconCumplimiento from "../../assets/nuestra-empresa/iconos/cumplimiento.png";
+
+const historia = [
+  {
+    year: "2005",
+    country: "El Salvador",
+    title: "El comienzo",
+    text: "Inicio de operaciones: instalación y mantenimiento de redes de cobre y HFC.",
+  },
+  {
+    year: "2011",
+    country: "El Salvador",
+    title: "Nuevas capacidades",
+    text: "Expansión a GPON, fibra óptica, MSAN y DSLAM.",
+  },
+  {
+    year: "2013",
+    country: "Honduras",
+    title: "Expansión regional",
+    text: "Inicio de operaciones: fibra óptica, site survey y enlaces de microonda.",
+  },
+  {
+    year: "2015",
+    country: "Guatemala",
+    title: "Contrato regional",
+    text: "Contrato regional CA4: site survey, 3G/LTE, MSAN, DSLAM y microonda.",
+  },
+  {
+    year: "2018",
+    country: "Panamá y Costa Rica",
+    title: "Mayor cobertura",
+    text: "Nuevas operaciones en site survey y negociación de contrato CA6.",
+  },
+  {
+    year: "2026",
+    country: "Actualidad",
+    title: "Grupo diversificado",
+    text: "Telecomunicaciones, energía solar y software, con recursos propios para ejecutar en toda la región.",
+    current: true,
+  },
+];
+
+const indicadores = [
+  {
+    icon: iconCalendario,
+    value: "2005",
+    label: "Año de fundación",
+  },
+  {
+    icon: iconEquipo,
+    value: "6 países",
+    label: "Presencia regional",
+  },
+  {
+    icon: iconCertificacion,
+    value: "ISO 9001:2015",
+    label: "Sistema de gestión de calidad",
+  },
+  {
+    icon: iconCrecimiento,
+    value: "+20 años",
+    label: "Experiencia en la región",
+  },
+];
+
+const pilares = [
+  {
+    icon: iconCalidad,
+    title: "Calidad",
+    text: "Implementamos soluciones con altos estándares técnicos y de seguridad, garantizando operaciones confiables y de largo plazo.",
+  },
+  {
+    icon: iconExperiencia,
+    title: "Experiencia",
+    text: "Más de dos décadas desarrollando proyectos de infraestructura en condiciones reales y entornos diversos de la región.",
+  },
+  {
+    icon: iconCumplimiento,
+    title: "Cumplimiento",
+    text: "Actuamos con integridad, cumplimos nuestros compromisos y trabajamos bajo las mejores prácticas de la industria.",
+  },
+];
+
+const paises = [
+  "El Salvador",
+  "Guatemala",
+  "Honduras",
+  "Nicaragua",
+  "Costa Rica",
+  "Panamá",
+];
 ---
 
 <MainLayout
   title="Nuestra Empresa | Reddcom"
-  description="Conoce Reddcom, nuestra experiencia y compromiso con el desarrollo de infraestructura de telecomunicaciones."
+  description="Conoce la historia, experiencia y presencia regional de Reddcom."
 >
+  <main class="overflow-hidden bg-[#f7f9fb] font-['Montserrat'] text-[#102f4d]">
 
-  <section
-    class="
-      min-h-screen
-      bg-[#f7f9fb]
-      px-6
-      pb-24
-      pt-36
-      font-['Montserrat']
-      md:px-8
-      lg:px-12
-    "
-  >
-    <div class="mx-auto max-w-[1320px]">
-
-      <span
+    <!-- HERO -->
+    <section
+      class="
+        relative min-h-[760px]
+        overflow-hidden
+        bg-gradient-to-br
+        from-[#edf6fa]
+        via-[#dcedf5]
+        to-[#a9d4e5]
+        lg:min-h-screen
+      "
+    >
+      <!-- Círculos decorativos -->
+      <div
         class="
-          text-[10px]
-          font-semibold
-          uppercase
-          tracking-[0.32em]
-          text-[#1595d3]
+          absolute -right-44 -top-44
+          h-[650px] w-[650px]
+          rounded-full
+          border border-[#1595d3]/20
         "
       >
-        CONOCE REDDCOM
-      </span>
+      </div>
 
-      <h1
+      <div
         class="
-          mt-5
-          max-w-[850px]
-          text-[44px]
-          font-semibold
-          leading-[1.05]
-          tracking-[-0.04em]
-          text-[#102f4d]
-          md:text-[60px]
+          absolute -right-20 -top-20
+          h-[440px] w-[440px]
+          rounded-full
+          border border-[#1595d3]/20
         "
       >
-        Nuestra
-        <span class="text-[#1595d3]">
-          Empresa.
+      </div>
+
+      <!-- Bloque azul -->
+      <div
+        class="
+          absolute bottom-0 right-0
+          h-[68%] w-[42%]
+          bg-[#073657]
+          [clip-path:polygon(20%_0,100%_0,100%_100%,0_100%)]
+        "
+      >
+      </div>
+
+      <div
+        class="
+          relative mx-auto flex
+          min-h-[760px]
+          max-w-[1320px]
+          items-center
+          px-6 pb-20 pt-36
+          md:px-8
+          lg:min-h-screen lg:px-12
+        "
+      >
+        <div class="max-w-[620px]">
+          <div class="flex items-center gap-4">
+            <span
+              class="
+                text-[10px]
+                font-semibold uppercase
+                tracking-[0.32em]
+                text-[#1595d3]
+              "
+            >
+              Conoce Reddcom
+            </span>
+
+            <span class="h-px w-12 bg-[#1595d3]"></span>
+          </div>
+
+          <h1
+            class="
+              mt-6 text-[52px]
+              font-semibold
+              leading-[0.98]
+              tracking-[-0.05em]
+              text-[#102f4d]
+              md:text-[76px]
+            "
+          >
+            Nuestra
+
+            <span class="block text-[#1595d3]">
+              Empresa.
+            </span>
+          </h1>
+
+          <p
+            class="
+              mt-7 max-w-[520px]
+              text-[18px] font-medium
+              leading-8 text-[#173b56]
+            "
+          >
+            Conectamos Centroamérica a través de infraestructura de
+            telecomunicaciones confiable, innovadora y sostenible.
+          </p>
+
+          <span class="mt-7 block h-[3px] w-16 bg-[#1595d3]"></span>
+
+          <p
+            class="
+              mt-7 max-w-[510px]
+              text-[14px] leading-7
+              text-[#526577]
+            "
+          >
+            Somos un grupo regional con más de 20 años de experiencia
+            desarrollando e integrando soluciones de conectividad para un
+            futuro más conectado.
+          </p>
+
+          <div class="mt-10 flex items-center gap-7">
+            <div>
+              <strong class="block text-[30px] font-semibold text-[#102f4d]">
+                +20
+              </strong>
+
+              <span
+                class="
+                  text-[9px] uppercase
+                  tracking-[0.2em]
+                  text-[#526577]
+                "
+              >
+                Años de experiencia
+              </span>
+            </div>
+
+            <span class="h-12 w-px bg-[#1595d3]/30"></span>
+
+            <div>
+              <strong class="block text-[30px] font-semibold text-[#102f4d]">
+                6
+              </strong>
+
+              <span
+                class="
+                  text-[9px] uppercase
+                  tracking-[0.2em]
+                  text-[#526577]
+                "
+              >
+                Países en la región
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRODUCCIÓN -->
+    <section
+      class="
+        bg-white px-6 py-20
+        md:px-8
+        lg:px-12 lg:py-28
+      "
+    >
+      <div
+        class="
+          mx-auto grid max-w-[1320px]
+          items-center gap-14
+          lg:grid-cols-[44%_56%]
+          lg:gap-20
+        "
+      >
+        <div>
+          <span
+            class="
+              text-[10px] font-semibold
+              uppercase tracking-[0.28em]
+              text-[#df8a35]
+            "
+          >
+            Nuestra historia
+          </span>
+
+          <h2
+            class="
+              mt-5 text-[36px]
+              font-semibold leading-[1.08]
+              tracking-[-0.04em]
+              text-[#102f4d]
+              md:text-[50px]
+            "
+          >
+            Una trayectoria construida con experiencia.
+          </h2>
+
+          <p class="mt-6 text-[14px] leading-7 text-[#526577]">
+            Iniciamos operaciones en 2005 en El Salvador con la instalación y
+            mantenimiento de redes de cobre y HFC. Desde entonces, hemos
+            evolucionado constantemente, incorporando nuevas tecnologías y
+            expandiendo nuestra presencia.
+          </p>
+
+          <span class="mt-7 block h-[3px] w-12 bg-[#1595d3]"></span>
+
+          <p class="mt-7 text-[13px] leading-7 text-[#526577]">
+            Hoy somos un referente regional en infraestructura de
+            telecomunicaciones, energía y soluciones digitales, con un equipo
+            comprometido con la excelencia y la creación de valor.
+          </p>
+        </div>
+
+        <!-- Bloque de historia -->
+        <div
+          class="
+            relative min-h-[430px]
+            overflow-hidden
+            bg-gradient-to-br
+            from-[#102f4d]
+            via-[#0b5e9a]
+            to-[#1595d3]
+          "
+        >
+          <div
+            class="
+              absolute -right-20 -top-20
+              h-[340px] w-[340px]
+              rounded-full
+              border border-white/10
+            "
+          >
+          </div>
+
+          <div
+            class="
+              absolute -right-5 -top-5
+              h-[220px] w-[220px]
+              rounded-full
+              border border-white/10
+            "
+          >
+          </div>
+
+          <div
+            class="
+              relative flex min-h-[430px]
+              items-center justify-center
+              p-12 text-center
+            "
+          >
+            <div>
+              <strong
+                class="
+                  block text-[78px]
+                  font-semibold
+                  leading-none text-white
+                "
+              >
+                2005
+              </strong>
+
+              <span
+                class="
+                  mt-5 block
+                  text-[11px] uppercase
+                  tracking-[0.28em]
+                  text-blue-100
+                "
+              >
+                El inicio de nuestra historia
+              </span>
+
+              <span
+                class="
+                  mx-auto mt-7 block
+                  h-[3px] w-16
+                  bg-[#55b9df]
+                "
+              >
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LÍNEA DE TIEMPO -->
+    <section
+      class="
+        relative bg-[#073657]
+        px-6 py-24
+        text-white
+        md:px-8
+        lg:px-12 lg:py-28
+      "
+    >
+      <div class="relative mx-auto max-w-[1320px]">
+        <div
+          class="
+            grid gap-8
+            lg:grid-cols-[1fr_360px]
+            lg:items-end
+          "
+        >
+          <div>
+            <span
+              class="
+                text-[10px] font-semibold
+                uppercase tracking-[0.28em]
+                text-[#df8a35]
+              "
+            >
+              Nuestra historia
+            </span>
+
+            <h2
+              class="
+                mt-4 text-[34px]
+                font-semibold leading-tight
+                tracking-[-0.035em]
+                md:text-[48px]
+              "
+            >
+              De El Salvador a una operación regional.
+            </h2>
+          </div>
+
+          <p class="text-[13px] leading-6 text-blue-100/70">
+            Una historia de crecimiento continuo, impulsada por la confianza
+            de nuestros clientes y el talento de nuestra gente.
+          </p>
+        </div>
+
+        <div class="relative mt-16">
+          <div
+            class="
+              absolute bottom-4
+              left-[15px] top-4
+              w-px bg-white/20
+              md:left-1/2
+            "
+          >
+          </div>
+
+          <div class="space-y-8 md:space-y-2">
+            {
+              historia.map((item, index) => (
+                <article
+                  class:list={[
+                    "timeline-card relative md:grid md:grid-cols-2",
+                    index % 2
+                      ? "md:pl-[50%]"
+                      : "md:pr-[50%]",
+                  ]}
+                >
+                  <span
+                    class:list={[
+                      "absolute left-[8px] top-10 z-10 h-[15px] w-[15px] rounded-full border-[3px] border-[#073657] md:left-1/2 md:-translate-x-1/2",
+                      item.current
+                        ? "bg-[#df8a35]"
+                        : "bg-[#1595d3]",
+                    ]}
+                  >
+                  </span>
+
+                  <div
+                    class:list={[
+                      "ml-11 border border-white/10 bg-white/[0.055] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#1595d3]/50 hover:bg-white/[0.08] md:ml-0",
+                      index % 2
+                        ? "md:ml-10 md:col-start-2"
+                        : "md:mr-10",
+                    ]}
+                  >
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <strong
+                          class:list={[
+                            "block text-[30px] font-semibold tracking-[-0.04em]",
+                            item.current
+                              ? "text-[#df8a35]"
+                              : "text-[#1595d3]",
+                          ]}
+                        >
+                          {item.year}
+                        </strong>
+
+                        <span
+                          class="
+                            mt-1 block
+                            text-[10px] font-semibold
+                            uppercase tracking-[0.17em]
+                            text-white
+                          "
+                        >
+                          {item.country}
+                        </span>
+                      </div>
+
+                      <span class="text-[10px] text-white/25">
+                        0{index + 1}
+                      </span>
+                    </div>
+
+                    <h3 class="mt-5 text-[17px] font-semibold text-white">
+                      {item.title}
+                    </h3>
+
+                    <p class="mt-3 text-[12px] leading-6 text-blue-100/70">
+                      {item.text}
+                    </p>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INDICADORES -->
+    <section
+      class="
+        border-y border-[#cfe2ea]
+        bg-[#eaf4f8]
+        px-6
+        md:px-8
+        lg:px-12
+      "
+    >
+      <div
+        class="
+          mx-auto grid
+          max-w-[1320px]
+          sm:grid-cols-2
+          lg:grid-cols-4
+        "
+      >
+        {
+          indicadores.map((item) => (
+            <article
+              class="
+                indicator-card
+                flex items-center gap-5
+                border-b border-[#bfd8e3]
+                py-9
+                sm:border-b-0 sm:border-r
+                sm:px-8
+                sm:first:pl-0
+                sm:last:border-r-0
+                sm:last:pr-0
+              "
+            >
+              <img
+                src={item.icon.src}
+                alt=""
+                class="h-11 w-11 object-contain"
+                loading="lazy"
+              />
+
+              <div>
+                <strong
+                  class="
+                    block text-[21px]
+                    font-semibold leading-tight
+                    text-[#0b78af]
+                  "
+                >
+                  {item.value}
+                </strong>
+
+                <span
+                  class="
+                    mt-2 block
+                    max-w-[170px]
+                    text-[11px] leading-5
+                    text-[#526577]
+                  "
+                >
+                  {item.label}
+                </span>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- PRESENCIA REGIONAL -->
+    <section
+      class="
+        relative overflow-hidden
+        bg-[#073657]
+        px-6 py-20
+        text-white
+        md:px-8
+        lg:px-12 lg:py-24
+      "
+    >
+      <div
+        class="
+          absolute -right-32 -top-48
+          h-[540px] w-[540px]
+          rounded-full
+          border border-white/5
+        "
+      >
+      </div>
+
+      <div
+        class="
+          absolute -right-20 -top-32
+          h-[380px] w-[380px]
+          rounded-full
+          border border-[#1595d3]/10
+        "
+      >
+      </div>
+
+      <div
+        class="
+          relative mx-auto grid
+          max-w-[1320px]
+          items-center gap-12
+          lg:grid-cols-[32%_46%_22%]
+        "
+      >
+        <div>
+          <span
+            class="
+              text-[10px] font-semibold
+              uppercase tracking-[0.28em]
+              text-[#8bd0e9]
+            "
+          >
+            Presencia regional
+          </span>
+
+          <h2
+            class="
+              mt-5 text-[38px]
+              font-semibold leading-[1.04]
+              tracking-[-0.04em]
+              md:text-[50px]
+            "
+          >
+            Conectando Centroamérica.
+          </h2>
+
+          <p class="mt-6 text-[13px] leading-7 text-blue-100/75">
+            Operamos en seis países, con equipos locales y un profundo
+            conocimiento de cada mercado. Nuestra presencia regional nos
+            permite ofrecer soluciones integrales y un acompañamiento cercano
+            a nuestros clientes.
+          </p>
+        </div>
+
+        <div class="relative">
+          <img
+            src={mapaCentroamerica.src}
+            alt="Mapa de presencia regional de Reddcom en Centroamérica"
+            class="
+              map-image
+              h-auto w-full
+              object-contain
+              drop-shadow-[0_18px_35px_rgba(0,0,0,0.18)]
+            "
+            loading="lazy"
+          />
+        </div>
+
+        <div
+          class="
+            border-t border-white/20
+            pt-8
+            lg:border-l lg:border-t-0
+            lg:pl-8 lg:pt-0
+          "
+        >
+          <span
+            class="
+              text-[10px] font-semibold
+              uppercase tracking-[0.22em]
+              text-[#8bd0e9]
+            "
+          >
+            Nuestros países
+          </span>
+
+          <ul class="mt-6 space-y-3">
+            {
+              paises.map((pais, index) => (
+                <li
+                  class="
+                    country-item
+                    flex items-center gap-3
+                    text-[12px] font-medium
+                    text-white
+                  "
+                >
+                  <span
+                    class:list={[
+                      "h-2 w-2 rounded-full",
+                      index < 3
+                        ? "bg-[#1595d3]"
+                        : "bg-white/70",
+                    ]}
+                  >
+                  </span>
+
+                  {pais}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PILARES -->
+    <section
+      class="
+        bg-white px-6 py-20
+        md:px-8
+        lg:px-12 lg:py-28
+      "
+    >
+      <div class="mx-auto max-w-[1320px]">
+        <span
+          class="
+            text-[10px] font-semibold
+            uppercase tracking-[0.28em]
+            text-[#df8a35]
+          "
+        >
+          Nuestro enfoque
         </span>
-      </h1>
 
-      <p
-        class="
-          mt-7
-          max-w-[650px]
-          text-[14px]
-          leading-7
-          text-[#526577]
-          md:text-[15px]
-        "
-      >
-        Conoce más sobre nuestra experiencia, trayectoria y el trabajo
-        que desarrollamos en el sector de las telecomunicaciones.
-      </p>
+        <h2
+          class="
+            mt-5 max-w-[860px]
+            text-[36px] font-semibold
+            leading-tight
+            tracking-[-0.035em]
+            text-[#102f4d]
+            md:text-[48px]
+          "
+        >
+          La forma en que hacemos nuestro trabajo.
+        </h2>
 
-      <!--
-        Aquí desarrollaremos después:
-        - Quiénes somos
-        - Nuestra trayectoria
-        - Experiencia
-        - Cobertura
-        - Capacidades
-      -->
+        <div
+          class="
+            mt-14 grid
+            border-y border-[#dce6eb]
+            md:grid-cols-3
+          "
+        >
+          {
+            pilares.map((item) => (
+              <article
+                class="
+                  pillar-card
+                  border-b border-[#dce6eb]
+                  py-10
+                  last:border-b-0
+                  md:border-b-0
+                  md:border-r
+                  md:px-10
+                  md:first:pl-0
+                  md:last:border-r-0
+                  md:last:pr-0
+                "
+              >
+                <img
+                  src={item.icon.src}
+                  alt=""
+                  class="h-12 w-12 object-contain"
+                  loading="lazy"
+                />
 
-    </div>
-  </section>
+                <h3 class="mt-6 text-[22px] font-semibold text-[#102f4d]">
+                  {item.title}
+                </h3>
 
+                <p class="mt-4 text-[13px] leading-7 text-[#526577]">
+                  {item.text}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    
+  </main>
 </MainLayout>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(55px);
+    transition:
+      opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  .scroll-reveal.reveal-left {
+    transform: translateX(-55px);
+  }
+
+  .scroll-reveal.reveal-right {
+    transform: translateX(55px);
+  }
+
+  .scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  .scroll-card {
+    opacity: 0;
+    transform: translateY(35px);
+    transition:
+      opacity 700ms ease,
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--card-delay, 0ms);
+  }
+
+  .scroll-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .map-image {
+    opacity: 0;
+    transform: scale(0.92);
+    transition:
+      opacity 1000ms ease,
+      transform 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .map-image.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    .scroll-reveal,
+    .scroll-card,
+    .map-image {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  function iniciarAnimaciones() {
+    const sections = document.querySelectorAll("main > section");
+
+    sections.forEach((section, index) => {
+      if (section.classList.contains("scroll-reveal")) return;
+
+      section.classList.add("scroll-reveal");
+
+      if (index % 3 === 1) {
+        section.classList.add("reveal-left");
+      }
+
+      if (index % 3 === 2) {
+        section.classList.add("reveal-right");
+      }
+    });
+
+  const cards = document.querySelectorAll<HTMLElement>(
+  ".timeline-card, .indicator-card, .pillar-card, .country-item"
+);
+
+    cards.forEach((card, index) => {
+      if (card.classList.contains("scroll-card")) return;
+
+      card.classList.add("scroll-card");
+
+      const delay = (index % 4) * 100;
+
+      card.style.setProperty(
+        "--card-delay",
+        `${delay}ms`
+      );
+    });
+
+    const animatedElements = document.querySelectorAll(
+      ".scroll-reveal, .scroll-card, .map-image"
+    );
+
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          entry.target.classList.add("is-visible");
+          currentObserver.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -60px 0px",
+      }
+    );
+
+    animatedElements.forEach((element) => {
+      if (!element.classList.contains("is-visible")) {
+        observer.observe(element);
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      iniciarAnimaciones,
+      { once: true }
+    );
+  } else {
+    iniciarAnimaciones();
+  }
+
+  document.addEventListener(
+    "astro:page-load",
+    iniciarAnimaciones
+  );
+</script>
