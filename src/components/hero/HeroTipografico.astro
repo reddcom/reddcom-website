@@ -1,0 +1,75 @@
+---
+import Foto from "../ui/Foto.astro";
+import BotonPildora from "../ui/BotonPildora.astro";
+import Etiqueta from "../ui/Etiqueta.astro";
+import Franja from "../ui/Franja.astro";
+import InsigniaGiratoria from "../ui/InsigniaGiratoria.astro";
+import type { DatosHero } from "./tipos";
+
+/* Tipográfico (ref. "Creating brands and digital solutions"): foto en blanco y negro
+   bajo un velo navy, título gigante con el destacado dentro de una píldora, insignia
+   giratoria con flecha y la franja de palabras pegada debajo. */
+type Props = DatosHero;
+
+const { encabezado, imagen, boton, franja = [] } = Astro.props;
+---
+
+<section id="hero" class="bg-surface px-3 pt-[96px] font-['Montserrat'] md:px-5">
+  <div data-anim="hero" data-cms="hero.imagen" class="relative isolate overflow-hidden rounded-[32px] bg-navy-950">
+    {
+      imagen && (
+        <Foto
+          data-hero-fondo
+          src={imagen.src}
+          alt={imagen.alt}
+          widths={[960, 1600, 2400]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          class="absolute inset-0 -z-20 h-full w-full object-cover grayscale"
+        />
+      )
+    }
+    <div class="absolute inset-0 -z-10 bg-navy-950/75"></div>
+
+    <div class="mx-auto max-w-[1320px] px-6 pb-16 pt-16 md:px-8 lg:px-12 lg:pb-20 lg:pt-24">
+      {encabezado.etiqueta && <div data-hero-item><Etiqueta texto={encabezado.etiqueta} tono="claro" /></div>}
+
+      <h1
+        data-anim="titulo"
+        data-cms="hero.encabezado"
+        class="mt-8 max-w-[1100px] text-[50px] font-semibold leading-[1.05] tracking-[-0.05em] text-white md:text-[84px] lg:text-[104px]"
+      >
+        {encabezado.titulo}{" "}
+        {
+          encabezado.destacado && (
+            <span class="inline-block rounded-full bg-primary-300 px-[0.35em] pb-[0.08em] text-navy-950">
+              {encabezado.destacado}
+            </span>
+          )
+        }
+      </h1>
+
+      <div class="mt-12 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+        <div data-hero-item data-cms="hero.boton" class="max-w-[460px]">
+          {encabezado.descripcion && <p class="text-[16px] leading-7 text-white/80">{encabezado.descripcion}</p>}
+          {boton && <BotonPildora texto={boton.texto} href={boton.url} variante="acento" class="mt-8" />}
+        </div>
+        {
+          boton && (
+            <div data-hero-item>
+              <InsigniaGiratoria
+                texto="Reddcom · desde 2005 · Centroamérica ·"
+                href={boton.url}
+                etiqueta={boton.texto}
+                tono="claro"
+              />
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+
+  {franja.length > 0 && <Franja palabras={franja} cms="hero.franja" class="mt-3 rounded-[20px]" />}
+</section>

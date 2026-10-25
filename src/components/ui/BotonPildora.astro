@@ -1,0 +1,42 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+
+/* Botón píldora con círculo de flecha al final (ref. "GET STARTED ↗").
+   Sin href se dibuja como botón de envío de formulario. */
+interface Props {
+  texto: string;
+  href?: string;
+  variante?: "oscuro" | "claro" | "acento";
+  class?: string;
+}
+
+const { texto, href, variante = "oscuro", class: clase } = Astro.props;
+
+const colores = {
+  oscuro: { boton: "bg-navy-900 text-white hover:bg-navy-800", circulo: "bg-primary-300 text-navy-950" },
+  claro: { boton: "bg-white text-navy-900 hover:bg-surface-tint", circulo: "bg-navy-900 text-white" },
+  acento: { boton: "bg-primary-300 text-navy-950 hover:bg-primary-500", circulo: "bg-navy-950 text-white" },
+}[variante];
+
+const Etiqueta = href ? "a" : "button";
+---
+
+<Etiqueta
+  href={href}
+  type={href ? undefined : "submit"}
+  class:list={[
+    "group inline-flex h-12 w-fit cursor-pointer items-center gap-4 rounded-full pl-6 pr-1.5 text-sm font-semibold no-underline transition-colors duration-200",
+    colores.boton,
+    clase,
+  ]}
+>
+  {texto}
+  <span
+    class:list={[
+      "flex size-9 items-center justify-center rounded-full transition-transform duration-300 group-hover:rotate-45",
+      colores.circulo,
+    ]}
+  >
+    <ArrowUpRight size={16} aria-hidden="true" />
+  </span>
+</Etiqueta>

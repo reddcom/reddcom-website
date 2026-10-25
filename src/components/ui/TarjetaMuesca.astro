@@ -1,0 +1,69 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+
+/* Tarjeta con muesca y botón de flecha en la esquina (ref. "Our classes" y "70% faster").
+   El botón vive fuera de la máscara, centrado en el hueco. Con `href` toda la
+   tarjeta es el enlace y la flecha es solo la señal visual. */
+interface Props {
+  href?: string;
+  etiqueta?: string; // nombre accesible del botón
+  tono?: "claro" | "gris" | "acento" | "primario" | "oscuro";
+  class?: string;
+}
+
+const { href, etiqueta, tono = "gris", class: clase } = Astro.props;
+
+const fondos = {
+  claro: "bg-white text-navy-900",
+  gris: "bg-surface text-navy-900",
+  acento: "bg-primary-300 text-navy-950",
+  primario: "bg-primary-600 text-white",
+  oscuro: "bg-navy-950 text-white",
+};
+const botones = {
+  claro: "bg-navy-900 text-white",
+  gris: "bg-navy-900 text-white",
+  acento: "bg-navy-950 text-white",
+  primario: "bg-white text-navy-900",
+  oscuro: "bg-primary-300 text-navy-950",
+};
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      aria-label={etiqueta}
+      data-anim="revelar"
+      class:list={[
+        "group relative block rounded-[24px] no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600",
+        clase,
+      ]}
+    >
+      <div class:list={["muesca flex h-full flex-col rounded-[24px] p-7 lg:p-8", fondos[tono]]}>
+        <slot />
+      </div>
+      <span
+        aria-hidden="true"
+        class:list={[
+          "absolute right-1 top-1 flex size-11 items-center justify-center rounded-full transition-transform duration-300 group-hover:rotate-45",
+          botones[tono],
+        ]}
+      >
+        <ArrowUpRight size={18} />
+      </span>
+    </a>
+  ) : (
+    <article data-anim="revelar" class:list={["group relative", clase]}>
+      <div class:list={["muesca flex h-full flex-col rounded-[24px] p-7 lg:p-8", fondos[tono]]}>
+        <slot />
+      </div>
+      <span
+        aria-hidden="true"
+        class:list={["absolute right-1 top-1 flex size-11 items-center justify-center rounded-full", botones[tono]]}
+      >
+        <slot name="icono" />
+      </span>
+    </article>
+  )
+}

@@ -1,0 +1,66 @@
+---
+import Etiqueta from "./Etiqueta.astro";
+
+/* Encabezado de sección: etiqueta, título grande (el destacado sigue en tono
+   apagado, ref. "A global consulting partner… and more adaptive") y descripción.
+   "dividido" pone la descripción a la derecha del título. */
+interface Props {
+  etiqueta?: string;
+  titulo: string;
+  destacado?: string;
+  descripcion?: string;
+  alineacion?: "izquierda" | "centro" | "dividido";
+  tono?: "claro" | "oscuro";
+  class?: string;
+  cms?: string; // campo del CMS que se pinta aquí (resaltado en la vista previa)
+}
+
+const {
+  etiqueta,
+  titulo,
+  destacado,
+  descripcion,
+  alineacion = "izquierda",
+  tono = "oscuro",
+  class: clase,
+  cms,
+} = Astro.props;
+
+const oscuro = tono === "oscuro";
+const claseDescripcion = ["text-[15px] leading-7", oscuro ? "text-body" : "text-white/75"];
+---
+
+<div
+  data-cms={cms}
+  class:list={[
+    alineacion === "centro" && "mx-auto max-w-[880px] text-center",
+    alineacion === "dividido" && "grid gap-6 lg:grid-cols-12 lg:items-end",
+    clase,
+  ]}
+>
+  <div class:list={[alineacion === "dividido" && "lg:col-span-7"]}>
+    {etiqueta && <Etiqueta texto={etiqueta} tono={oscuro ? "oscuro" : "claro"} />}
+    <h2
+      data-anim="titulo"
+      class:list={[
+        "mt-5 text-[36px] font-semibold leading-[1.04] tracking-[-0.045em] md:text-[54px]",
+        oscuro ? "text-navy-900" : "text-white",
+      ]}
+    >
+      {titulo}{" "}
+      {destacado && <span class={oscuro ? "text-navy-900/35" : "text-white/45"}>{destacado}</span>}
+    </h2>
+    {
+      descripcion && alineacion !== "dividido" && (
+        <p class:list={[claseDescripcion, "mt-5", alineacion === "centro" && "mx-auto max-w-[560px]"]}>
+          {descripcion}
+        </p>
+      )
+    }
+  </div>
+  {
+    descripcion && alineacion === "dividido" && (
+      <p class:list={[claseDescripcion, "max-w-[400px] lg:col-span-4 lg:col-start-9"]}>{descripcion}</p>
+    )
+  }
+</div>

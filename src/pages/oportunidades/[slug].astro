@@ -1,0 +1,158 @@
+---
+import { ArrowLeft, BriefcaseBusiness, CalendarDays, Layers, MapPin } from "@lucide/astro";
+import MainLayout from "../../layout/MainLayout.astro";
+import HeroPagina from "../../components/hero/HeroPagina.astro";
+import FormPostulacion from "../../components/empleo/FormPostulacion.astro";
+import EncabezadoSeccion from "../../components/ui/EncabezadoSeccion.astro";
+import TarjetaMuesca from "../../components/ui/TarjetaMuesca.astro";
+import {
+  correoRrhhPrueba,
+  detalleVacante,
+  jornadaLegible,
+  ubicacionDe,
+  vacantesActivas,
+} from "../../data/empleo";
+import { obtenerPagina, seccion } from "../../lib/cms";
+// Foto temporal de Pexels (licencia libre)
+import fotoEquipo from "../../assets/pexels/equipo-oficina.jpg";
+
+/* Una página por cada vacante activa del módulo Vacantes del CMS, leída en
+   cada visita: una vacante nueva tiene su página sin recompilar. */
+const { slug = "" } = Astro.params;
+const [vacante, vacantes, cms] = await Promise.all([
+  detalleVacante(slug),
+  vacantesActivas(),
+  obtenerPagina("detalleVacante"),
+]);
+if (!vacante) return Astro.rewrite("/404");
+
+const otras = vacantes.filter((otra) => otra.slug !== vacante.slug).slice(0, 3);
+
+const postulacionCms = seccion(cms, "postulacion");
+const correoRrhh = postulacionCms.uno("correo", "texto") ?? correoRrhhPrueba;
+const encabezadoFormulario = postulacionCms.uno("encabezado", "encabezado") ?? {
+  etiqueta: "¿Te interesa?",
+  titulo: "Postúlate a esta vacante.",
+};
+const fotoHero = postulacionCms.uno("imagen", "imagen") ?? { src: fotoEquipo, alt: "" };
+
+const detalles = [
+  { etiqueta: "Ubicación", valor: ubicacionDe(vacante), icono: MapPin },
+  { etiqueta: "Jornada", valor: jornadaLegible(vacante), icono: BriefcaseBusiness },
+  { etiqueta: "Área", valor: vacante.area, icono: Layers },
+  {
+    etiqueta: "Publicada",
+    valor: new Intl.DateTimeFormat("es", { dateStyle: "long" }).format(vacante.fechaPublicacion),
+    icono: CalendarDays,
+  },
+];
+
+const listas = [
+  { titulo: "Responsabilidades", puntos: vacante.responsabilidades },
+  { titulo: "Requisitos", puntos: vacante.requisitos },
+].filter((lista) => lista.puntos.length > 0);
+---
+
+<MainLayout
+  title={`${vacante.titulo} | Oportunidades Laborales | Reddcom`}
+  description={vacante.resumen}
+>
+  <!-- La foto del hero sale de "Detalle de vacante → Postulación" en el CMS -->
+  <div data-cms="postulacion.imagen">
+    <HeroPagina
+      tipo="tipografico"
+      encabezado={{
+        etiqueta: "Vacante activa",
+        titulo: vacante.titulo,
+        destacado: vacante.area,
+        descripcion: vacante.resumen,
+      }}
+      imagen={fotoHero}
+      boton={{ texto: "Postularme", url: "#postular" }}
+      franja={[ubicacionDe(vacante), jornadaLegible(vacante), vacante.area, "Únete a Reddcom"]}
+    />
+  </div>
+
+  <!-- Detalle de la vacante como contenido de la página y, al lado, el formulario siempre visible -->
+  <section id="vacante" class="bg-white py-16 font-['Montserrat'] lg:py-24">
+    <div class="mx-auto grid max-w-[1320px] gap-14 px-6 md:px-8 lg:grid-cols-12 lg:gap-12 lg:px-12">
+      <article class="lg:col-span-6">
+        <a
+          href="/Oportunidades-Laborales"
+          class="inline-flex items-center gap-2 text-[13px] font-semibold text-primary-700 no-underline hover:text-navy-900"
+        >
+          <ArrowLeft size={16} aria-hidden="true" /> Todas las vacantes
+        </a>
+
+        <dl class="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-navy-900/10 py-6">
+          {
+            detalles.map((detalle) => (
+              <div class="flex items-start gap-3">
+                <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-surface-tint text-primary-700">
+                  <detalle.icono size={16} aria-hidden="true" />
+                </span>
+                <div class="min-w-0">
+                  <dt class="text-[12px] text-body">{detalle.etiqueta}</dt>
+                  <dd class="text-[14px] font-semibold text-navy-900">{detalle.valor}</dd>
+                </div>
+              </div>
+            ))
+          }
+        </dl>
+
+        {
+          listas.map((lista) => (
+            <section data-anim="revelar" class="mt-10">
+              <h2 class="text-[28px] font-semibold tracking-[-0.03em] text-navy-900">{lista.titulo}</h2>
+              <ul class="mt-4 space-y-3">
+                {lista.puntos.map((punto) => (
+                  <li class="flex gap-3 text-[16px] leading-7 text-body">
+                    <span class="mt-[0.7em] size-2 shrink-0 rounded-full bg-primary-300" aria-hidden="true" />
+                    {punto}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </article>
+
+      <div class="border-t border-navy-900/10 pt-12 lg:col-span-5 lg:col-start-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+        <FormPostulacion
+          vacanteId={vacante.id}
+          vacanteTitulo={vacante.titulo}
+          encabezado={encabezadoFormulario}
+          correoRrhh={correoRrhh}
+        />
+      </div>
+    </div>
+  </section>
+
+  {
+    otras.length > 0 && (
+      <section id="otras" class="bg-surface py-20 font-['Montserrat'] lg:py-28">
+        <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+          <EncabezadoSeccion etiqueta="Más vacantes" titulo="Otras posiciones" destacado="abiertas." />
+          <ul class="mt-12 grid gap-5 md:grid-cols-3">
+            {otras.map((otra) => (
+              <li>
+                <TarjetaMuesca href={`/oportunidades/${otra.slug}`} etiqueta={`Ver vacante ${otra.titulo}`} tono="claro" class="h-full">
+                  <span class="w-fit rounded-full bg-surface px-3 py-1 text-[12px] font-semibold">{otra.area}</span>
+                  <h3 class="mt-6 pr-10 text-[24px] font-semibold leading-tight tracking-[-0.03em]">{otra.titulo}</h3>
+                  <p class="mt-auto flex items-center gap-1.5 pt-8 text-[13px] text-body">
+                    <MapPin size={14} aria-hidden="true" />
+                    {ubicacionDe(otra)}
+                  </p>
+                </TarjetaMuesca>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+</MainLayout>
+
+<script>
+  import "../../scripts/postulacion";
+</script>

@@ -1,0 +1,18 @@
+---
+/* Placa pegada a la esquina inferior derecha de una foto redondeada (ref. "Know More"):
+   tiene el color de la página y dos esquinas cóncavas, así parece recortada de la foto. */
+interface Props {
+  class?: string;
+  cms?: string; // campos del CMS que se pintan aquí (resaltado en la vista previa)
+}
+
+const { class: clase, cms } = Astro.props;
+const concava =
+  "absolute size-7 bg-[radial-gradient(circle_at_0_0,transparent_27.5px,var(--color-surface)_28px)]";
+---
+
+<div data-cms={cms} class:list={["absolute bottom-0 right-0 rounded-tl-[28px] bg-surface", clase]}>
+  <span aria-hidden="true" class:list={[concava, "-top-7 right-0"]}></span>
+  <span aria-hidden="true" class:list={[concava, "bottom-0 -left-7"]}></span>
+  <slot />
+</div>

@@ -1,0 +1,208 @@
+---
+import Foto from "../ui/Foto.astro";
+import { ArrowDown, ArrowLeft, ArrowRight, Quote, SearchX } from "@lucide/astro";
+import MainLayout from "../../layout/MainLayout.astro";
+import HeroPagina from "../hero/HeroPagina.astro";
+import type { DatosHero, Imagen } from "../hero/tipos";
+import BannerCta from "../ui/BannerCta.astro";
+import BotonPildora from "../ui/BotonPildora.astro";
+import EncabezadoSeccion from "../ui/EncabezadoSeccion.astro";
+import TarjetaProyecto from "./TarjetaProyecto.astro";
+import { proyectosDe } from "../../data/proyectos";
+import { cierreDe, heroDe, obtenerPagina, seccion } from "../../lib/cms";
+
+/* Página de proyectos de un país (Reddcom Honduras, Reddcom Guatemala).
+   Textos y fotos salen de su página en el CMS; los proyectos, del módulo
+   Proyectos. Las props son el respaldo mientras el CMS esté vacío. */
+interface Props {
+  clave: "reddcomHonduras" | "reddcomGuatemala";
+  pais: string;
+  descripcion: string;
+  imagen: Imagen;
+  fotoLogros: Imagen;
+  desde: number;
+  servicios: string[];
+}
+
+const { clave, pais, descripcion, imagen, fotoLogros, desde, servicios } = Astro.props;
+const [cms, proyectos] = await Promise.all([obtenerPagina(clave), proyectosDe(pais)]);
+const [destacado] = proyectos;
+
+const heroPrueba: DatosHero = {
+  tipo: "fotoClara",
+  encabezado: { etiqueta: "Nuestros proyectos", titulo: "Reddcom", destacado: `${pais}.`, descripcion },
+  imagen,
+  boton: { texto: "Ver proyectos", url: "#proyectos" },
+  diapositivas: proyectos.flatMap((proyecto) =>
+    proyecto.imagen
+      ? [{ titulo: proyecto.titulo, texto: `${proyecto.ciudad} · ${proyecto.anio}`, imagen: proyecto.imagen, url: `/proyectos/${proyecto.slug}` }]
+      : [],
+  ),
+  franja: servicios,
+};
+const hero = heroDe(cms, heroPrueba);
+
+const lecturaLogros = seccion(cms, "logros");
+const [datoGris, datoAzul] = lecturaLogros.lista("datos", "dato") ?? [
+  { valor: String(proyectos.length), etiqueta: "Proyectos en el país" },
+  { valor: String(desde), etiqueta: "Operando desde" },
+];
+const logros = {
+  titulo: lecturaLogros.uno("encabezado", "encabezado")?.titulo ?? `Logros de Reddcom en ${pais}`,
+  imagen: lecturaLogros.uno("imagen", "imagen") ?? fotoLogros,
+};
+
+const cierre = cierreDe(cms, { titulo: "Construyamos juntos", destacado: `en ${pais}` });
+---
+
+<MainLayout title={`Reddcom ${pais} | Reddcom`} description={`Proyectos de Reddcom en ${pais}. ${descripcion}`}>
+  <HeroPagina {...hero} />
+
+  <!-- =====================================================
+       LOGROS  (ref. "Key Achievements of This Company": foto en marco oscuro + tarjetas de dato)
+  ====================================================== -->
+  <section id="logros" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto grid max-w-[1320px] gap-6 px-6 md:px-8 lg:grid-cols-12 lg:px-12">
+      <div class="relative lg:col-span-4">
+        <div data-anim="foto" data-cms="logros.imagen" class="overflow-hidden rounded-[28px] border-[6px] border-navy-950">
+          <Foto
+            src={logros.imagen.src}
+            alt={logros.imagen.alt}
+            widths={[480, 720]}
+            sizes="(min-width: 1024px) 400px, 100vw"
+            class="aspect-[4/5] w-full object-cover grayscale"
+          />
+        </div>
+        <span
+          class="absolute -bottom-5 left-1/2 flex size-14 -translate-x-1/2 items-center justify-center rounded-full bg-primary-300 text-navy-950 ring-[6px] ring-navy-950"
+          aria-hidden="true"
+        >
+          <ArrowDown size={20} />
+        </span>
+      </div>
+
+      <div class="flex flex-col gap-6 lg:col-span-8">
+        <div class="grid gap-4 sm:grid-cols-2" data-cms="logros.datos">
+          <article data-anim="revelar" class="rounded-[22px] bg-surface p-6">
+            <p class="text-[13px] text-body">{datoGris.etiqueta}</p>
+            <p data-contar class="mt-6 text-[56px] font-normal leading-none tracking-[-0.04em] text-navy-950">
+              {datoGris.valor}
+            </p>
+          </article>
+          <article data-anim="revelar" class="rounded-[22px] bg-primary-300 p-6 text-navy-950">
+            <p class="text-[13px]">{datoAzul?.etiqueta}</p>
+            <p data-contar class="mt-6 text-[56px] font-normal leading-none tracking-[-0.04em]">{datoAzul?.valor}</p>
+          </article>
+        </div>
+        <h2
+          data-anim="titulo"
+          data-cms="logros.encabezado"
+          class="mt-auto text-[44px] font-normal leading-[1] tracking-[-0.045em] text-navy-950 md:text-[76px]"
+        >
+          {logros.titulo}
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       PROYECTOS  (ref. "Popular Destination": pista de tarjetas con flechas)
+  ====================================================== -->
+  <section id="proyectos" data-pista-grupo class="bg-surface py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+      <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <EncabezadoSeccion etiqueta="Proyectos" titulo={`Lo que hemos construido en ${pais}`} />
+        <div class:list={["flex gap-3", proyectos.length < 2 && "hidden"]}>
+          <button
+            type="button"
+            data-pista-anterior
+            aria-label="Proyectos anteriores"
+            class="flex size-12 items-center justify-center rounded-full bg-white text-navy-900 transition-colors hover:bg-surface-tint"
+          >
+            <ArrowLeft size={18} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            data-pista-siguiente
+            aria-label="Proyectos siguientes"
+            class="flex size-12 items-center justify-center rounded-full bg-navy-950 text-white transition-colors hover:bg-primary-700"
+          >
+            <ArrowRight size={18} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
+      {
+        proyectos.length > 0 ? (
+          <ul
+            data-pista
+            class="mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {proyectos.map((proyecto) => (
+              <li class="w-[300px] shrink-0 snap-start md:w-[400px]">
+                <TarjetaProyecto proyecto={proyecto} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div class="mt-12 flex flex-col items-center rounded-[28px] bg-white px-6 py-16 text-center">
+            <span class="flex size-14 items-center justify-center rounded-full bg-surface-tint text-primary-700">
+              <SearchX size={22} aria-hidden="true" />
+            </span>
+            <p class="mt-6 text-[22px] font-semibold text-navy-900">Pronto publicaremos proyectos en {pais}</p>
+            <p class="mt-2 max-w-[420px] text-[15px] leading-7 text-body">
+              Mientras tanto, cuéntanos qué necesitas y te mostramos experiencias similares.
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- =====================================================
+       DESTACADO  (ref. "Partnerships That Deliver Value": cita + foto + píldora oscura)
+  ====================================================== -->
+  {
+    destacado && (
+      <section id="destacado" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+        <div class="mx-auto grid max-w-[1320px] items-center gap-12 px-6 md:px-8 lg:grid-cols-12 lg:px-12">
+          <div class="lg:col-span-7">
+            <h2
+              data-anim="titulo"
+              class="text-[38px] font-normal leading-[1.02] tracking-[-0.045em] text-navy-950 md:text-[64px]"
+            >
+              Proyecto destacado
+            </h2>
+            <Quote size={36} class="mt-10 text-primary-600" aria-hidden="true" />
+            <p data-anim="revelar" class="mt-4 text-[22px] font-semibold leading-[1.35] text-navy-900 md:text-[28px]">
+              {destacado.resumen}
+            </p>
+            <p data-anim="revelar" class="mt-4 text-[14px] text-body">
+              {destacado.titulo} · {destacado.ciudad}, {destacado.anio}
+            </p>
+          </div>
+          <div class="relative lg:col-span-5">
+            <div data-anim="foto" class="overflow-hidden rounded-[28px]">
+              {destacado.imagen && (
+              <Foto
+                src={destacado.imagen.src}
+                alt={destacado.imagen.alt}
+                widths={[480, 720, 960]}
+                sizes="(min-width: 1024px) 480px, 100vw"
+                class="aspect-square w-full object-cover grayscale"
+              />
+              )}
+            </div>
+            <BotonPildora
+              texto="Ver proyecto"
+              href={`/proyectos/${destacado.slug}`}
+              class="absolute -bottom-6 right-6"
+            />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <BannerCta {...cierre} />
+</MainLayout>

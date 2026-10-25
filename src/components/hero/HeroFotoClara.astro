@@ -1,0 +1,97 @@
+---
+import Foto from "../ui/Foto.astro";
+import { ArrowRight } from "@lucide/astro";
+import BotonPildora from "../ui/BotonPildora.astro";
+import Etiqueta from "../ui/Etiqueta.astro";
+import PlacaEsquina from "./PlacaEsquina.astro";
+import TiraHero from "./TiraHero.astro";
+import type { DatosHero } from "./tipos";
+
+/* Foto clara (ref. "Experience the magic of flight"): foto de cielo en una tarjeta
+   redondeada, texto navy a la izquierda, placa recortada abajo a la derecha con
+   miniaturas circulares (tarjetas) y una tira de especialidades debajo (franja). */
+type Props = DatosHero;
+
+const { encabezado, imagen, boton, diapositivas = [], franja = [] } = Astro.props;
+const [destacada] = diapositivas;
+---
+
+<section id="hero" class="bg-surface px-3 pt-[96px] font-['Montserrat'] md:px-5">
+  <div data-anim="hero" data-cms="hero.imagen" class="relative isolate overflow-hidden rounded-[32px] bg-surface-tint">
+    {
+      imagen && (
+        <Foto
+          data-hero-fondo
+          src={imagen.src}
+          alt={imagen.alt}
+          widths={[960, 1600, 2400]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          class="absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+      )
+    }
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-surface/90 via-surface/55 to-surface/0"></div>
+
+    <div
+      class="mx-auto flex min-h-[600px] max-w-[1320px] items-center px-6 pb-48 pt-16 md:px-8 lg:min-h-[680px] lg:px-12 lg:pb-24"
+    >
+      <div class="max-w-[640px]">
+        {encabezado.etiqueta && <div data-hero-item><Etiqueta texto={encabezado.etiqueta} /></div>}
+        <h1
+          data-anim="titulo"
+          data-cms="hero.encabezado"
+          class="mt-6 text-[48px] font-bold leading-[1] tracking-[-0.045em] text-navy-950 md:text-[72px]"
+        >
+          {encabezado.titulo}
+          {encabezado.destacado && <span class="block">{encabezado.destacado}</span>}
+        </h1>
+        {
+          encabezado.descripcion && (
+            <p data-hero-item class="mt-6 max-w-[460px] text-[16px] leading-7 text-navy-900/80">
+              {encabezado.descripcion}
+            </p>
+          )
+        }
+        {
+          boton && (
+            <div data-hero-item data-cms="hero.boton" class="mt-8">
+              <BotonPildora texto={boton.texto} href={boton.url} variante="oscuro" />
+            </div>
+          )
+        }
+      </div>
+    </div>
+
+    {
+      destacada && (
+        <PlacaEsquina cms="hero.diapositivas" class="w-[min(100%,360px)] px-6 pb-2 pt-5 md:pl-7">
+          <a
+            href={destacada.url}
+            class="flex items-center justify-between gap-4 text-[18px] font-semibold text-navy-900 no-underline"
+          >
+            {destacada.titulo}
+            <ArrowRight size={20} aria-hidden="true" />
+          </a>
+          <div class="mt-3 flex items-center gap-3">
+            <div class="flex -space-x-3">
+              {diapositivas.slice(0, 3).map((tarjeta) => (
+                <Foto
+                  src={tarjeta.imagen.src}
+                  alt=""
+                  widths={[96]}
+                  sizes="48px"
+                  class="size-12 rounded-full border-2 border-surface object-cover"
+                />
+              ))}
+            </div>
+            {destacada.texto && <p class="text-[12px] leading-4 text-body">{destacada.texto}</p>}
+          </div>
+        </PlacaEsquina>
+      )
+    }
+  </div>
+
+  {franja.length > 0 && <TiraHero palabras={franja} cms="hero.franja" />}
+</section>

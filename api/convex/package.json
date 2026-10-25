@@ -1,0 +1,33 @@
+{
+  "name": "@reddcom/convex",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./api": "./functions/_generated/api.js",
+    "./modelo": {
+      "types": "./functions/_generated/dataModel.d.ts"
+    },
+    "./bloques": "./compartido/bloques.ts",
+    "./imagenes": "./compartido/imagenes.ts",
+    "./mensajes": "./compartido/mensajes.ts",
+    "./vacantes": "./compartido/vacantes.ts",
+    "./proyectos": "./compartido/proyectos.ts",
+    "./roles": "./compartido/roles.ts",
+    "./registro": "./compartido/registro.ts"
+  },
+  "scripts": {
+    "dev": "convex dev",
+    "deploy": "convex deploy"
+  },
+  "dependencies": {
+    "@convex-dev/better-auth": "^0.12.5",
+    "better-auth": "~1.6.33",
+    "convex": "^1.48.0",
+    "convex-helpers": "^0.1.129",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "~5.9.3"
+  }
+}

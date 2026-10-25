@@ -1,0 +1,40 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+
+/* Insignia circular con texto que gira y flecha al centro (ref. "SINCE 2001 · LEADING DIGITAL AGENCY"). */
+interface Props {
+  texto: string;
+  href?: string;
+  etiqueta?: string; // nombre accesible del enlace
+  tono?: "claro" | "oscuro";
+  class?: string;
+}
+
+const { texto, href, etiqueta, tono = "oscuro", class: clase } = Astro.props;
+const idCirculo = `circulo-${Math.random().toString(36).slice(2, 8)}`;
+const Etiqueta = href ? "a" : "div";
+---
+
+<Etiqueta
+  href={href}
+  aria-label={href ? (etiqueta ?? texto) : undefined}
+  class:list={[
+    "group relative grid size-32 shrink-0 place-items-center no-underline",
+    tono === "claro" ? "text-white" : "text-navy-900",
+    clase,
+  ]}
+>
+  <svg data-anim="girar" viewBox="0 0 120 120" class="absolute inset-0 size-full" aria-hidden="true">
+    <defs>
+      <path id={idCirculo} d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"></path>
+    </defs>
+    <text class="fill-current text-[10px] font-semibold uppercase tracking-[0.32em]">
+      <textPath href={`#${idCirculo}`}>{texto}</textPath>
+    </text>
+  </svg>
+  <span
+    class="flex size-14 items-center justify-center rounded-full bg-primary-300 text-navy-950 transition-transform duration-300 group-hover:rotate-45"
+  >
+    <ArrowUpRight size={22} aria-hidden="true" />
+  </span>
+</Etiqueta>

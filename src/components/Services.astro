@@ -3,39 +3,59 @@ import ConstruccionImg from "../assets/Servicios/01-construccion.png";
 import RedesHfcImg from "../assets/Servicios/02-HFC.png";
 import FibraOpticaImg from "../assets/Servicios/03-fibra.png";
 
-const services = [
+import Foto from "./ui/Foto.astro";
+import { obtenerPagina, seccion } from "../lib/cms";
+
+/* Servicios de Inicio: el contenido sale del CMS (registro `inicio` → Servicios)
+   con estos datos de prueba como respaldo; el tamaño de cada tarjeta, por posición. */
+const servicios = seccion(await obtenerPagina("inicio"), "servicios");
+
+const encabezado = servicios.uno("encabezado", "encabezado") ?? {
+  etiqueta: "NUESTROS SERVICIOS",
+  titulo: "Soluciones para cada",
+  destacado: "conexión.",
+  descripcion:
+    "Diseñamos, construimos y mantenemos infraestructura de telecomunicaciones adaptada a las necesidades de cada proyecto.",
+};
+
+// No hay página que liste todos los servicios: por defecto lleva a la primera.
+const enlaceTodos = servicios.uno("enlaceTodos", "enlace") ?? { texto: "Ver todos los servicios", url: "/Servicios/redes-hfc" };
+const tarjetas = servicios.lista("servicios", "tarjeta") ?? [
   {
-    title: "Proyectos RF",
-    description:
-      "Diseño, implementación y optimización de soluciones de radiofrecuencia para redes de telecomunicaciones.",
-    image: ConstruccionImg.src,
-    href: "/Servicios/Proyectos-RF",
-    className: "md:col-span-7 md:row-span-2",
-    featured: true,
+    titulo: "Proyectos RF",
+    texto: "Diseño, implementación y optimización de soluciones de radiofrecuencia para redes de telecomunicaciones.",
+    imagen: { src: ConstruccionImg, alt: "Proyectos RF" },
+    url: "/Servicios/Proyectos-RF",
   },
   {
-    title: "Redes HFC",
-    description:
-      "Planificación y diseño de soluciones de telecomunicaciones.",
-    image: RedesHfcImg.src,
-    href: "/Servicios/redes-hfc",
-    className: "md:col-span-5",
+    titulo: "Redes HFC",
+    texto: "Planificación y diseño de soluciones de telecomunicaciones.",
+    imagen: { src: RedesHfcImg, alt: "Redes HFC" },
+    url: "/Servicios/redes-hfc",
   },
   {
-    title: "Redes Fibra Óptica",
-    description:
-      "Soluciones en fibra óptica y redes de alta capacidad.",
-    image: FibraOpticaImg.src,
-    href: "/Servicios/redes-fo",
-    className: "md:col-span-5",
+    titulo: "Redes Fibra Óptica",
+    texto: "Soluciones en fibra óptica y redes de alta capacidad.",
+    imagen: { src: FibraOpticaImg, alt: "Redes de fibra óptica" },
+    url: "/Servicios/redes-fo",
   },
 ];
+
+// La primera tarjeta es la grande del bento.
+const services = tarjetas.map((tarjeta, indice) => ({
+  title: tarjeta.titulo,
+  description: tarjeta.texto,
+  image: tarjeta.imagen?.src,
+  href: tarjeta.url,
+  className: indice === 0 ? "md:col-span-7 md:row-span-2" : "md:col-span-5",
+  featured: indice === 0,
+}));
 ---
 
 <section
   id="servicios"
   class="
-    bg-[#f7f9fb]
+    bg-surface
     py-20
     font-['Montserrat']
     md:py-28
@@ -45,6 +65,7 @@ const services = [
 
     <!-- HEADER -->
     <div
+      data-cms="servicios.encabezado"
       class="
         mb-10
         flex flex-col
@@ -56,17 +77,17 @@ const services = [
     >
       <div>
         <div class="mb-4 flex items-center gap-3">
-          <span class="h-px w-8 bg-[#087fc1]"></span>
+          <span class="h-px w-8 bg-primary-700"></span>
 
           <span
             class="
               text-[10px]
               font-semibold
               tracking-[0.3em]
-              text-[#087fc1]
+              text-primary-700
             "
           >
-            NUESTROS SERVICIOS
+            {encabezado.etiqueta}
           </span>
         </div>
 
@@ -77,14 +98,14 @@ const services = [
             font-semibold
             leading-[1.08]
             tracking-[-0.04em]
-            text-[#123d68]
+            text-navy-800
 
             md:text-[48px]
           "
         >
-          Soluciones para cada 
+          {encabezado.titulo}
           <span class="text-[#76a5c9] font-bold">
-            conexión.
+            {encabezado.destacado}
           </span>
         </h2>
       </div>
@@ -98,15 +119,14 @@ const services = [
           md:text-[13px]
         "
       >
-        Diseñamos, construimos y mantenemos infraestructura
-        de telecomunicaciones adaptada a las necesidades
-        de cada proyecto.
+        {encabezado.descripcion}
       </p>
     </div>
 
 
     <!-- BENTO GRID -->
     <div
+      data-cms="servicios.servicios"
       class="
         grid
         auto-rows-[245px]
@@ -130,62 +150,36 @@ const services = [
                 group
                 relative
                 overflow-hidden
-                rounded-[24px]
+                rounded-sm
               `,
               service.className,
             ]}
           >
 
             <!-- IMAGE -->
-            <img
-              src={service.image}
-              alt={service.title}
-              loading="lazy"
-              class="
-                absolute inset-0
-                h-full w-full
-                object-cover
-                transition-transform
-                duration-700
-                ease-out
-
-                group-hover:scale-[1.04]
-              "
-            />
+            {service.image && (
+              <Foto
+                src={service.image}
+                alt={service.title}
+                loading="lazy"
+                class="
+                  absolute inset-0
+                  h-full w-full
+                  object-cover
+                "
+              />
+            )}
 
             <!-- DARK GRADIENT -->
             <div
               class="
                 absolute inset-0
                 bg-gradient-to-t
-                from-[#071c30]/90
+                from-navy-950/90
                 via-[#0b2c48]/20
                 to-transparent
               "
             ></div>
-
-
-            <!-- NUMBER -->
-            <div
-              class="
-                absolute
-                right-5 top-5
-
-                flex h-10 w-10
-                items-center justify-center
-
-                rounded-full
-                border border-white/30
-                bg-white/10
-                text-[10px]
-                font-medium
-                text-white
-
-                backdrop-blur-md
-              "
-            >
-              0{services.indexOf(service) + 1}
-            </div>
 
 
             <!-- CONTENT -->
@@ -246,29 +240,27 @@ const services = [
                 <!-- ARROW -->
                 <span
                   class="
-                    flex
-                    h-11 w-11
+                    inline-flex
+                    h-10
                     shrink-0
-                    items-center justify-center
+                    items-center
+                    gap-2
+                    rounded-sm
+                    bg-white
+                    px-4
+                    text-sm
+                    font-semibold
+                    text-navy-900
 
-                    rounded-full
-                    border border-white/40
-                    bg-white/10
+                    transition-colors
+                    duration-200
 
-                    text-lg
-                    text-white
-
-                    backdrop-blur-md
-
-                    transition-all
-                    duration-300
-
-                    group-hover:rotate-[-35deg]
-                    group-hover:bg-white
-                    group-hover:text-[#123d68]
+                    group-hover:bg-primary-700
+                    group-hover:text-white
                   "
                 >
-                  ↗
+                  Ver servicio
+                  <span aria-hidden="true">→</span>
                 </span>
 
               </div>
@@ -291,28 +283,29 @@ const services = [
       "
     >
       <a
-        href="/servicios"
+        href={enlaceTodos.url}
+        data-cms="servicios.enlaceTodos"
         class="
           group
           inline-flex
           h-12
           items-center
-          gap-4
-          rounded-full
-          border border-[#123d68]/20
+          gap-3
+          rounded-sm
+          border border-navy-800/25
           bg-white
           px-6
-          text-[11px]
+          text-sm
           font-semibold
-          text-[#123d68]
+          text-navy-800
           no-underline
           transition-all
 
-          hover:border-[#087fc1]
-          hover:text-[#087fc1]
+          hover:border-primary-700
+          hover:text-primary-700
         "
       >
-        Ver todos los servicios
+        {enlaceTodos.texto}
 
         <span
           class="

@@ -1,0 +1,127 @@
+---
+import Foto from "../ui/Foto.astro";
+import { BadgeCheck } from "@lucide/astro";
+import BotonPildora from "../ui/BotonPildora.astro";
+import Etiqueta from "../ui/Etiqueta.astro";
+import type { DatosHero } from "./tipos";
+
+/* Dividido (ref. "Des projets plus grands dès aujourd'hui"): fondo tinte con formas
+   orgánicas, título enorme a la izquierda, foto redondeada con dos tarjetas flotantes
+   (datos 1 y 2) y una fila de cifras grandes con divisores (el resto de los datos). */
+type Props = DatosHero;
+
+const { encabezado, imagen, boton, datos = [] } = Astro.props;
+const [superior, inferior, ...cifras] = datos;
+const sombra = "shadow-[0_24px_60px_-24px_rgba(7,28,48,0.45)]";
+---
+
+<section id="hero" class="relative isolate overflow-hidden bg-surface-tint pt-[105px] font-['Montserrat']">
+  <!-- Formas orgánicas de fondo -->
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 600 600"
+    class="absolute -left-56 -top-24 -z-10 w-[760px] text-primary-300/25"
+  >
+    <path fill="currentColor" d="M455 116c74 72 108 196 60 298s-178 182-298 152S8 410 22 290 120 66 236 42s145 2 219 74Z"></path>
+  </svg>
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 600 600"
+    class="absolute -bottom-72 -right-48 -z-10 w-[820px] text-primary-300/30"
+  >
+    <path fill="currentColor" d="M520 260c30 130-60 270-190 300S60 500 40 360 120 70 260 50s230 80 260 210Z"></path>
+  </svg>
+
+  <div data-anim="hero" class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+    <div class="grid items-center gap-16 pt-10 lg:grid-cols-12 lg:pt-14">
+      <div class="lg:col-span-7">
+        {encabezado.etiqueta && <div data-hero-item><Etiqueta texto={encabezado.etiqueta} /></div>}
+
+        <h1
+          data-anim="titulo"
+          data-cms="hero.encabezado"
+          class="mt-6 text-[48px] font-bold leading-[0.98] tracking-[-0.045em] text-navy-950 md:text-[72px] lg:text-[84px]"
+        >
+          {encabezado.titulo}
+          {encabezado.destacado && <span class="block text-primary-600">{encabezado.destacado}</span>}
+        </h1>
+
+        {
+          encabezado.descripcion && (
+            <p data-hero-item class="mt-7 max-w-[480px] text-[17px] leading-8 text-navy-900/80">
+              {encabezado.descripcion}
+            </p>
+          )
+        }
+
+        {
+          boton && (
+            <div data-hero-item data-cms="hero.boton" class="mt-9">
+              <BotonPildora texto={boton.texto} href={boton.url} />
+            </div>
+          )
+        }
+      </div>
+
+      {
+        imagen && (
+          <div class="relative mx-auto w-full max-w-[440px] lg:col-span-5 lg:max-w-none">
+            <div data-anim="foto" data-cms="hero.imagen" class="overflow-hidden rounded-[32px]">
+              <Foto
+                src={imagen.src}
+                alt={imagen.alt}
+                widths={[480, 720, 960]}
+                sizes="(min-width: 1024px) 460px, 90vw"
+                loading="eager"
+                fetchpriority="high"
+                class="aspect-[4/5] w-full object-cover"
+              />
+            </div>
+
+            {superior && (
+              <div
+                data-anim="flotar"
+                class:list={["absolute -left-4 top-10 rounded-[20px] bg-white px-5 py-4 lg:-left-16", sombra]}
+              >
+                <p class="text-[13px] text-body">{superior.etiqueta}</p>
+                <p class="mt-1 text-[28px] font-bold tracking-[-0.03em] text-navy-950">{superior.valor}</p>
+              </div>
+            )}
+
+            {inferior && (
+              <div
+                data-anim="flotar"
+                class:list={[
+                  "absolute -right-3 bottom-8 flex max-w-[250px] items-center gap-3 rounded-[20px] bg-white px-4 py-3 lg:-right-10",
+                  sombra,
+                ]}
+              >
+                <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-300 text-navy-950">
+                  <BadgeCheck size={18} aria-hidden="true" />
+                </span>
+                <p class="text-[13px] leading-5 text-navy-900">
+                  <strong class="font-bold">{inferior.valor}</strong> {inferior.etiqueta}
+                </p>
+              </div>
+            )}
+          </div>
+        )
+      }
+    </div>
+
+    {
+      cifras.length > 0 && (
+        <dl data-cms="hero.datos" class="mt-16 grid gap-y-2 pb-16 sm:grid-cols-3 sm:divide-x sm:divide-navy-900/20 lg:mt-20 lg:pb-20">
+          {cifras.map((dato) => (
+            <div class="flex flex-col-reverse items-center justify-end px-4 py-4 text-center">
+              <dt class="mt-2 max-w-[200px] text-[14px] leading-5 text-navy-900/70">{dato.etiqueta}</dt>
+              <dd data-contar class="text-[52px] font-bold leading-none tracking-[-0.045em] text-navy-950 md:text-[64px]">
+                {dato.valor}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+  </div>
+</section>

@@ -1,0 +1,298 @@
+---
+import { Clock, Mail, MapPin, MessageCircle, Phone } from "@lucide/astro";
+import MainLayout from "../layout/MainLayout.astro";
+import HeroPagina from "../components/hero/HeroPagina.astro";
+import type { DatosHero } from "../components/hero/tipos";
+import { heroDe, obtenerPagina, seccion, type Tarjeta } from "../lib/cms";
+import BotonPildora from "../components/ui/BotonPildora.astro";
+import Etiqueta from "../components/ui/Etiqueta.astro";
+import EncabezadoSeccion from "../components/ui/EncabezadoSeccion.astro";
+import Franja from "../components/ui/Franja.astro";
+import TarjetaMuesca from "../components/ui/TarjetaMuesca.astro";
+import { motivosMensaje } from "../../api/convex/compartido/mensajes";
+// Fotos temporales de Pexels (licencia libre): se reemplazarán desde el CMS
+import fotoAtencion from "../assets/pexels/atencion-cliente.jpg";
+import fotoTegucigalpa from "../assets/pexels/tegucigalpa-panorama.jpg";
+import fotoGuatemala from "../assets/pexels/guatemala-volcan.jpg";
+import fotoEdificio from "../assets/pexels/edificio-ciudad.jpg";
+
+/* Datos de prueba: se muestran mientras el campo del CMS (registro `contacto`) esté vacío.
+   Teléfonos y correos se confirmarán con Reddcom. */
+
+const heroPrueba: DatosHero = {
+  tipo: "fotoClara",
+  encabezado: {
+    etiqueta: "Contacto",
+    titulo: "Hablemos de",
+    destacado: "tu proyecto.",
+    descripcion: "Cuéntanos qué necesitas y un especialista te responderá en menos de 48 horas hábiles.",
+  },
+  imagen: { src: fotoAtencion, alt: "Asesora de atención al cliente con audífonos en una oficina" },
+  boton: { texto: "Escribir mensaje", url: "#formulario" },
+  diapositivas: [
+    { titulo: "Ver oficinas", texto: "Equipos locales en 6 países", imagen: { src: fotoTegucigalpa, alt: "" }, url: "#oficinas" },
+    { titulo: "Guatemala", imagen: { src: fotoGuatemala, alt: "" } },
+    { titulo: "Ciudad", imagen: { src: fotoEdificio, alt: "" } },
+  ],
+};
+
+const prueba = {
+  encabezado: {
+    etiqueta: "Escríbenos",
+    titulo: "Una red",
+    destacado: "segura, a tiempo y bien documentada.",
+  },
+  canales: [
+    { titulo: "Correo", texto: "info@reddcom.hn", url: "mailto:info@reddcom.hn" },
+    { titulo: "Teléfono", texto: "+504 2550-XXXX", url: "tel:+50425500000" },
+    { titulo: "WhatsApp", texto: "Escríbenos", url: "https://wa.me/50425500000" },
+  ] as Tarjeta[],
+  oficinas: {
+    encabezado: {
+      etiqueta: "Oficinas",
+      titulo: "Equipos locales",
+      destacado: "en seis países.",
+      descripcion: "Escribe a la oficina más cercana o usa el formulario y te asignamos al equipo correcto.",
+    },
+    lista: [
+      { titulo: "Honduras", texto: "San Pedro Sula, Cortés", url: "mailto:info@reddcom.hn" },
+      { titulo: "El Salvador", texto: "San Salvador", url: "mailto:info@reddcomca.com" },
+      { titulo: "Guatemala", texto: "Ciudad de Guatemala", url: "mailto:info@reddcomca.com" },
+      { titulo: "Nicaragua", texto: "Managua", url: "mailto:info@reddcomca.com" },
+      { titulo: "Costa Rica", texto: "San José", url: "mailto:info@reddcomca.com" },
+      { titulo: "Panamá", texto: "Ciudad de Panamá", url: "mailto:info@reddcomca.com" },
+    ] as Tarjeta[],
+  },
+  franja: ["Fibra óptica", "Redes HFC", "Proyectos RF", "Energía solar", "Software"],
+};
+
+/* Contenido del CMS con respaldo campo por campo. */
+const cms = await obtenerPagina("contacto");
+const hero = heroDe(cms, heroPrueba);
+
+const formulario = seccion(cms, "formulario");
+const encabezado = formulario.uno("encabezado", "encabezado") ?? prueba.encabezado;
+const canales = formulario.lista("canales", "tarjeta") ?? prueba.canales;
+
+const lecturaOficinas = seccion(cms, "oficinas");
+const encabezadoOficinas = lecturaOficinas.uno("encabezado", "encabezado") ?? prueba.oficinas.encabezado;
+const oficinas = lecturaOficinas.lista("oficinas", "tarjeta") ?? prueba.oficinas.lista;
+
+const franja = seccion(cms, "franja").lista("palabras", "texto") ?? prueba.franja;
+
+// El ícono del canal se deduce del tipo de enlace.
+const iconoCanal = (url = "") => (url.startsWith("mailto:") ? Mail : url.startsWith("tel:") ? Phone : MessageCircle);
+
+const paises = oficinas.map((oficina) => oficina.titulo);
+const tonosOficina = ["acento", "claro", "claro", "oscuro", "claro", "claro"] as const;
+
+const claseCampo =
+  "mt-2 w-full rounded-[14px] border border-navy-900/15 bg-surface px-4 py-3 text-[15px] text-navy-900 outline-none transition-colors placeholder:text-body-soft focus:border-primary-600 focus:bg-white";
+const claseEtiqueta = "text-[13px] font-semibold text-navy-900";
+---
+
+<MainLayout title="Contacto | Reddcom" description="Escríbenos para cotizar tu proyecto de telecomunicaciones en Centroamérica.">
+  <HeroPagina {...hero} />
+
+  <!-- =====================================================
+       FORMULARIO  (ref. Supervity "Designed for secure…": título con resaltado,
+       tarjeta oscura con chips y tarjeta blanca flotante)
+  ====================================================== -->
+  <section id="formulario" class="bg-surface py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto grid max-w-[1320px] gap-10 px-6 md:px-8 lg:grid-cols-12 lg:px-12">
+      <div class="lg:col-span-5">
+        {encabezado.etiqueta && <Etiqueta texto={encabezado.etiqueta} />}
+        <h2
+          data-cms="formulario.encabezado"
+          data-anim="titulo"
+          class="mt-5 text-[36px] font-semibold leading-[1.1] tracking-[-0.045em] text-navy-900 md:text-[52px]"
+        >
+          {encabezado.titulo}{" "}
+          {encabezado.destacado && <span class="rounded-[14px] bg-primary-300/40 px-2">{encabezado.destacado}</span>}
+        </h2>
+        {encabezado.descripcion && <p class="mt-5 text-[15px] leading-7 text-body">{encabezado.descripcion}</p>}
+
+        <div data-anim="revelar" class="relative mt-10 overflow-hidden rounded-[28px] bg-navy-950 p-7 text-white">
+          <span aria-hidden="true" class="absolute -left-10 -top-16 size-48 rounded-full bg-primary-600/50 blur-3xl"></span>
+          <p class="relative text-[18px] font-medium leading-snug">Canales directos con nuestro equipo comercial</p>
+          <ul class="relative mt-6 space-y-3" data-cms="formulario.canales">
+            {
+              canales.map((canal) => {
+                const Icono = iconoCanal(canal.url);
+                return (
+                <li>
+                  <a
+                    href={canal.url}
+                    class="flex items-center gap-3 rounded-full bg-white/10 py-2 pl-2 pr-5 text-[14px] text-white no-underline transition-colors hover:bg-white/20"
+                  >
+                    <span class="flex size-9 items-center justify-center rounded-full bg-primary-300 text-navy-950">
+                      <Icono size={16} aria-hidden="true" />
+                    </span>
+                    <span class="text-white/65">{canal.titulo}</span>
+                    <span class="ml-auto font-semibold">{canal.texto}</span>
+                  </a>
+                </li>
+                );
+              })
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="relative lg:col-span-7">
+        <form
+          data-contacto
+          novalidate
+          class="rounded-[28px] bg-white p-6 shadow-[0_30px_80px_-40px_rgba(7,28,48,0.35)] md:p-10"
+        >
+          <div class="grid gap-5 md:grid-cols-2">
+            <label class="block">
+              <span class={claseEtiqueta}>Nombre completo *</span>
+              <input name="nombre" required maxlength="100" autocomplete="name" class={claseCampo} />
+            </label>
+            <label class="block">
+              <span class={claseEtiqueta}>Correo *</span>
+              <input name="correo" type="email" required maxlength="120" autocomplete="email" class={claseCampo} />
+            </label>
+            <label class="block">
+              <span class={claseEtiqueta}>Teléfono</span>
+              <input name="telefono" type="tel" maxlength="30" autocomplete="tel" class={claseCampo} />
+            </label>
+            <label class="block">
+              <span class={claseEtiqueta}>Empresa</span>
+              <input name="empresa" maxlength="100" autocomplete="organization" class={claseCampo} />
+            </label>
+            <label class="block md:col-span-2">
+              <span class={claseEtiqueta}>País</span>
+              <select name="pais" class={claseCampo}>
+                <option value="">Selecciona un país</option>
+                {paises.map((pais) => <option>{pais}</option>)}
+                <option>Otro</option>
+              </select>
+            </label>
+          </div>
+
+          <fieldset class="mt-6">
+            <legend class={claseEtiqueta}>Motivo *</legend>
+            <div class="mt-3 flex flex-wrap gap-2">
+              {
+                Object.entries(motivosMensaje).map(([valor, etiqueta], indice) => (
+                  <label class="cursor-pointer">
+                    <input type="radio" name="motivo" value={valor} checked={indice === 0} class="peer sr-only" />
+                    <span class="block rounded-full border border-navy-900/15 px-4 py-2 text-[13px] font-semibold text-navy-900 transition-colors peer-checked:border-navy-900 peer-checked:bg-navy-900 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-primary-600">
+                      {etiqueta}
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <label class="mt-6 block">
+            <span class={claseEtiqueta}>Mensaje *</span>
+            <textarea name="mensaje" required maxlength="3000" rows="5" class={claseCampo}></textarea>
+          </label>
+
+          <!-- Trampa para bots: oculta para las personas. -->
+          <label class="sr-only" aria-hidden="true">
+            Sitio web
+            <input name="sitioWeb" tabindex="-1" autocomplete="off" />
+          </label>
+
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <BotonPildora texto="Enviar mensaje" />
+            <p data-estado role="status" aria-live="polite" class="text-[14px] text-body"></p>
+          </div>
+        </form>
+
+        <div
+          data-anim="flotar"
+          class="absolute -top-6 right-6 hidden items-center gap-3 rounded-[18px] bg-primary-300 px-5 py-3 text-navy-950 md:flex"
+        >
+          <Clock size={18} aria-hidden="true" />
+          <p class="text-[13px] font-semibold">Respuesta en menos de 48 h</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       OFICINAS  (ref. tarjetas con muesca)
+  ====================================================== -->
+  <section id="oficinas" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+      <EncabezadoSeccion {...encabezadoOficinas} alineacion="dividido" cms="oficinas.encabezado" />
+      <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-cms="oficinas.oficinas">
+        {
+          oficinas.map((oficina, indice) => (
+            <li>
+              <TarjetaMuesca href={oficina.url} etiqueta={`Escribir a ${oficina.titulo}`} tono={tonosOficina[indice % tonosOficina.length]} class="h-full">
+                <h3 class="pr-12 text-[28px] font-semibold tracking-[-0.04em]">{oficina.titulo}</h3>
+                <p class="mt-auto flex items-center gap-2 pt-10 text-[14px] opacity-80">
+                  <MapPin size={15} aria-hidden="true" />
+                  {oficina.texto}
+                </p>
+                {oficina.url?.startsWith("mailto:") && (
+                  <p class="mt-1 flex items-center gap-2 text-[14px] opacity-80">
+                    <Mail size={15} aria-hidden="true" />
+                    {oficina.url.slice("mailto:".length)}
+                  </p>
+                )}
+              </TarjetaMuesca>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <div id="franja"><Franja palabras={franja} cms="franja.palabras" class="mb-3" /></div>
+</MainLayout>
+
+<script>
+  /* Envía el formulario a la mutación pública `mensajes:enviar` de Convex por su
+     API HTTP (sin cliente JS). Los errores de validación del servidor llegan en
+     errorData.mensaje y se muestran tal cual. */
+  const URL_CONVEX = import.meta.env.PUBLIC_CONVEX_URL;
+
+  async function enviar(formulario: HTMLFormElement, estado: HTMLElement) {
+    if (!formulario.reportValidity()) return;
+
+    const datos = Object.fromEntries(new FormData(formulario)) as Record<string, string>;
+    // Convex rechaza strings vacíos en campos opcionales: se omiten.
+    const args = Object.fromEntries(Object.entries(datos).filter(([, valor]) => valor.trim() !== ""));
+    const boton = formulario.querySelector<HTMLButtonElement>("button[type=submit]");
+
+    boton?.setAttribute("disabled", "");
+    estado.textContent = "Enviando…";
+    try {
+      const respuesta = await fetch(`${URL_CONVEX}/api/mutation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: "mensajes:enviar", args, format: "json" }),
+      });
+      const resultado = await respuesta.json();
+      if (resultado.status !== "success") {
+        throw new Error(resultado.errorData?.mensaje ?? "No pudimos enviar tu mensaje.");
+      }
+      formulario.reset();
+      estado.textContent = "¡Gracias! Recibimos tu mensaje y te responderemos pronto.";
+    } catch (error) {
+      estado.textContent =
+        error instanceof Error ? error.message : "No pudimos enviar tu mensaje. Intenta de nuevo.";
+    } finally {
+      boton?.removeAttribute("disabled");
+    }
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    const formulario = document.querySelector<HTMLFormElement>("[data-contacto]");
+    const estado = formulario?.querySelector<HTMLElement>("[data-estado]");
+    if (!formulario || !estado) return;
+
+    formulario.addEventListener("submit", (evento) => {
+      evento.preventDefault();
+      enviar(formulario, estado);
+    });
+  });
+</script>

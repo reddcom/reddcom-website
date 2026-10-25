@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets";
+import type { ComponentProps } from "astro/types";
+
+/* <Image> que acepta también URLs remotas (imágenes del CMS). Las URLs de
+   Convex File Storage no tienen extensión, así que el optimizador de Astro no
+   puede leer su formato: esas se sirven tal cual con un <img> normal y las
+   locales se siguen optimizando. */
+type Props = ComponentProps<typeof Image>;
+
+const { src, widths: _widths, sizes: _sizes, densities: _densities, format: _format, quality: _quality, ...atributos } =
+  Astro.props as Props & Record<string, unknown>;
+const remota = typeof src === "string";
+// Etiqueta dinámica: así el compilador no la trata como imagen a optimizar.
+const Etiqueta = "img";
+---
+
+{
+  remota ? (
+    <Etiqueta src={src as string} loading="lazy" decoding="async" {...(atributos as Record<string, unknown>)} />
+  ) : (
+    <Image {...(Astro.props as any)} />
+  )
+}

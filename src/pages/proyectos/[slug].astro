@@ -1,0 +1,104 @@
+---
+import Foto from "../../components/ui/Foto.astro";
+import { CircleCheck } from "@lucide/astro";
+import MainLayout from "../../layout/MainLayout.astro";
+import HeroPagina from "../../components/hero/HeroPagina.astro";
+import BannerCta from "../../components/ui/BannerCta.astro";
+import EncabezadoSeccion from "../../components/ui/EncabezadoSeccion.astro";
+import Etiqueta from "../../components/ui/Etiqueta.astro";
+import TarjetaProyecto from "../../components/proyectos/TarjetaProyecto.astro";
+import { detalleProyecto, proyectosActivos } from "../../data/proyectos";
+
+/* Una página por cada proyecto activo del módulo Proyectos del CMS, leída en
+   cada visita: un proyecto nuevo tiene su página sin recompilar. */
+const { slug = "" } = Astro.params;
+const [proyecto, proyectos] = await Promise.all([detalleProyecto(slug), proyectosActivos()]);
+if (!proyecto) return Astro.rewrite("/404");
+
+const otros = proyectos.filter((otro) => otro.slug !== proyecto.slug).slice(0, 3);
+const paginaPais = `/proyectos/Reddcom-${proyecto.pais}`;
+---
+
+<MainLayout title={`${proyecto.titulo} | Reddcom`} description={proyecto.resumen}>
+  <HeroPagina
+    tipo="dividido"
+    encabezado={{
+      etiqueta: `${proyecto.servicio} · ${proyecto.pais}`,
+      titulo: proyecto.titulo,
+      descripcion: proyecto.resumen,
+    }}
+    imagen={proyecto.imagen}
+    boton={{ texto: `Más proyectos en ${proyecto.pais}`, url: paginaPais }}
+    datos={[
+      { valor: String(proyecto.anio), etiqueta: "Año de ejecución" },
+      { valor: proyecto.ciudad, etiqueta: proyecto.servicio },
+      ...proyecto.cifras,
+    ]}
+  />
+
+  <!-- =====================================================
+       DESCRIPCIÓN Y ALCANCE  (ref. Axios: texto + tarjeta con checklist y esquina doblada)
+  ====================================================== -->
+  <section id="descripcion" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto grid max-w-[1320px] gap-12 px-6 md:px-8 lg:grid-cols-12 lg:px-12">
+      <div class="lg:col-span-7">
+        <EncabezadoSeccion etiqueta="El proyecto" titulo="Qué necesitaba el cliente" destacado="y cómo lo resolvimos." />
+        {proyecto.descripcion.map((parrafo) => <p data-anim="revelar" class="mt-6 text-[16px] leading-8 text-body">{parrafo}</p>)}
+      </div>
+
+      <aside data-anim="revelar" class="relative h-fit overflow-hidden rounded-[24px] bg-navy-950 p-8 text-white lg:col-span-4 lg:col-start-9">
+        <Etiqueta texto="Alcance" tono="claro" />
+        <ul class="mt-6 space-y-3">
+          {
+            proyecto.alcance.map((punto) => (
+              <li class="flex items-center gap-3 text-[15px]">
+                <CircleCheck size={18} class="shrink-0 text-primary-300" aria-hidden="true" />
+                {punto}
+              </li>
+            ))
+          }
+        </ul>
+        <span aria-hidden="true" class="absolute bottom-0 right-0 size-7 rounded-tl-[10px] bg-primary-300"></span>
+      </aside>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       GALERÍA  (ref. "Level up": tres fotos, la central más alta)
+  ====================================================== -->
+  {proyecto.galeria.length > 0 && (
+  <section id="galeria" class="bg-surface py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto grid max-w-[1100px] grid-cols-3 items-center gap-3 px-6 md:gap-6 md:px-8">
+      {
+        proyecto.galeria.map((foto, indice) => (
+          <div data-anim="foto" class="overflow-hidden rounded-[22px]">
+            <Foto
+              src={foto.src}
+              alt={foto.alt}
+              widths={[320, 640]}
+              sizes="(min-width: 768px) 340px, 33vw"
+              class:list={["w-full object-cover", indice === 1 ? "aspect-[3/5]" : "aspect-[3/4]"]}
+            />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+  )}
+
+  <!-- =====================================================
+       OTROS PROYECTOS
+  ====================================================== -->
+  {otros.length > 0 && (
+  <section id="otros" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+      <EncabezadoSeccion etiqueta="Más proyectos" titulo="Otros proyectos" destacado="de Reddcom" />
+      <div class="mt-12 grid gap-8 md:grid-cols-3">
+        {otros.map((otro) => <TarjetaProyecto proyecto={otro} />)}
+      </div>
+    </div>
+  </section>
+  )}
+
+  <BannerCta titulo="¿Un proyecto" destacado="parecido?" />
+</MainLayout>

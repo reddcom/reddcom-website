@@ -1,0 +1,144 @@
+---
+import Foto from "../ui/Foto.astro";
+import BotonPildora from "../ui/BotonPildora.astro";
+import Etiqueta from "../ui/Etiqueta.astro";
+import TiraHero from "./TiraHero.astro";
+import type { DatosHero } from "./tipos";
+
+/* Carrusel (ref. "Building the future with AI and strategy"): foto de cielo a todo
+   el ancho, título centrado y una fila de tarjetas inclinadas en 3D; cada tarjeta es
+   una diapositiva y al elegirla cambia la foto. Avanza sola cada 6 s salvo con
+   movimiento reducido y se pausa con el puntero o el foco encima. */
+type Props = DatosHero;
+
+const { encabezado, boton, diapositivas = [], franja = [] } = Astro.props;
+
+// Las tarjetas se abren en abanico: las de los lados giran hacia el centro.
+const centro = (diapositivas.length - 1) / 2;
+const giro = (indice: number) => (centro === 0 ? 0 : ((centro - indice) / centro) * 22);
+---
+
+<section id="hero" class="bg-surface px-3 pt-[96px] font-['Montserrat'] md:px-5">
+  <div
+    data-carrusel
+    data-anim="hero"
+    aria-roledescription="carrusel"
+    aria-label={encabezado.titulo}
+    class="relative isolate overflow-hidden rounded-[32px] bg-navy-900 pb-12 lg:pb-16"
+  >
+    {
+      diapositivas.map((diapositiva, indice) => (
+        <Foto
+          data-foto
+          src={diapositiva.imagen.src}
+          alt={diapositiva.imagen.alt}
+          widths={[960, 1600, 2400]}
+          sizes="100vw"
+          loading={indice === 0 ? "eager" : "lazy"}
+          class:list={[
+            "absolute inset-0 -z-20 h-full w-full object-cover transition-opacity duration-1000",
+            indice > 0 && "opacity-0",
+          ]}
+        />
+      ))
+    }
+    <div class="absolute inset-0 -z-10 bg-gradient-to-b from-navy-950/55 via-navy-950/15 to-navy-950/55"></div>
+
+    <div class="mx-auto max-w-[900px] px-6 pt-16 text-center text-white lg:pt-24">
+      {encabezado.etiqueta && <div data-hero-item><Etiqueta texto={encabezado.etiqueta} tono="claro" /></div>}
+      <h1 data-anim="titulo" data-cms="hero.encabezado" class="mt-6 text-[44px] font-semibold leading-[1.02] tracking-[-0.05em] md:text-[72px]">
+        {encabezado.titulo}
+        {encabezado.destacado && <span class="block text-white/70">{encabezado.destacado}</span>}
+      </h1>
+      {
+        encabezado.descripcion && (
+          <p data-hero-item class="mx-auto mt-6 max-w-[520px] text-[16px] leading-7 text-white/85">
+            {encabezado.descripcion}
+          </p>
+        )
+      }
+      {
+        boton && (
+          <div data-hero-item data-cms="hero.boton" class="mt-8 flex justify-center">
+            <BotonPildora texto={boton.texto} href={boton.url} variante="acento" />
+          </div>
+        )
+      }
+    </div>
+
+    <ol
+      data-anim="inclinar"
+      data-cms="hero.diapositivas"
+      class="mt-14 flex snap-x gap-4 overflow-x-auto px-6 pb-4 [perspective:1200px] [scrollbar-width:none] md:justify-center lg:mt-20"
+    >
+      {
+        diapositivas.map((diapositiva, indice) => (
+          <li class="shrink-0 snap-center">
+            <button
+              type="button"
+              data-tarjeta={indice}
+              aria-label={`Ver ${diapositiva.titulo}`}
+              aria-current={indice === 0 ? "true" : undefined}
+              style={`transform: rotateY(${giro(indice)}deg)`}
+              class="block w-[220px] cursor-pointer rounded-[22px] bg-white/90 p-2.5 text-left text-navy-900 ring-primary-300 transition-[box-shadow,translate] duration-300 hover:-translate-y-1 aria-[current=true]:-translate-y-2 aria-[current=true]:ring-4"
+            >
+              <Foto
+                src={diapositiva.imagen.src}
+                alt=""
+                widths={[240, 440]}
+                sizes="220px"
+                class="aspect-[4/3] w-full rounded-[16px] object-cover"
+              />
+              <p class="mt-3 px-1.5 text-[14px] font-semibold">{diapositiva.titulo}</p>
+              {diapositiva.texto && <p class="px-1.5 pb-1.5 text-[12px] leading-4 text-body">{diapositiva.texto}</p>}
+            </button>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  {franja.length > 0 && <TiraHero palabras={franja} cms="hero.franja" />}
+</section>
+
+<script>
+  const INTERVALO_MS = 6000;
+  let temporizadores: number[] = [];
+
+  function iniciarCarrusel(carrusel: HTMLElement) {
+    const fotos = [...carrusel.querySelectorAll<HTMLElement>("[data-foto]")];
+    const tarjetas = [...carrusel.querySelectorAll<HTMLButtonElement>("[data-tarjeta]")];
+    if (fotos.length < 2) return;
+
+    let actual = 0;
+    const mostrar = (indice: number) => {
+      actual = (indice + fotos.length) % fotos.length;
+      fotos.forEach((foto, i) => foto.classList.toggle("opacity-0", i !== actual));
+      tarjetas.forEach((tarjeta, i) =>
+        i === actual ? tarjeta.setAttribute("aria-current", "true") : tarjeta.removeAttribute("aria-current"),
+      );
+    };
+
+    tarjetas.forEach((tarjeta, i) => tarjeta.addEventListener("click", () => mostrar(i)));
+
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let pausado = false;
+    carrusel.addEventListener("mouseenter", () => (pausado = true));
+    carrusel.addEventListener("mouseleave", () => (pausado = false));
+    carrusel.addEventListener("focusin", () => (pausado = true));
+    carrusel.addEventListener("focusout", () => (pausado = false));
+
+    temporizadores.push(window.setInterval(() => !pausado && mostrar(actual + 1), INTERVALO_MS));
+  }
+
+  // Con ClientRouter las páginas se cambian sin recargar: se inicia en cada carga
+  // y se detienen los temporizadores antes de salir.
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>("[data-carrusel]").forEach(iniciarCarrusel);
+  });
+  document.addEventListener("astro:before-swap", () => {
+    temporizadores.forEach(clearInterval);
+    temporizadores = [];
+  });
+</script>

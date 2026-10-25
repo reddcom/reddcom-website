@@ -1,0 +1,33 @@
+/* =========================================================
+   PALETA REDDCOM
+   Única fuente de colores del sitio y del CMS. Usar como clases
+   (bg-navy-900, text-body…) o en CSS como var(--color-…).
+========================================================= */
+
+@theme {
+  /* Azul del logotipo */
+  --color-brand: #013a7e;
+
+  /* Azules profundos: títulos, fondos oscuros */
+  --color-navy-950: #071c30;
+  --color-navy-900: #102f4d;
+  --color-navy-800: #123d68;
+  --color-navy-700: #0c4774;
+
+  /* Azules de acción: enlaces, botones, acentos */
+  --color-primary-700: #087fc1;
+  --color-primary-600: #1595d3;
+  --color-primary-500: #19a9e5;
+  --color-primary-300: #61c5ef;
+
+  /* Texto secundario */
+  --color-body: #526577;
+  --color-body-soft: #647486;
+
+  /* Superficies */
+  --color-surface: #f7f9fb;
+  --color-surface-tint: #e8f6fc;
+
+  /* Acento cálido */
+  --color-accent: #df8a35;
+}

@@ -1,58 +1,341 @@
 ---
+import Foto from "../../components/ui/Foto.astro";
+import { ArrowUpRight, Cable, ChevronRight, Ruler, Wrench } from "@lucide/astro";
 import MainLayout from "../../layout/MainLayout.astro";
+import HeroPagina from "../../components/hero/HeroPagina.astro";
+import type { DatosHero } from "../../components/hero/tipos";
+import { cierreDe, heroDe, obtenerPagina, seccion, type Tarjeta } from "../../lib/cms";
+import BannerCta from "../../components/ui/BannerCta.astro";
+import EncabezadoSeccion from "../../components/ui/EncabezadoSeccion.astro";
+import InsigniaGiratoria from "../../components/ui/InsigniaGiratoria.astro";
+// Fotos temporales de Pexels (licencia libre): se reemplazarán desde el CMS
+import fotoCielo from "../../assets/pexels/torre-cielo-azul.jpg";
+import fotoAzotea from "../../assets/pexels/tecnicos-azotea.jpg";
+import fotoCables from "../../assets/pexels/cables-ethernet.jpg";
+import fotoRack from "../../assets/pexels/ingeniero-rack.jpg";
+import fotoServidores from "../../assets/pexels/racks-servidores.jpg";
+import fotoCentroDatos from "../../assets/pexels/centro-datos.jpg";
+import fotoContrapicado from "../../assets/pexels/torre-contrapicado.jpg";
+
+/* Datos de prueba: se muestran mientras el campo del CMS (registro `redesHfc`) esté vacío. */
+
+const heroPrueba: DatosHero = {
+  tipo: "fotoClara",
+  encabezado: {
+    etiqueta: "Servicios · Redes HFC",
+    titulo: "Redes HFC que",
+    destacado: "llegan más lejos.",
+    descripcion:
+      "Diseño, construcción y mantenimiento de redes híbridas de fibra y coaxial para operadores de cable en Centroamérica.",
+  },
+  imagen: { src: fotoCielo, alt: "Torre de telecomunicaciones con antenas bajo un cielo azul" },
+  boton: { texto: "Solicitar cotización", url: "/contacto" },
+  diapositivas: [
+    { titulo: "Ver proyectos", texto: "Nodos HFC construidos en la región", imagen: { src: fotoAzotea, alt: "" }, url: "/proyectos/Reddcom-Honduras" },
+    { titulo: "Cableado", imagen: { src: fotoCables, alt: "" } },
+    { titulo: "Equipos", imagen: { src: fotoRack, alt: "" } },
+  ],
+  franja: ["DOCSIS 3.1", "Nodos ópticos", "Coaxial troncal", "Amplificadores", "Acometidas"],
+};
+
+const introduccionPrueba = {
+  imagen: { src: fotoRack, alt: "Ingeniero conectando cables en un rack de telecomunicaciones" },
+  dato: { valor: "99%", etiqueta: "de disponibilidad objetivo en contratos de mantenimiento" },
+  lineas: ["Redes híbridas", "que conectan", "más hogares"],
+  parrafos: [
+    "Combinamos fibra óptica hasta el nodo y coaxial hasta el hogar para llevar internet, televisión y telefonía con la capacidad que exigen los operadores.",
+    "Nuestro equipo cubre todo el ciclo: diseño, construcción, balanceo y mantenimiento preventivo y correctivo.",
+  ],
+};
+
+const serviciosPrueba = {
+  encabezado: {
+    etiqueta: "Qué hacemos",
+    titulo: "Del diseño al mantenimiento,",
+    destacado: "sin intermediarios.",
+    descripcion: "Un solo equipo responsable de la red en cada etapa del proyecto.",
+  },
+  tarjetas: [
+    { titulo: "Diseño de red", texto: "Planos, cálculo de niveles y presupuesto de materiales." },
+    { titulo: "Construcción y tendido", texto: "Tendido aéreo y subterráneo de fibra y coaxial troncal, instalación de nodos, amplificadores y acometidas.", imagen: { src: fotoAzotea, alt: "" } },
+    { titulo: "Mantenimiento", texto: "Planes preventivos y atención de fallas con cuadrillas propias." },
+  ],
+};
+
+const capacidadPrueba = {
+  encabezado: {
+    etiqueta: "Capacidad",
+    titulo: "Capacidad",
+    destacado: "en cifras.",
+    descripcion: "Volumen de red construida y mantenida por nuestras cuadrillas.",
+  },
+  imagen: { src: fotoServidores, alt: "Pasillo de racks en un centro de datos" },
+  cifras: [
+    { etiqueta: "Hogares pasados", valor: "120k+" },
+    { etiqueta: "Km de red coaxial", valor: "2400" },
+    { etiqueta: "Nodos ópticos", valor: "300+" },
+  ],
+};
+
+const procesoPrueba = {
+  encabezado: { etiqueta: "Proceso", titulo: "Cómo construimos", destacado: "una red HFC." },
+  imagen: { src: fotoContrapicado, alt: "Torre de telecomunicaciones vista desde abajo" },
+  etapas: [
+    { titulo: "Levantamiento y diseño", texto: "Visita de campo, censo de postes y diseño de la red." },
+    { titulo: "Construcción", texto: "Tendido, fusiones e instalación de equipos activos." },
+    { titulo: "Balanceo y certificación", texto: "Ajuste de niveles y pruebas de retorno y DOCSIS." },
+    { titulo: "Operación", texto: "Monitoreo y mantenimiento con tiempos de respuesta acordados." },
+  ],
+};
+
+/* Contenido del CMS con respaldo campo por campo. */
+const cms = await obtenerPagina("redesHfc");
+const hero = heroDe(cms, heroPrueba);
+
+const intro = seccion(cms, "introduccion");
+const introduccion = {
+  lineas: intro.lista("lineas", "texto") ?? introduccionPrueba.lineas,
+  parrafos: intro.lista("parrafos", "texto") ?? introduccionPrueba.parrafos,
+  imagen: intro.uno("imagen", "imagen") ?? introduccionPrueba.imagen,
+  dato: intro.uno("dato", "dato") ?? introduccionPrueba.dato,
+};
+
+const lecturaServicios = seccion(cms, "servicios");
+const servicios = {
+  encabezado: lecturaServicios.uno("encabezado", "encabezado") ?? serviciosPrueba.encabezado,
+  tarjetas: (lecturaServicios.lista("tarjetas", "tarjeta") ?? serviciosPrueba.tarjetas) as Tarjeta[],
+};
+
+const lecturaCapacidad = seccion(cms, "capacidad");
+const capacidad = {
+  encabezado: lecturaCapacidad.uno("encabezado", "encabezado") ?? capacidadPrueba.encabezado,
+  imagen: lecturaCapacidad.uno("imagen", "imagen") ?? capacidadPrueba.imagen,
+  cifras: lecturaCapacidad.lista("cifras", "dato") ?? capacidadPrueba.cifras,
+};
+
+const lecturaProceso = seccion(cms, "proceso");
+const proceso = {
+  encabezado: lecturaProceso.uno("encabezado", "encabezado") ?? procesoPrueba.encabezado,
+  imagen: lecturaProceso.uno("imagen", "imagen") ?? procesoPrueba.imagen,
+  etapas: lecturaProceso.lista("etapas", "tarjeta") ?? procesoPrueba.etapas,
+};
+
+const cierre = cierreDe(cms, {
+  titulo: "¿Tu red necesita",
+  destacado: "crecer?",
+  imagen: { src: fotoCentroDatos, alt: "" },
+});
+
+// Estilo por posición: el contenido viene del CMS, la forma la decide el diseño.
+const iconosServicio = [Ruler, Cable, Wrench];
+const estilosBarra = [
+  { ancho: "w-full", tono: "bg-primary-300 text-navy-950" },
+  { ancho: "w-[86%]", tono: "bg-navy-900 text-white" },
+  { ancho: "w-[72%]", tono: "bg-surface text-navy-900" },
+];
+const tonosEtapa = ["bg-primary-300 text-navy-950", "bg-navy-900 text-white"];
 ---
 
 <MainLayout
-	title="Redes HFC | Reddcom"
-	description="Conoce las soluciones de Reddcom para construcción, instalación y mantenimiento de redes HFC."
+  title="Redes HFC | Reddcom"
+  description="Diseño, construcción y mantenimiento de redes HFC para operadores de cable en Centroamérica."
 >
+  <HeroPagina {...hero} />
 
-	<section
-		class="
-			min-h-screen
-			bg-[#f7f9fb]
-			px-6
-			pb-24
-			pt-36
-			font-['Montserrat']
-			md:px-8
-			lg:px-12
-		"
-	>
-		<div class="mx-auto max-w-[1320px]">
+  <!-- =====================================================
+       INTRODUCCIÓN  (ref. "UNLEASH WANDERLUST": foto + mayúsculas gigantes con textos intercalados)
+  ====================================================== -->
+  <section id="introduccion" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto grid max-w-[1320px] gap-10 px-6 md:px-8 lg:grid-cols-12 lg:px-12">
+      <div class="flex flex-col gap-4 lg:col-span-4">
+        <div data-anim="foto" data-cms="introduccion.imagen" class="overflow-hidden rounded-[24px]">
+          <Foto
+            src={introduccion.imagen.src}
+            alt={introduccion.imagen.alt}
+            widths={[480, 720]}
+            sizes="(min-width: 1024px) 380px, 100vw"
+            class="aspect-[4/5] w-full object-cover"
+          />
+        </div>
+        <div data-anim="revelar" data-cms="introduccion.dato" class="flex items-center gap-4 rounded-[20px] bg-surface p-5">
+          <p data-contar class="text-[40px] font-bold leading-none tracking-[-0.04em] text-primary-600">
+            {introduccion.dato.valor}
+          </p>
+          <p class="text-[13px] leading-5 text-body">{introduccion.dato.etiqueta}</p>
+        </div>
+      </div>
 
-			<span
-				class="
-					text-[10px]
-					font-semibold
-					tracking-[0.32em]
-					text-[#1595d3]
-				"
-			>
-				NUESTROS SERVICIOS
-			</span>
+      <div class="flex flex-col justify-center lg:col-span-8">
+        <h2 class="sr-only">{introduccion.lineas.join(" ")}</h2>
+        <div aria-hidden="true" data-cms="introduccion.lineas introduccion.parrafos" class="grid gap-y-4">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <p data-anim="titulo" class="text-[44px] font-bold uppercase leading-none tracking-[-0.02em] text-navy-950 md:text-[76px]">
+              {introduccion.lineas[0]}
+            </p>
+            <p data-anim="revelar" class="max-w-[280px] text-[13px] leading-6 text-body">{introduccion.parrafos[0]}</p>
+          </div>
+          <p data-anim="titulo" class="text-[44px] font-bold uppercase leading-none tracking-[-0.02em] text-navy-950 md:text-[76px]">
+            {introduccion.lineas[1]}
+          </p>
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <p data-anim="revelar" class="max-w-[280px] text-[13px] leading-6 text-body">{introduccion.parrafos[1]}</p>
+            <p
+              data-anim="titulo"
+              class="text-[44px] font-bold uppercase leading-none tracking-[-0.02em] text-primary-600 md:ml-auto md:text-[76px]"
+            >
+              {introduccion.lineas[2]}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-			<h1
-				class="
-					mt-5
-					max-w-[800px]
-					text-[44px]
-					font-semibold
-					leading-[1.05]
-					tracking-[-0.04em]
-					text-[#102f4d]
-					md:text-[60px]
-				"
-			>
-				Redes
-				<span class="text-[#1595d3]">
-					HFC.
-				</span>
-			</h1>
+  <!-- =====================================================
+       SERVICIOS  (ref. "Journey to the skies made simple": tarjeta central alta en azul)
+  ====================================================== -->
+  <section id="servicios" class="bg-surface py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+      <EncabezadoSeccion {...servicios.encabezado} alineacion="centro" cms="servicios.encabezado" />
 
-			<!-- Aquí irá el contenido de Redes HFC -->
+      <div class="mt-14 grid items-center gap-4 md:grid-cols-3" data-cms="servicios.tarjetas">
+        {
+          servicios.tarjetas.map((tarjeta, indice) => {
+            const central = indice === 1;
+            const Icono = iconosServicio[indice % iconosServicio.length];
+            return (
+              <article
+                data-anim="revelar"
+                class:list={[
+                  "relative flex flex-col overflow-hidden rounded-[24px] p-8",
+                  central ? "min-h-[300px] bg-primary-600 text-white md:min-h-[440px]" : "min-h-[260px] bg-white text-navy-900 md:min-h-[340px]",
+                ]}
+              >
+                <span
+                  class:list={[
+                    "flex size-12 items-center justify-center rounded-full",
+                    central ? "bg-white/15 text-white" : "bg-surface-tint text-primary-700",
+                  ]}
+                >
+                  <Icono size={20} aria-hidden="true" />
+                </span>
+                {tarjeta.imagen && (
+                  <Foto
+                    src={tarjeta.imagen.src}
+                    alt=""
+                    widths={[400]}
+                    sizes="200px"
+                    class="absolute -right-12 -top-12 size-52 rounded-full object-cover"
+                  />
+                )}
+                <h3 class="mt-auto text-[24px] font-semibold leading-tight tracking-[-0.03em]">{tarjeta.titulo}</h3>
+                <p class:list={["mt-3 text-[14px] leading-6", central ? "text-white/85" : "text-body"]}>{tarjeta.texto}</p>
+                {central && (
+                  <a
+                    href="/contacto"
+                    class="mt-6 inline-flex items-center gap-1 text-[12px] font-semibold uppercase tracking-[0.14em] text-white no-underline"
+                  >
+                    Saber más <ChevronRight size={14} aria-hidden="true" />
+                  </a>
+                )}
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
 
-		</div>
-	</section>
+  <!-- =====================================================
+       CAPACIDAD  (ref. "Revenue Breakdown": barras en píldora con cifras)
+  ====================================================== -->
+  <section id="capacidad" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto grid max-w-[1320px] gap-12 px-6 md:px-8 lg:grid-cols-12 lg:px-12">
+      <div class="lg:col-span-5">
+        <EncabezadoSeccion {...capacidad.encabezado} cms="capacidad.encabezado" />
+      </div>
 
+      <div class="relative lg:col-span-7">
+        <div data-anim="foto" data-cms="capacidad.imagen" class="overflow-hidden rounded-[24px]">
+          <Foto
+            src={capacidad.imagen.src}
+            alt={capacidad.imagen.alt}
+            widths={[640, 960]}
+            sizes="(min-width: 1024px) 680px, 100vw"
+            class="h-44 w-full object-cover grayscale"
+          />
+        </div>
+        <InsigniaGiratoria texto="Capacidad · Reddcom · HFC ·" class="absolute -top-10 right-6 rounded-full bg-white" />
+      </div>
+
+      <dl class="grid gap-3 lg:col-span-7 lg:col-start-6" data-cms="capacidad.cifras">
+        {
+          capacidad.cifras.map((barra, indice) => (
+            <div
+              data-anim="revelar"
+              class:list={["flex items-center justify-between gap-6 rounded-[18px] px-6 py-4", estilosBarra[indice % estilosBarra.length].ancho, estilosBarra[indice % estilosBarra.length].tono]}
+            >
+              <dt class="text-[14px] font-medium">{barra.etiqueta}</dt>
+              <dd data-contar class="text-[32px] font-semibold tracking-[-0.04em] md:text-[40px]">{barra.valor}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       PROCESO  (ref. "Technology & Innovation": tarjetas numeradas en marco oscuro + foto)
+  ====================================================== -->
+  <section id="proceso" class="bg-surface py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between" data-cms="proceso.encabezado">
+        <span class="w-fit rounded-full bg-navy-950 py-2 pl-2 pr-5 text-[13px] font-semibold text-white">
+          <span class="mr-2 inline-block size-6 rounded-full bg-primary-300 align-middle"></span>
+          {proceso.encabezado.etiqueta}
+        </span>
+        <h2
+          data-anim="titulo"
+          class="text-[38px] font-normal leading-[1.02] tracking-[-0.04em] text-navy-950 md:text-right md:text-[64px]"
+        >
+          {proceso.encabezado.titulo}<br />{proceso.encabezado.destacado}
+        </h2>
+      </div>
+
+      <div class="mt-12 grid gap-3 rounded-[30px] border-[6px] border-navy-950 p-3 md:grid-cols-2 lg:grid-cols-6">
+        {
+          proceso.etapas.map((etapa, indice) => (
+            <article
+              data-anim="revelar"
+              data-cms="proceso.etapas"
+              class:list={["flex min-h-[160px] flex-col rounded-[22px] p-6 md:min-h-[220px] lg:col-span-1", tonosEtapa[indice % 2]]}
+            >
+              <p class="text-[13px] font-semibold opacity-70">{String(indice + 1).padStart(2, "0")}</p>
+              <h3 class="mt-auto text-[18px] font-semibold leading-tight">{etapa.titulo}</h3>
+              <p class="mt-2 text-[13px] leading-5 opacity-80">{etapa.texto}</p>
+            </article>
+          ))
+        }
+        <div class="relative overflow-hidden rounded-[22px] md:col-span-2 lg:col-span-2" data-cms="proceso.imagen">
+          <Foto
+            src={proceso.imagen.src}
+            alt={proceso.imagen.alt}
+            widths={[480, 720]}
+            sizes="(min-width: 1024px) 400px, 100vw"
+            data-anim="parallax"
+            class="h-full min-h-[220px] w-full scale-110 object-cover grayscale"
+          />
+          <a
+            href="/contacto"
+            aria-label="Hablar con el equipo"
+            class="absolute bottom-4 left-1/2 flex size-14 -translate-x-1/2 items-center justify-center rounded-full bg-primary-300 text-navy-950 ring-[6px] ring-navy-950"
+          >
+            <ArrowUpRight size={20} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <BannerCta {...cierre} />
 </MainLayout>

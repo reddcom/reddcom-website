@@ -1,0 +1,57 @@
+---
+import Foto from "./Foto.astro";
+import { ArrowRight } from "@lucide/astro";
+import fotoPorDefecto from "../../assets/pexels/torre-nubes.jpg";
+import type { DatosCierre } from "../../lib/cms";
+
+/* Cierre de página (ref. "UNLEASH WANDERLUST" + barra "Book a Flight Now"):
+   título en mayúsculas gigantes y una barra con foto de cielo que lleva a contacto. */
+// `seccion`: nombre de la sección en el CMS, para marcar sus campos en la vista previa.
+type Props = DatosCierre & { seccion?: string };
+
+const {
+  titulo = "Hablemos de",
+  destacado = "tu próximo proyecto",
+  texto = "Cuéntanos qué necesitas y un especialista de nuestro equipo te contactará en menos de 48 horas.",
+  boton = { texto: "Contactar al equipo", url: "/contacto" },
+  imagen = { src: fotoPorDefecto, alt: "" },
+  seccion = "cierre",
+} = Astro.props;
+---
+
+<section id="cierre" class="bg-surface py-20 font-['Montserrat'] lg:py-28">
+  <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-end" data-cms={`${seccion}.encabezado`}>
+      <h2
+        data-anim="titulo"
+        class="text-[40px] font-bold uppercase leading-[0.95] tracking-[-0.03em] text-navy-900 md:text-[64px] lg:col-span-8 lg:text-[84px]"
+      >
+        {titulo} <span class="text-primary-600">{destacado}</span>
+      </h2>
+      <p data-anim="revelar" class="max-w-[340px] text-[15px] leading-7 text-body lg:col-span-4">{texto}</p>
+    </div>
+
+    <a
+      href={boton.url}
+      data-anim="revelar"
+      data-cms={`${seccion}.boton ${seccion}.imagen`}
+      class="group relative isolate mt-10 flex h-28 items-center justify-center gap-4 overflow-hidden rounded-[28px] text-[20px] font-semibold text-navy-900 no-underline md:h-32 md:text-[26px]"
+    >
+      <Foto
+        src={imagen.src}
+        alt=""
+        widths={[960, 1600]}
+        sizes="(min-width: 1320px) 1220px, 100vw"
+        class="absolute inset-0 -z-10 h-full w-full object-cover"
+      />
+      <span class="absolute inset-0 -z-10 bg-surface/60"></span>
+      {boton.texto}
+      <span
+        class="flex size-12 items-center justify-center rounded-full bg-navy-900 text-white transition-transform duration-300 group-hover:translate-x-1"
+        aria-hidden="true"
+      >
+        <ArrowRight size={20} />
+      </span>
+    </a>
+  </div>
+</section>

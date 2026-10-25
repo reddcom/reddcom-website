@@ -1,0 +1,22 @@
+---
+import type { DatosHero, TipoHero } from "./tipos";
+import HeroFotoClara from "./HeroFotoClara.astro";
+import HeroDividido from "./HeroDividido.astro";
+import HeroCarrusel from "./HeroCarrusel.astro";
+import HeroTipografico from "./HeroTipografico.astro";
+
+/* Hero de las páginas internas: el tipo lo elige el editor en el CMS.
+   Agregar una variante = sumar su componente a este mapa. */
+const variantes = {
+  fotoClara: HeroFotoClara,
+  dividido: HeroDividido,
+  carrusel: HeroCarrusel,
+  tipografico: HeroTipografico,
+} satisfies Record<TipoHero, unknown>;
+
+type Props = DatosHero;
+
+const Variante = variantes[Astro.props.tipo];
+---
+
+<Variante {...Astro.props} />

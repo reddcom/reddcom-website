@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "../../../src/styles/tokens.css";
+
+/* Tokens propios del CMS (la paleta viene del sitio). */
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --color-linea: #dce6ed; /* líneas de 1px de la retícula */
+}
+
+body {
+  @apply bg-surface font-sans text-navy-900 antialiased;
+}

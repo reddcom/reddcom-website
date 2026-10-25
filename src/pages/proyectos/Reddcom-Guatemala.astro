@@ -1,0 +1,16 @@
+---
+import PaginaPais from "../../components/proyectos/PaginaPais.astro";
+// Fotos temporales de Pexels (licencia libre)
+import fotoVolcan from "../../assets/pexels/guatemala-volcan.jpg";
+import fotoContrapicado from "../../assets/pexels/torre-contrapicado.jpg";
+---
+
+<PaginaPais
+  clave="reddcomGuatemala"
+  pais="Guatemala"
+  descripcion="Backbone de fibra, enlaces de microonda y proyectos regionales de radiofrecuencia desde 2015."
+  imagen={{ src: fotoVolcan, alt: "Volcán rodeado de nubes en Guatemala" }}
+  fotoLogros={{ src: fotoContrapicado, alt: "" }}
+  desde={2015}
+  servicios={["Backbone", "Microonda", "Site survey", "3G / LTE", "Fibra óptica"]}
+/>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./tokens.css";
 
 @keyframes reddcom-page-enter {
   0% {
@@ -14,4 +15,23 @@
 
 main {
   animation: reddcom-page-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Silueta de tarjeta (ref. "Tenista"): unión de dos rectángulos redondeados
+   desplazados en diagonal, con un escalón curvo arriba a la derecha y abajo a
+   la izquierda. Tailwind no tiene utilidades para esta forma, así que se recorta
+   con una máscara SVG. viewBox 160×200 = proporción 4:5; preserveAspectRatio="none"
+   hace que la silueta se estire con el elemento. */
+@utility silueta {
+  --silueta: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 200' preserveAspectRatio='none'%3E%3Cpath d='M20 0H110A20 20 0 0 1 130 20V22A8 8 0 0 0 138 30H140A20 20 0 0 1 160 50V180A20 20 0 0 1 140 200H50A20 20 0 0 1 30 180V178A8 8 0 0 0 22 170H20A20 20 0 0 1 0 150V20A20 20 0 0 1 20 0Z'/%3E%3C/svg%3E");
+
+  -webkit-mask: var(--silueta) center / 100% 100% no-repeat;
+  mask: var(--silueta) center / 100% 100% no-repeat;
+}
+
+/* Muesca circular arriba a la derecha (ref. tarjetas con botón de flecha en la
+   esquina): el hueco deja ver el fondo y aloja un botón de 44px centrado en él. */
+@utility muesca {
+  -webkit-mask: radial-gradient(circle 32px at calc(100% - 26px) 26px, transparent 31px, #000 32px);
+  mask: radial-gradient(circle 32px at calc(100% - 26px) 26px, transparent 31px, #000 32px);
 }

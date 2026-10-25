@@ -1,0 +1,21 @@
+---
+/* Etiqueta pequeña sobre los títulos (ref. "• ABOUT US"). */
+interface Props {
+  texto: string;
+  tono?: "claro" | "oscuro";
+  class?: string;
+}
+
+const { texto, tono = "oscuro", class: clase } = Astro.props;
+---
+
+<p
+  class:list={[
+    "inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.18em]",
+    tono === "claro" ? "text-primary-300" : "text-primary-700",
+    clase,
+  ]}
+>
+  <span class="size-1.5 rounded-full bg-current" aria-hidden="true"></span>
+  {texto}
+</p>

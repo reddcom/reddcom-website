@@ -1,58 +1,293 @@
 ---
+import Foto from "../../components/ui/Foto.astro";
+import { CircleCheck, Network, Plus, RadioTower, Spline, Wrench } from "@lucide/astro";
 import MainLayout from "../../layout/MainLayout.astro";
+import HeroPagina from "../../components/hero/HeroPagina.astro";
+import type { DatosHero } from "../../components/hero/tipos";
+import { cierreDe, heroDe, obtenerPagina, seccion } from "../../lib/cms";
+import BannerCta from "../../components/ui/BannerCta.astro";
+import EncabezadoSeccion from "../../components/ui/EncabezadoSeccion.astro";
+import Etiqueta from "../../components/ui/Etiqueta.astro";
+import InsigniaGiratoria from "../../components/ui/InsigniaGiratoria.astro";
+import TarjetaMuesca from "../../components/ui/TarjetaMuesca.astro";
+// Fotos temporales de Pexels (licencia libre): se reemplazarán desde el CMS
+import fotoConectores from "../../assets/pexels/fibra-conectores.jpg";
+import fotoRack from "../../assets/pexels/ingeniero-rack.jpg";
+import fotoTurquesa from "../../assets/pexels/fibra-turquesa.jpg";
+import fotoPanel from "../../assets/pexels/fibra-panel.jpg";
+import fotoEquipo from "../../assets/pexels/equipo-taller.jpg";
+import fotoReunion from "../../assets/pexels/ingenieros-reunion.jpg";
+import fotoAzotea from "../../assets/pexels/tecnicos-azotea.jpg";
+import fotoPoste from "../../assets/pexels/poste-cielo.jpg";
+
+/* Datos de prueba: se muestran mientras el campo del CMS (registro `redesFo`) esté vacío. */
+
+const heroPrueba: DatosHero = {
+  tipo: "tipografico",
+  encabezado: {
+    etiqueta: "Servicios · Fibra óptica",
+    titulo: "Redes de fibra que",
+    destacado: "conectan",
+    descripcion:
+      "Diseñamos, construimos y mantenemos redes FTTH, backbone y última milla con certificación de cada enlace.",
+  },
+  imagen: { src: fotoConectores, alt: "Conectores de fibra óptica en un panel de distribución" },
+  boton: { texto: "Hablar con un ingeniero", url: "/contacto" },
+  franja: ["FTTH", "GPON", "Backbone", "Empalmes por fusión", "Certificación OTDR", "Mantenimiento 24/7"],
+};
+
+const retoPrueba = {
+  encabezado: { etiqueta: "El reto", titulo: "Más tráfico, más usuarios", destacado: "y la misma red." },
+  parrafos: [
+    "Los operadores necesitan crecer sin interrumpir el servicio. Planificamos la red para soportar la demanda de los próximos años y la construimos por etapas, con ventanas de trabajo acordadas.",
+    "Cada enlace se entrega medido con OTDR y documentado, para que el mantenimiento sea rápido y predecible.",
+  ],
+  imagenes: [
+    { src: fotoRack, alt: "Ingeniero conectando cables en un rack" },
+    { src: fotoTurquesa, alt: "Cables de fibra conectados a un equipo de red" },
+  ],
+};
+
+const serviciosPrueba = {
+  encabezado: {
+    etiqueta: "Servicios",
+    titulo: "Todo lo que tu red",
+    destacado: "de fibra necesita.",
+    descripcion: "Equipos propios de diseño, construcción y certificación en cada país donde operamos.",
+  },
+  tarjetas: [
+    { titulo: "FTTH / FTTx", puntos: ["Diseño de red GPON", "Instalación de splitters", "Acometidas al hogar"] },
+    { titulo: "Backbone y última milla", puntos: ["Tendido aéreo y canalizado", "Cruces y derechos de vía", "Redes metropolitanas"] },
+    { titulo: "Empalmes y certificación", puntos: ["Fusión de fibras", "Pruebas OTDR", "Memoria técnica"] },
+    { titulo: "Mantenimiento", puntos: ["Atención de cortes", "Planes preventivos", "Monitoreo de enlaces"] },
+  ],
+};
+
+const resultadosPrueba = {
+  encabezado: { etiqueta: "Resultados", titulo: "Redes que rinden", destacado: "desde el primer día" },
+  textura: { src: fotoPanel, alt: "" },
+  avatares: [fotoEquipo, fotoReunion, fotoAzotea],
+  datos: [
+    { valor: "100%", etiqueta: "de enlaces entregados con certificación OTDR" },
+    { valor: "70%", etiqueta: "menos tiempo de reparación con monitoreo" },
+    { valor: "80%", etiqueta: "de la red diseñada para crecer sin obra nueva" },
+    { valor: "4", etiqueta: "semanas promedio de despliegue por zona" },
+  ],
+};
+
+/* Contenido del CMS con respaldo campo por campo. */
+const cms = await obtenerPagina("redesFo");
+const hero = heroDe(cms, heroPrueba);
+
+const reto = seccion(cms, "reto");
+const solucion = {
+  encabezado: reto.uno("encabezado", "encabezado") ?? retoPrueba.encabezado,
+  parrafos: reto.lista("parrafos", "texto") ?? retoPrueba.parrafos,
+  imagenes: [
+    reto.uno("imagenPrincipal", "imagen") ?? retoPrueba.imagenes[0],
+    reto.uno("imagenSecundaria", "imagen") ?? retoPrueba.imagenes[1],
+  ],
+};
+
+// En el CMS cada servicio es una tarjeta y sus puntos van uno por línea en el texto.
+const lecturaServicios = seccion(cms, "servicios");
+const servicios = {
+  encabezado: lecturaServicios.uno("encabezado", "encabezado") ?? serviciosPrueba.encabezado,
+  tarjetas:
+    lecturaServicios.lista("tarjetas", "tarjeta")?.map((tarjeta) => ({
+      titulo: tarjeta.titulo,
+      puntos: (tarjeta.texto ?? "").split("\n").map((punto) => punto.trim()).filter(Boolean),
+    })) ?? serviciosPrueba.tarjetas,
+};
+
+// El bento tiene cuatro casillas: si el CMS no trae las cuatro cifras, se usan las de prueba.
+const lecturaResultados = seccion(cms, "resultados");
+const cifrasCms = lecturaResultados.lista("datos", "dato");
+const resultados = {
+  encabezado: lecturaResultados.uno("encabezado", "encabezado") ?? resultadosPrueba.encabezado,
+  textura: lecturaResultados.uno("textura", "imagen") ?? resultadosPrueba.textura,
+  avatares: resultadosPrueba.avatares,
+  datos: cifrasCms && cifrasCms.length >= 4 ? cifrasCms : resultadosPrueba.datos,
+};
+
+const cierre = cierreDe(cms, { titulo: "Llevemos fibra", destacado: "a tu próximo proyecto" });
+
+// Estilo por posición: el contenido viene del CMS, la forma la decide el diseño.
+const iconosServicio = [Network, Spline, RadioTower, Wrench];
+const tarjetaOscura = 1;
 ---
 
 <MainLayout
-	title="Fibra Óptica | Reddcom"
-	description="Soluciones de fibra óptica para redes de telecomunicaciones de alta capacidad, velocidad y confiabilidad."
+  title="Fibra Óptica | Reddcom"
+  description="Soluciones de fibra óptica para redes de telecomunicaciones de alta capacidad, velocidad y confiabilidad."
 >
+  <HeroPagina {...hero} />
 
-	<section
-		class="
-			min-h-screen
-			bg-[#f7f9fb]
-			px-6
-			pb-24
-			pt-36
-			font-['Montserrat']
-			md:px-8
-			lg:px-12
-		"
-	>
-		<div class="mx-auto max-w-[1320px]">
+  <!-- =====================================================
+       EL RETO  (ref. Axios "problems and their best solutions": línea + fotos en B/N + insignia)
+  ====================================================== -->
+  <section id="reto" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto max-w-[1100px] px-6 md:px-8 lg:px-12">
+      <div class="flex items-center gap-6">
+        <span class="hidden h-px w-24 bg-navy-900/30 md:block" aria-hidden="true"></span>
+        <EncabezadoSeccion {...solucion.encabezado} cms="reto.encabezado" />
+      </div>
 
-			<span
-				class="
-					text-[10px]
-					font-semibold
-					tracking-[0.32em]
-					text-[#1595d3]
-				"
-			>
-				NUESTROS SERVICIOS
-			</span>
+      <div class="mt-12 grid gap-8 md:grid-cols-12">
+        <div data-anim="foto" data-cms="reto.imagenPrincipal" class="overflow-hidden rounded-[22px] md:col-span-5">
+          <Foto
+            src={solucion.imagenes[0].src}
+            alt={solucion.imagenes[0].alt}
+            widths={[480, 720]}
+            sizes="(min-width: 768px) 420px, 100vw"
+            class="aspect-[4/3] w-full object-cover grayscale"
+          />
+        </div>
+        <div class="md:col-span-7">
+          {solucion.parrafos.map((parrafo) => <p data-anim="revelar" data-cms="reto.parrafos" class="mb-4 text-[14px] leading-7 text-body">{parrafo}</p>)}
+          <div class="mt-6 flex items-center gap-6">
+            <InsigniaGiratoria texto="Fibra · Reddcom · desde 2011 ·" href="/contacto" etiqueta="Hablar con un ingeniero" />
+            <div data-anim="foto" data-cms="reto.imagenSecundaria" class="flex-1 overflow-hidden rounded-[22px]">
+              <Foto
+                src={solucion.imagenes[1].src}
+                alt={solucion.imagenes[1].alt}
+                widths={[400, 640]}
+                sizes="(min-width: 768px) 360px, 60vw"
+                class="aspect-[16/10] w-full object-cover grayscale"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-			<h1
-				class="
-					mt-5
-					max-w-[800px]
-					text-[44px]
-					font-semibold
-					leading-[1.05]
-					tracking-[-0.04em]
-					text-[#102f4d]
-					md:text-[60px]
-				"
-			>
-				Redes de
-				<span class="text-[#1595d3]">
-					Fibra Óptica.
-				</span>
-			</h1>
+  <!-- =====================================================
+       SERVICIOS  (ref. Axios "Explore unique digital agency service": checklist + esquina doblada)
+  ====================================================== -->
+  <section id="servicios" class="bg-surface-tint py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto grid max-w-[1320px] gap-5 px-6 md:grid-cols-2 md:px-8 lg:grid-cols-3 lg:px-12">
+      <div class="md:col-span-2 lg:col-span-1 lg:row-span-2 lg:pr-8">
+        <EncabezadoSeccion {...servicios.encabezado} cms="servicios.encabezado" />
+      </div>
+      {
+        servicios.tarjetas.map((tarjeta, indice) => {
+          const oscura = indice === tarjetaOscura;
+          const Icono = iconosServicio[indice % iconosServicio.length];
+          return (
+            <article
+              data-anim="revelar"
+              data-cms="servicios.tarjetas"
+              class:list={[
+                "relative overflow-hidden rounded-[20px] p-7",
+                oscura ? "bg-navy-950 text-white" : "bg-white text-navy-900",
+              ]}
+            >
+              <div class="flex items-center gap-3">
+                <span
+                  class:list={[
+                    "flex size-11 items-center justify-center rounded-[12px]",
+                    oscura ? "bg-primary-300 text-navy-950" : "bg-surface-tint text-primary-700",
+                  ]}
+                >
+                  <Icono size={20} aria-hidden="true" />
+                </span>
+                <h3 class="text-[18px] font-semibold leading-tight">{tarjeta.titulo}</h3>
+              </div>
+              <ul class="mt-6 space-y-2.5">
+                {tarjeta.puntos.map((punto) => (
+                  <li class:list={["flex items-center gap-2 text-[14px]", oscura ? "text-white/85" : "text-body"]}>
+                    <CircleCheck size={16} class={oscura ? "text-primary-300" : "text-primary-600"} aria-hidden="true" />
+                    {punto}
+                  </li>
+                ))}
+              </ul>
+              <span
+                aria-hidden="true"
+                class:list={["absolute bottom-0 right-0 size-6 rounded-tl-[8px]", oscura ? "bg-primary-300" : "bg-navy-950"]}
+              />
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
 
-			<!-- Aquí irá el contenido de Fibra Óptica -->
+  <!-- =====================================================
+       RESULTADOS  (ref. Supervity "Driving enterprise ROI": bento de cifras)
+  ====================================================== -->
+  <section id="resultados" class="bg-white py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+      {resultados.encabezado.etiqueta && <Etiqueta texto={resultados.encabezado.etiqueta} />}
+      <h2
+        data-anim="titulo"
+        data-cms="resultados.encabezado"
+        class="mt-5 max-w-[760px] text-[36px] font-semibold leading-[1.1] tracking-[-0.045em] text-navy-900 md:text-[54px]"
+      >
+        {resultados.encabezado.titulo}{" "}
+        <span class="rounded-[14px] bg-primary-300/40 px-2">{resultados.encabezado.destacado}</span>
+      </h2>
 
-		</div>
-	</section>
+      <div class="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-12" data-cms="resultados.datos">
+        <!-- Textura de fibra -->
+        <article data-anim="revelar" class="flex flex-col rounded-[24px] bg-surface p-3 lg:col-span-4">
+          <div class="relative overflow-hidden rounded-[18px]" data-cms="resultados.textura">
+            <Foto src={resultados.textura.src} alt="" widths={[400, 640]} sizes="380px" class="h-44 w-full object-cover" />
+            <span class="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full bg-navy-950 text-white">
+              <Plus size={16} aria-hidden="true" />
+            </span>
+          </div>
+          <p data-contar class="mt-auto px-4 pt-8 text-[56px] font-normal leading-none tracking-[-0.04em] text-navy-950">
+            {resultados.datos[0].valor}
+          </p>
+          <p class="px-4 pb-4 pt-2 text-[14px] text-body">{resultados.datos[0].etiqueta}</p>
+        </article>
 
+        <!-- Acento con muesca -->
+        <TarjetaMuesca href="/proyectos/Reddcom-Honduras" etiqueta="Ver proyectos" tono="acento" class="lg:col-span-4">
+          <div class="flex -space-x-3">
+            {
+              resultados.avatares.map((foto) => (
+                <Foto src={foto} alt="" widths={[96]} sizes="44px" class="size-11 rounded-full border-2 border-primary-300 object-cover" />
+              ))
+            }
+          </div>
+          <p data-contar class="mt-auto pt-24 text-[56px] font-normal leading-none tracking-[-0.04em]">
+            {resultados.datos[1].valor}
+          </p>
+          <p class="mt-2 text-[14px]">{resultados.datos[1].etiqueta}</p>
+        </TarjetaMuesca>
+
+        <!-- Esfera difuminada + tarjeta oscura -->
+        <div class="grid gap-4 md:col-span-2 lg:col-span-4">
+          <article
+            data-anim="revelar"
+            class="relative overflow-hidden rounded-[24px] bg-surface p-7"
+          >
+            <span
+              aria-hidden="true"
+              class="absolute -right-10 -top-10 size-40 rounded-full bg-primary-300 blur-2xl"
+            ></span>
+            <p data-contar class="relative text-[48px] font-normal leading-none tracking-[-0.04em] text-navy-950">
+              {resultados.datos[2].valor}
+            </p>
+            <p class="relative mt-2 max-w-[200px] text-[14px] text-body">{resultados.datos[2].etiqueta}</p>
+          </article>
+          <article data-anim="revelar" class="relative flex items-center gap-5 overflow-hidden rounded-[24px] bg-navy-950 p-7 text-white">
+            <Foto
+              src={fotoPoste}
+              alt=""
+              widths={[400]}
+              sizes="300px"
+              class="absolute inset-0 h-full w-full object-cover opacity-20 grayscale"
+            />
+            <p data-contar class="relative text-[56px] font-normal leading-none">{resultados.datos[3].valor}</p>
+            <p class="relative text-[14px] text-white/80">{resultados.datos[3].etiqueta}</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <BannerCta {...cierre} />
 </MainLayout>

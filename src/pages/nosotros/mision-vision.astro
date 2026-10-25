@@ -1,157 +1,145 @@
 ---
+import Foto from "../../components/ui/Foto.astro";
 import MainLayout from "../../layout/MainLayout.astro";
+import { obtenerPagina, seccion, type Tarjeta } from "../../lib/cms";
+import tecnicoReddcom from "../../assets/Servicios/01-construccion.png";
+// Fotos temporales de Unsplash y Pexels (licencia libre): se reemplazarán por fotos del equipo desde el CMS
+import fotoMision from "../../assets/mision-vision/temporal-fibra-switch.jpg";
+import fotoVision from "../../assets/mision-vision/temporal-ciudad-noche.jpg";
+import texturaValores from "../../assets/mision-vision/temporal-torre-nubes.jpg";
+import fotoResponsabilidad from "../../assets/mision-vision/temporal-valor-responsabilidad.jpg";
+import fotoEtica from "../../assets/mision-vision/temporal-valor-etica.jpg";
+import fotoDisciplina from "../../assets/mision-vision/temporal-valor-disciplina.jpg";
+import fotoDedicacion from "../../assets/mision-vision/temporal-valor-dedicacion.jpg";
+import fotoCompromiso from "../../assets/mision-vision/temporal-valor-compromiso.jpg";
+import fotoObjetividad from "../../assets/mision-vision/temporal-valor-objetividad.jpg";
+import fotoMotivacion from "../../assets/mision-vision/temporal-valor-motivacion.jpg";
+import {
+  ArrowRight,
+  ChartNoAxesColumn,
+  ClipboardList,
+  Handshake,
+  Lightbulb,
+  RadioTower,
+  Scale,
+  ShieldCheck,
+  Telescope,
+  Wrench,
+} from "@lucide/astro";
 
-const valores = [
-  {
-    nombre: "Responsabilidad",
-    icono: `
-      <svg viewBox="0 0 24 24" fill="none">
-        <path
-          d="M8.5 12.5L11 15L16 9"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M4 7.5L8 4L12 6L16 4L20 7.5V13C20 17 16.8 20 12 21C7.2 20 4 17 4 13V7.5Z"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linejoin="round"
-        />
-      </svg>
-    `,
+/* Datos de prueba: se muestran mientras el campo del CMS (registro `misionVision`)
+   esté vacío. Íconos y forma de las tarjetas los decide el diseño, por posición. */
+const prueba = {
+  hero: {
+    encabezado: {
+      etiqueta: "Nuestro propósito",
+      titulo: "Misión y",
+      destacado: "Visión",
+      descripcion: "Nuestros principios nos guían y nos impulsan a seguir construyendo conexiones que generan un mejor futuro.",
+    },
+    imagen: { src: "/images/mision-vision/reddcom-honduras.webp", alt: "Visión y desarrollo de Reddcom" },
   },
-  {
-    nombre: "Ética",
-    icono: `
-      <svg viewBox="0 0 24 24" fill="none">
-        <path
-          d="M12 3V20M6 6H18M8 6L5 12H11L8 6ZM16 6L13 12H19L16 6Z"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M8 20H16"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-        />
-      </svg>
-    `,
+  mision: {
+    titulo: "Construimos conexiones para el desarrollo regional",
+    texto:
+      "Ser una empresa multidisciplinaria dispuesta a brindar Servicios de Construcción, Adecuación, expansión, enlaces y Mantenimiento de sitios en el Área de telefonía móvil remota a nivel regional centroamericano.",
+    imagen: { src: fotoMision, alt: "Cables de fibra óptica conectados a un equipo de red" },
   },
-  {
-    nombre: "Disciplina",
-    icono: `
-      <svg viewBox="0 0 24 24" fill="none">
-        <rect
-          x="5"
-          y="3"
-          width="14"
-          height="18"
-          rx="2"
-          stroke="currentColor"
-          stroke-width="1.7"
-        />
-        <path
-          d="M8 8H16M8 12H16M8 16H13"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-        />
-      </svg>
-    `,
+  vision: {
+    titulo: "Ser líderes a nivel regional",
+    texto:
+      "Ser una empresa líder a nivel regional manteniendo la excelencia, y establecernos como la principal opción de nuestros clientes.",
+    imagen: { src: fotoVision, alt: "" },
   },
-  {
-    nombre: "Dedicación",
-    icono: `
-      <svg viewBox="0 0 24 24" fill="none">
-        <circle
-          cx="12"
-          cy="12"
-          r="4"
-          stroke="currentColor"
-          stroke-width="1.7"
-        />
-        <path
-          d="M12 2V5M12 19V22M22 12H19M5 12H2M19 5L17 7M7 17L5 19M19 19L17 17M7 7L5 5"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-        />
-      </svg>
-    `,
+  imagenCentral: { src: tecnicoReddcom, alt: "Técnico de Reddcom trabajando en una torre de telecomunicaciones" },
+  lema: "Construimos conexiones",
+  datos: [
+    { valor: "+20", etiqueta: "años de experiencia en la región" },
+    { valor: "6", etiqueta: "países con presencia regional" },
+  ],
+  valores: {
+    encabezado: {
+      etiqueta: "Nuestros valores",
+      titulo: "Lo que nos define",
+      descripcion: "Valores que guían nuestro trabajo y reflejan el compromiso de nuestro equipo.",
+    },
+    tarjetas: [
+      { titulo: "Responsabilidad", imagen: { src: fotoResponsabilidad, alt: "" } },
+      { titulo: "Ética", imagen: { src: fotoEtica, alt: "" } },
+      { titulo: "Disciplina", imagen: { src: fotoDisciplina, alt: "" } },
+      { titulo: "Dedicación", imagen: { src: fotoDedicacion, alt: "" } },
+      { titulo: "Compromiso", imagen: { src: fotoCompromiso, alt: "" } },
+      { titulo: "Objetividad", imagen: { src: fotoObjetividad, alt: "" } },
+      { titulo: "Motivación", imagen: { src: fotoMotivacion, alt: "" } },
+    ] as Tarjeta[],
+    boton: { texto: "Únete al equipo", url: "/Oportunidades-Laborales" },
+    datos: [
+      { valor: "2005", etiqueta: "Fundación" },
+      { valor: "ISO 9001:2015", etiqueta: "Gestión de calidad" },
+    ],
+    textura: { src: texturaValores, alt: "" },
   },
-  {
-    nombre: "Compromiso",
-    icono: `
-      <svg viewBox="0 0 24 24" fill="none">
-        <circle
-          cx="12"
-          cy="12"
-          r="8"
-          stroke="currentColor"
-          stroke-width="1.7"
-        />
-        <circle
-          cx="12"
-          cy="12"
-          r="4"
-          stroke="currentColor"
-          stroke-width="1.7"
-        />
-        <path
-          d="M12 12L20 4M16 4H20V8"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    `,
-  },
-  {
-    nombre: "Objetividad",
-    icono: `
-      <svg viewBox="0 0 24 24" fill="none">
-        <path
-          d="M5 20V14M10 20V10M15 20V6M20 20V3"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-        />
-        <path
-          d="M4 11L9 8L13 9L20 3"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    `,
-  },
-  {
-    nombre: "Motivación",
-    icono: `
-      <svg viewBox="0 0 24 24" fill="none">
-        <path
-          d="M9 18H15M10 21H14"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-        />
-        <path
-          d="M8.5 15.5C6.9 14.4 6 12.6 6 10.5A6 6 0 0 1 18 10.5C18 12.6 17.1 14.4 15.5 15.5C14.6 16.1 14 16.8 14 18H10C10 16.8 9.4 16.1 8.5 15.5Z"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linejoin="round"
-        />
-      </svg>
-    `,
-  },
-];
+};
+
+/* Contenido del CMS con respaldo campo por campo. */
+const cms = await obtenerPagina("misionVision");
+
+const lecturaHero = seccion(cms, "hero");
+const hero = {
+  encabezado: lecturaHero.uno("encabezado", "encabezado") ?? prueba.hero.encabezado,
+  imagen: lecturaHero.uno("imagen", "imagen") ?? prueba.hero.imagen,
+};
+
+const lecturaMv = seccion(cms, "misionVision");
+const misionCms = lecturaMv.uno("mision", "tarjeta");
+const visionCms = lecturaMv.uno("vision", "tarjeta");
+const mision = {
+  icono: RadioTower,
+  titulo: misionCms?.titulo ?? prueba.mision.titulo,
+  texto: misionCms?.texto ?? prueba.mision.texto,
+  imagen: misionCms?.imagen ?? prueba.mision.imagen,
+};
+const vision = {
+  icono: Telescope,
+  titulo: visionCms?.titulo ?? prueba.vision.titulo,
+  texto: visionCms?.texto ?? prueba.vision.texto,
+  imagen: visionCms?.imagen ?? prueba.vision.imagen,
+};
+const imagenCentral = lecturaMv.uno("imagen", "imagen") ?? prueba.imagenCentral;
+// La tipografía gigante va en dos líneas: la primera palabra y el resto.
+const [lemaInicio, ...lemaResto] = (lecturaMv.uno("lema", "texto") ?? prueba.lema).split(" ");
+const [datoSuperior, datoInferior] = lecturaMv.lista("datos", "dato") ?? prueba.datos;
+
+const lecturaValores = seccion(cms, "valores");
+const encabezadoValores = lecturaValores.uno("encabezado", "encabezado") ?? prueba.valores.encabezado;
+const botonValores = lecturaValores.uno("boton", "enlace") ?? prueba.valores.boton;
+const datosValores = lecturaValores.lista("datos", "dato") ?? prueba.valores.datos;
+const texturaFondo = lecturaValores.uno("textura", "imagen") ?? prueba.valores.textura;
+
+const iconosValor = [ShieldCheck, Scale, ClipboardList, Wrench, Handshake, ChartNoAxesColumn, Lightbulb];
+const valores = (lecturaValores.lista("valores", "tarjeta") ?? prueba.valores.tarjetas).map((tarjeta, indice) => ({
+  nombre: tarjeta.titulo,
+  icono: iconosValor[indice % iconosValor.length],
+  foto: tarjeta.imagen,
+}));
+
+/* Arco de valores (solo desktop): cada tarjeta se ubica sobre un arco
+   que va de 195° a -15°. x/y salen de cos/sin del ángulo y el giro
+   acompaña la curva, suavizado al 20% para que el texto se lea. */
+const ARCO = { radio: 400, centroY: 450, desde: 195, hasta: -15 };
+
+const valoresEnArco = valores.map((valor, index) => {
+  const paso = (ARCO.desde - ARCO.hasta) / (valores.length - 1);
+  const angulo = ARCO.desde - index * paso;
+  const radianes = (angulo * Math.PI) / 180;
+
+  return {
+    ...valor,
+    x: Math.round(ARCO.radio * Math.cos(radianes)),
+    y: Math.round(ARCO.centroY - ARCO.radio * Math.sin(radianes)),
+    giro: Math.round((90 - angulo) * 0.2),
+  };
+});
 ---
 
 <MainLayout
@@ -159,9 +147,11 @@ const valores = [
   description="Conoce la misión, visión y valores que guían el trabajo de Reddcom."
 >
   <section
+    id="hero"
+    data-cms="hero.imagen"
     class="
       overflow-hidden
-      bg-[#f7f9fb]
+      bg-surface
       pt-[105px]
       font-['Montserrat']
     "
@@ -183,8 +173,8 @@ const valores = [
         "
       >
         <img
-          src="/images/mision-vision/reddcom-honduras.png"
-          alt="Visión y desarrollo de Reddcom"
+          src={typeof hero.imagen.src === "string" ? hero.imagen.src : hero.imagen.src.src}
+          alt={hero.imagen.alt}
           class="
             h-full
             w-full
@@ -214,7 +204,7 @@ const valores = [
             bottom-0
             h-[160px]
             bg-gradient-to-t
-            from-[#f7f9fb]
+            from-surface
             to-transparent
           "
         ></div>
@@ -235,11 +225,11 @@ const valores = [
         <div
           class="
             flex
-            min-h-[380px]
+            min-h-[520px]
             items-start
             justify-between
             pt-16
-            lg:min-h-[420px]
+            lg:min-h-[610px]
             lg:pt-20
           "
         >
@@ -251,39 +241,40 @@ const valores = [
                 class="
                   h-[2px]
                   w-[48px]
-                  bg-[#1595d3]
+                  bg-primary-600
                 "
               ></span>
 
               <span
                 class="
-                  text-[9px]
+                  text-[11px]
                   font-semibold
                   uppercase
-                  tracking-[0.38em]
-                  text-[#102f4d]
+                  tracking-[0.2em]
+                  text-navy-900
                 "
               >
-                Nuestro propósito
+                {hero.encabezado.etiqueta}
               </span>
             </div>
 
             <h1
+              data-cms="hero.encabezado"
               class="
                 mt-7
                 text-[48px]
                 font-semibold
                 leading-[0.98]
                 tracking-[-0.05em]
-                text-[#102f4d]
+                text-navy-900
                 md:text-[64px]
                 lg:text-[72px]
               "
             >
-              Misión y
+              {hero.encabezado.titulo}
 
-              <span class="block text-[#1595d3]">
-                Visión
+              <span class="block text-primary-600">
+                {hero.encabezado.destacado}
               </span>
             </h1>
 
@@ -293,513 +284,377 @@ const valores = [
                 max-w-[430px]
                 text-[14px]
                 leading-[1.65]
-                text-[#526577]
+                text-body
                 md:text-[16px]
               "
             >
-              Nuestros principios nos guían y nos impulsan a seguir
-              construyendo conexiones que generan un mejor futuro.
+              {hero.encabezado.descripcion}
             </p>
           </div>
-
-          <!-- TEXTO DECORATIVO -->
-          <div
-            class="
-              mt-3
-              hidden
-              max-w-[180px]
-              lg:block
-            "
-          >
-            <span
-              class="
-                mb-5
-                block
-                h-[2px]
-                w-[55px]
-                bg-[#1595d3]
-              "
-            ></span>
-
-            <p
-              class="
-                text-[9px]
-                font-semibold
-                uppercase
-                leading-[1.8]
-                tracking-[0.35em]
-                text-[#102f4d]
-              "
-            >
-              Infraestructura<br />
-              que conecta<br />
-              el futuro
-            </p>
-          </div>
-        </div>
-
-        <!-- =====================================================
-             MISIÓN + VISIÓN ESCALONADAS
-        ====================================================== -->
-        <div
-          class="
-            relative
-            z-20
-            grid
-            items-start
-            pb-10
-            lg:grid-cols-[49%_53%]
-            lg:pb-24
-          "
-        >
-          <!-- =================================================
-               MISIÓN
-          ================================================== -->
-          <article
-            class="
-              relative
-              z-20
-              min-h-[360px]
-              overflow-hidden
-              bg-white
-              px-8
-              py-10
-              shadow-[0_25px_70px_rgba(16,47,77,0.10)]
-              md:px-12
-              lg:min-h-[390px]
-              lg:px-14
-              lg:py-12
-            "
-          >
-            <!-- NÚMERO 01 -->
-            <span
-              class="
-                pointer-events-none
-                absolute
-                left-7
-                top-4
-                text-[110px]
-                font-semibold
-                leading-none
-                tracking-[-0.08em]
-                text-[#102f4d]/[0.07]
-                md:text-[135px]
-              "
-            >
-              01
-            </span>
-
-            <!-- CONTENIDO MISIÓN -->
-            <div
-              class="
-                relative
-                z-10
-                md:ml-[130px]
-              "
-            >
-              <span
-                class="
-                  block
-                  h-[2px]
-                  w-[58px]
-                  bg-[#1595d3]
-                "
-              ></span>
-
-              <p
-                class="
-                  mt-5
-                  text-[10px]
-                  font-semibold
-                  uppercase
-                  tracking-[0.35em]
-                  text-[#1595d3]
-                "
-              >
-                Misión
-              </p>
-
-              <h2
-                class="
-                  mt-5
-                  max-w-[430px]
-                  text-[24px]
-                  font-semibold
-                  leading-[1.18]
-                  tracking-[-0.03em]
-                  text-[#102f4d]
-                  md:text-[27px]
-                "
-              >
-                Construimos conexiones para el desarrollo regional.
-              </h2>
-
-              <p
-                class="
-                  mt-5
-                  max-w-[470px]
-                  text-[13px]
-                  leading-[1.7]
-                  text-[#526577]
-                  md:text-[14px]
-                "
-              >
-                Ser una empresa multidisciplinaria dispuesta a brindar
-                Servicios de Construcción, Adecuación, expansión, enlaces
-                y Mantenimiento de sitios en el Área de telefonía móvil
-                remota a nivel regional centroamericano.
-              </p>
-
-              <div class="mt-8 flex items-center gap-5">
-                <span
-                  class="
-                    h-[2px]
-                    w-[65px]
-                    bg-[#1595d3]
-                  "
-                ></span>
-
-                <span
-                  class="
-                    text-[8px]
-                    font-semibold
-                    uppercase
-                    leading-[1.8]
-                    tracking-[0.35em]
-                    text-[#087fc1]
-                  "
-                >
-                  Conectamos<br />
-                  oportunidades
-                </span>
-              </div>
-            </div>
-          </article>
-
-          <!-- =================================================
-               VISIÓN
-          ================================================== -->
-          <article
-            class="
-              relative
-              z-30
-              min-h-[360px]
-              overflow-hidden
-              bg-[#073b68]
-              px-8
-              py-10
-              text-white
-              shadow-[0_30px_70px_rgba(7,59,104,0.18)]
-              md:px-12
-
-              lg:-ml-5
-              lg:mt-[105px]
-              lg:min-h-[330px]
-              lg:px-14
-              lg:py-12
-            "
-          >
-            <!-- DECORACIÓN CIRCULAR -->
-            <div
-              class="
-                pointer-events-none
-                absolute
-                -right-[100px]
-                top-[30px]
-                h-[330px]
-                w-[330px]
-                rounded-full
-                border
-                border-white/10
-              "
-            ></div>
-
-            <div
-              class="
-                pointer-events-none
-                absolute
-                -right-[45px]
-                top-[85px]
-                h-[220px]
-                w-[220px]
-                rounded-full
-                border
-                border-white/10
-              "
-            ></div>
-
-            <!-- NÚMERO 02 -->
-            <span
-              class="
-                pointer-events-none
-                absolute
-                left-8
-                top-5
-                text-[110px]
-                font-semibold
-                leading-none
-                tracking-[-0.08em]
-                text-white/[0.12]
-                md:text-[135px]
-              "
-            >
-              02
-            </span>
-
-            <!-- CONTENIDO VISIÓN -->
-            <div
-              class="
-                relative
-                z-10
-                md:ml-[130px]
-              "
-            >
-              <span
-                class="
-                  block
-                  h-[2px]
-                  w-[58px]
-                  bg-[#24a9e6]
-                "
-              ></span>
-
-              <p
-                class="
-                  mt-5
-                  text-[10px]
-                  font-semibold
-                  uppercase
-                  tracking-[0.35em]
-                  text-[#49b9ec]
-                "
-              >
-                Visión
-              </p>
-
-              <h2
-                class="
-                  mt-5
-                  max-w-[440px]
-                  text-[24px]
-                  font-semibold
-                  leading-[1.2]
-                  tracking-[-0.03em]
-                  text-white
-                  md:text-[27px]
-                "
-              >
-                Ser líderes a nivel regional.
-              </h2>
-
-              <p
-                class="
-                  mt-5
-                  max-w-[440px]
-                  text-[14px]
-                  leading-[1.75]
-                  text-white/75
-                "
-              >
-                Ser una empresa líder a nivel regional manteniendo la
-                excelencia, y establecernos como la principal opción de
-                nuestros clientes.
-              </p>
-
-              <div class="mt-8 flex items-center gap-5">
-                <span
-                  class="
-                    h-[2px]
-                    w-[65px]
-                    bg-[#24a9e6]
-                  "
-                ></span>
-
-                <span
-                  class="
-                    text-[8px]
-                    font-semibold
-                    uppercase
-                    leading-[1.8]
-                    tracking-[0.35em]
-                    text-[#61c5ef]
-                  "
-                >
-                  Un mejor<br />
-                  mañana
-                </span>
-              </div>
-            </div>
-          </article>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- =====================================================
-         VALORES
-    ====================================================== -->
-    <section
-      class="
-        relative
-        bg-white
-        px-6
-        py-20
-        md:px-8
-        lg:px-12
-      "
-    >
-      <!-- DECORACIÓN -->
-      <div
-        class="
-          pointer-events-none
-          absolute
-          -right-[160px]
-          top-[20px]
-          hidden
-          h-[400px]
-          w-[400px]
-          rounded-full
-          border
-          border-[#1595d3]/5
-          lg:block
-        "
-      ></div>
+  <!-- =====================================================
+       MISIÓN Y VISIÓN  (ref. tipografía gigante + imagen inclinada)
+  ====================================================== -->
+  <section id="mision-vision" class="overflow-hidden bg-surface pb-24 font-['Montserrat'] lg:pb-32">
+    <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
 
-      <div
-        class="
-          relative
-          mx-auto
-          max-w-[1320px]
-        "
-      >
-        <!-- ETIQUETA -->
-        <div class="flex items-center gap-5">
-          <span
-            class="
-              h-[2px]
-              w-[48px]
-              bg-[#1595d3]
-            "
-          ></span>
-
-          <span
-            class="
-              text-[9px]
-              font-semibold
-              uppercase
-              tracking-[0.38em]
-              text-[#102f4d]
-            "
-          >
-            Nuestros valores
-          </span>
-        </div>
-
+      <!-- FILA SUPERIOR: dato + misión -->
+      <div class="grid items-start gap-8 lg:grid-cols-12">
         <div
+          data-cms="misionVision.datos"
           class="
-            mt-8
-            grid
-            gap-12
-            lg:grid-cols-[280px_1fr]
-            lg:items-center
+            flex h-40 w-40 flex-col items-center justify-center rounded-full
+            bg-accent text-center
+            lg:col-span-3
           "
         >
-          <!-- TITULO -->
-          <div>
-            <h2
-              class="
-                text-[42px]
-                font-semibold
-                leading-[1]
-                tracking-[-0.05em]
-                text-[#102f4d]
-                md:text-[52px]
-              "
-            >
-              Lo que
+          <p class="text-[34px] font-semibold tracking-[-0.04em] text-navy-950">{datoSuperior?.valor}</p>
+          <p class="mt-1 max-w-[110px] text-[12px] font-medium leading-4 text-navy-950">
+            {datoSuperior?.etiqueta}
+          </p>
+        </div>
 
-              <span class="block text-[#1595d3]">
-                nos define
+        <article data-cms="misionVision.mision" class="group relative overflow-hidden rounded-sm bg-white p-3 lg:col-span-6 lg:col-start-7">
+          <Foto
+            src={mision.imagen.src}
+            alt={mision.imagen.alt}
+            widths={[480, 720, 960]}
+            sizes="(min-width: 1024px) 600px, 100vw"
+            class="
+              aspect-[16/7] w-full rounded-sm object-cover grayscale-[45%]
+              transition-[filter] duration-500 group-hover:grayscale-0
+            "
+          />
+
+          <div class="px-5 pb-5 pt-7 lg:px-7 lg:pb-7">
+            <div class="flex items-center gap-3">
+              <span
+                class="
+                  flex h-10 w-10 items-center justify-center rounded-sm bg-navy-900 text-white
+                  transition-colors duration-300 group-hover:bg-primary-700
+                "
+              >
+                <mision.icono size={20} stroke-width={1.6} aria-hidden="true" />
               </span>
-            </h2>
+              <p class="text-[13px] font-semibold uppercase tracking-[0.15em] text-primary-700">
+                Misión
+              </p>
+            </div>
 
-            <p
-              class="
-                mt-5
-                max-w-[270px]
-                text-[12px]
-                leading-[1.65]
-                text-[#647486]
-              "
-            >
-              Valores que guían nuestro trabajo y reflejan el compromiso
-              de nuestro equipo.
+            <h2 class="mt-6 text-[26px] font-semibold leading-[1.15] tracking-[-0.03em] text-navy-900 md:text-[30px]">
+              {mision.titulo}
+            </h2>
+            <p class="mt-4 text-[15px] leading-7 text-body">
+              {mision.texto}
             </p>
           </div>
 
-          <!-- LISTA DE VALORES -->
-          <div
+          <span
+            aria-hidden="true"
             class="
-              grid
-              grid-cols-2
-              gap-y-10
-              sm:grid-cols-3
-              md:grid-cols-4
-              lg:grid-cols-7
-              lg:gap-0
+              absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-accent
+              transition-transform duration-500 group-hover:scale-x-100
             "
-          >
-            {
-              valores.map((valor, index) => (
-                <div
-                  class:list={[
-                    "flex flex-col items-center px-3 text-center",
-                    index !== 0
-                      ? "lg:border-l lg:border-[#102f4d]/10"
-                      : "",
-                  ]}
-                >
-                  <!-- ICONO -->
-                  <div
-                    class="
-                      flex
-                      h-[62px]
-                      w-[62px]
-                      items-center
-                      justify-center
-                      rounded-full
-                      bg-[#e9f6fc]
-                      text-[#087fc1]
-                    "
-                  >
-                    <div
-                      class="
-                        h-[30px]
-                        w-[30px]
-                        [&>svg]:h-full
-                        [&>svg]:w-full
-                      "
-                      set:html={valor.icono}
-                    ></div>
-                  </div>
+          ></span>
+        </article>
+      </div>
 
-                  <!-- NOMBRE -->
-                  <h3
-                    class="
-                      mt-4
-                      text-[11px]
-                      font-semibold
-                      text-[#102f4d]
-                      md:text-[12px]
-                    "
-                  >
-                    {valor.nombre}
-                  </h3>
-                </div>
-              ))
-            }
+      <!-- TIPOGRAFÍA GIGANTE + IMAGEN -->
+      <div class="relative my-16 lg:my-28">
+        <p
+          aria-hidden="true"
+          data-cms="misionVision.lema"
+          class="
+            select-none font-semibold leading-[0.95] tracking-[-0.06em]
+            text-[52px]
+            sm:text-[72px]
+            xl:text-[96px]
+          "
+        >
+          <span class="block text-navy-900/20">{lemaInicio}</span>
+          <span class="block text-right text-navy-900">{lemaResto.join(" ")}</span>
+        </p>
+
+        <Foto
+          data-cms="misionVision.imagen"
+          src={imagenCentral.src}
+          alt={imagenCentral.alt}
+          widths={[320, 480, 640]}
+          sizes="(min-width: 1024px) 300px, 80vw"
+          class="
+            mx-auto mt-10 aspect-[4/5] w-[70%] max-w-[230px] -rotate-6
+            rounded-sm object-cover object-[62%_center]
+            transition-[rotate] duration-500 ease-out hover:-rotate-2
+            lg:absolute lg:left-[53%] lg:top-1/2 lg:mt-0 lg:w-[220px]
+            lg:-translate-x-1/2 lg:-translate-y-1/2
+            xl:left-[54%] xl:w-[260px]
+          "
+        />
+      </div>
+
+      <!-- FILA INFERIOR: visión + dato -->
+      <div class="grid items-end gap-8 lg:grid-cols-12">
+        <article data-cms="misionVision.vision" class="group relative isolate overflow-hidden rounded-sm bg-navy-900 p-8 text-white lg:col-span-6 lg:p-10">
+          <Foto
+            src={vision.imagen.src}
+            alt={vision.imagen.alt}
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 1024px) 600px, 100vw"
+            class="
+              absolute inset-0 -z-10 h-full w-full object-cover object-[center_70%] opacity-60
+              transition-opacity duration-500 group-hover:opacity-90
+            "
+          />
+          <div class="absolute inset-0 -z-10 bg-gradient-to-r from-navy-900 via-navy-900/85 to-navy-900/30"></div>
+
+          <div class="flex items-center gap-3">
+            <span
+              class="
+                flex h-10 w-10 items-center justify-center rounded-sm bg-primary-600 text-white
+                transition-colors duration-300 group-hover:bg-accent group-hover:text-navy-950
+              "
+            >
+              <vision.icono size={20} stroke-width={1.6} aria-hidden="true" />
+            </span>
+            <p class="text-[13px] font-semibold uppercase tracking-[0.15em] text-primary-300">
+              Visión
+            </p>
           </div>
+
+          <h2 class="mt-24 text-[26px] font-semibold leading-[1.15] tracking-[-0.03em] md:text-[30px]">
+            {vision.titulo}
+          </h2>
+          <p class="mt-4 max-w-[440px] text-[15px] leading-7 text-white/85">
+            {vision.texto}
+          </p>
+
+          <span
+            aria-hidden="true"
+            class="
+              absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-accent
+              transition-transform duration-500 group-hover:scale-x-100
+            "
+          ></span>
+        </article>
+
+        <div
+          data-cms="misionVision.datos"
+          class="
+            flex h-40 w-40 flex-col items-center justify-center rounded-full
+            bg-accent text-center
+            lg:col-span-3 lg:col-start-10 lg:justify-self-end
+          "
+        >
+          <p class="text-[34px] font-semibold tracking-[-0.04em] text-navy-950">{datoInferior?.valor}</p>
+          <p class="mt-1 max-w-[110px] text-[12px] font-medium leading-4 text-navy-950">
+            {datoInferior?.etiqueta}
+          </p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       VALORES  (ref. arco de imágenes)
+  ====================================================== -->
+  <section id="valores" data-cms="valores.textura" class="relative isolate overflow-hidden bg-surface py-24 font-['Montserrat'] lg:py-28">
+    <!-- FOTO DE FONDO: velo claro para que el texto navy se lea sobre las nubes -->
+    <Foto
+      src={texturaFondo.src}
+      alt={texturaFondo.alt}
+      widths={[960, 1600, 2400]}
+      sizes="100vw"
+      class="absolute inset-0 -z-10 h-full w-full object-cover"
+    />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-b from-surface/85 via-surface/55 to-surface/90"></div>
+
+    <div class="relative mx-auto max-w-[1100px] px-6 md:px-8 lg:h-[700px] lg:px-0">
+
+      <!-- CENTRO -->
+      <div class="mx-auto max-w-[460px] text-center lg:absolute lg:inset-x-0 lg:top-[215px]">
+        <p class="text-[13px] font-semibold uppercase tracking-[0.15em] text-primary-700">
+          {encabezadoValores.etiqueta}
+        </p>
+
+        <h2 data-cms="valores.encabezado" class="mt-4 text-[40px] font-semibold leading-[1] tracking-[-0.045em] text-navy-900 md:text-[52px]">
+          {encabezadoValores.titulo}
+        </h2>
+
+        <p class="mx-auto mt-5 max-w-[360px] text-[15px] leading-7 text-navy-900/80">
+          {encabezadoValores.descripcion}
+        </p>
+
+        <a
+          href={botonValores.url}
+          data-cms="valores.boton"
+          class="
+            group mt-7 inline-flex h-11 items-center gap-2 rounded-full bg-navy-900 px-6
+            text-sm font-semibold text-white no-underline
+            transition-colors duration-200 hover:bg-primary-700
+          "
+        >
+          {botonValores.texto}
+          <ArrowRight
+            size={16}
+            aria-hidden="true"
+            class="transition-transform duration-200 group-hover:translate-x-0.5"
+          />
+        </a>
+
+        <dl data-cms="valores.datos" class="mt-9 grid grid-cols-2 divide-x divide-navy-900/20">
+          {
+            datosValores.map((dato) => (
+              <div class="px-4">
+                <dt class="text-[12px] text-body">{dato.etiqueta}</dt>
+                <dd class="mt-1 text-[18px] font-semibold text-navy-900">{dato.valor}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <!-- TARJETAS (ref. tarjeta con foto y esquinas asimétricas, utilidad `silueta`
+           de global.css): retícula en móvil, arco en desktop -->
+      <ul
+        data-valores
+        data-cms="valores.valores"
+        data-centro-y={ARCO.centroY}
+        class="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:mt-0"
+      >
+        {
+          valoresEnArco.map((valor) => (
+            <li
+              data-valor
+              data-x={valor.x}
+              data-y={valor.y}
+              data-giro={valor.giro}
+              style={`--x: ${valor.x}px; --y: ${valor.y}px; --giro: ${valor.giro}deg;`}
+              class="
+                silueta group relative isolate aspect-[4/5] overflow-hidden
+                lg:absolute lg:left-[calc(50%+var(--x))] lg:top-[calc(var(--y)+var(--flotar,0px))]
+                lg:aspect-auto lg:h-[200px] lg:w-[160px] lg:-translate-x-1/2 lg:-translate-y-1/2
+                lg:rotate-(--giro)
+              "
+            >
+              {valor.foto && (
+              <Foto
+                src={valor.foto.src}
+                alt={valor.foto.alt}
+                widths={[300, 450]}
+                sizes="(min-width: 1024px) 160px, 45vw"
+                class="
+                  absolute inset-0 -z-10 h-full w-full object-cover grayscale-[40%]
+                  transition-[filter] duration-500 group-hover:grayscale-0
+                "
+              />
+              )}
+
+              <!-- Tinte azul de marca: desaparece en hover para mostrar la foto real -->
+              <div
+                class="
+                  absolute inset-0 -z-10 bg-navy-900/50 mix-blend-multiply
+                  transition-opacity duration-500 group-hover:opacity-0
+                "
+              ></div>
+
+              <div
+                class="
+                  absolute bottom-[19%] left-[calc(50%+4px)] flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap
+                  rounded-[10px] border border-white/30 bg-white/20 px-2.5 py-1.5 text-white backdrop-blur-md
+                  transition-colors duration-300 group-hover:border-primary-600 group-hover:bg-primary-600
+                "
+              >
+                <valor.icono size={14} stroke-width={2} aria-hidden="true" class="shrink-0" />
+                <h3 class="text-[11.5px] font-semibold">{valor.nombre}</h3>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </section>
 </MainLayout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  let contexto: gsap.MatchMedia | undefined;
+
+  function animarValores() {
+    const lista = document.querySelector<HTMLElement>("[data-valores]");
+    if (!lista) return;
+
+    const placas = lista.querySelectorAll<HTMLElement>("[data-valor]");
+    const centroY = `${lista.dataset.centroY}px`;
+
+    contexto = gsap.matchMedia();
+
+    // Desktop: las placas nacen apiladas en el centro del arco y se abren en abanico.
+    // Solo se animan variables CSS (--x, --y, --giro, --flotar): el centrado y el giro
+    // los pone Tailwind, y tocar `transform` desde GSAP los anularía.
+    contexto.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(
+        placas,
+        { "--x": "0px", "--y": centroY, "--giro": "0deg", opacity: 0 },
+        {
+          "--x": (_: number, placa: HTMLElement) => `${placa.dataset.x}px`,
+          "--y": (_: number, placa: HTMLElement) => `${placa.dataset.y}px`,
+          "--giro": (_: number, placa: HTMLElement) => `${placa.dataset.giro}deg`,
+          opacity: 1,
+          duration: 1.1,
+          ease: "power3.out",
+          stagger: { each: 0.06, from: "center" },
+          scrollTrigger: { trigger: lista, start: "top 75%", once: true },
+        },
+      );
+
+      // Hover: la placa se endereza y sube; al salir vuelve a su ángulo en el arco
+      const limpiezas = [...placas].map((placa) => {
+        const entrar = () =>
+          gsap.to(placa, { "--giro": "0deg", "--flotar": "-8px", duration: 0.3, ease: "power2.out", overwrite: "auto" });
+        const salir = () =>
+          gsap.to(placa, {
+            "--giro": `${placa.dataset.giro}deg`,
+            "--flotar": "0px",
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+
+        placa.addEventListener("mouseenter", entrar);
+        placa.addEventListener("mouseleave", salir);
+
+        return () => {
+          placa.removeEventListener("mouseenter", entrar);
+          placa.removeEventListener("mouseleave", salir);
+        };
+      });
+
+      return () => limpiezas.forEach((limpiar) => limpiar());
+    });
+
+    // Móvil/tablet: entrada simple en cascada
+    contexto.add("(max-width: 1023px) and (prefers-reduced-motion: no-preference)", () => {
+      gsap.from(placas, {
+        y: 24, // aquí no hay giro ni centrado de Tailwind, así que `y` es seguro
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out",
+        stagger: 0.06,
+        scrollTrigger: { trigger: lista, start: "top 85%", once: true },
+      });
+    });
+  }
+
+  // Con ClientRouter las páginas se cambian sin recargar: se inicia en cada
+  // carga y se limpia antes de salir para no dejar animaciones huérfanas.
+  document.addEventListener("astro:page-load", animarValores);
+  document.addEventListener("astro:before-swap", () => contexto?.revert());
+</script>

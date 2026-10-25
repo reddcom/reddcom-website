@@ -1,0 +1,40 @@
+---
+import { Asterisk } from "@lucide/astro";
+
+/* Cinta de palabras en bucle (ref. franja lima con ✳). La animación la da
+   data-anim="franja"; la lista se repite para cubrir pantallas anchas. */
+interface Props {
+  palabras: string[];
+  tono?: "acento" | "oscuro";
+  class?: string;
+  cms?: string; // campos del CMS que se pintan aquí (resaltado en la vista previa)
+}
+
+const { palabras, tono = "acento", class: clase, cms } = Astro.props;
+const serie = [...palabras, ...palabras, ...palabras];
+---
+
+<div
+  data-cms={cms}
+  class:list={[
+    "overflow-hidden py-4",
+    tono === "acento" ? "bg-primary-300 text-navy-950" : "bg-navy-950 text-white",
+    clase,
+  ]}
+>
+  <p class="sr-only">{palabras.join(", ")}</p>
+  <div data-anim="franja" class="flex w-max" aria-hidden="true">
+    {
+      [0, 1].map(() => (
+        <ul class="flex shrink-0 items-center">
+          {serie.map((palabra) => (
+            <li class="flex items-center gap-8 whitespace-nowrap pr-8 text-[14px] font-semibold uppercase tracking-[0.1em]">
+              {palabra}
+              <Asterisk size={18} />
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>

@@ -1,1265 +1,278 @@
 ---
-
+import Foto from "../components/ui/Foto.astro";
+import { BriefcaseBusiness, Clock, GraduationCap, HardHat, MapPin, Plane, Sparkles } from "@lucide/astro";
 import MainLayout from "../layout/MainLayout.astro";
-import { getCollection } from "astro:content";
+import HeroPagina from "../components/hero/HeroPagina.astro";
+import type { DatosHero } from "../components/hero/tipos";
+import BannerCta from "../components/ui/BannerCta.astro";
+import EncabezadoSeccion from "../components/ui/EncabezadoSeccion.astro";
+import TarjetaMuesca from "../components/ui/TarjetaMuesca.astro";
+import { correoRrhhPrueba, enlaceCorreo, jornadaLegible, ubicacionDe, vacantesActivas } from "../data/empleo";
+import { cierreDe, heroDe, obtenerPagina, seccion, type Tarjeta } from "../lib/cms";
+// Fotos temporales de Pexels (licencia libre): se reemplazarán desde el CMS
+import fotoEquipo from "../assets/pexels/equipo-taller.jpg";
+import fotoOficina from "../assets/pexels/equipo-oficina.jpg";
+import fotoAzotea from "../assets/pexels/tecnicos-azotea.jpg";
+import fotoReunion from "../assets/pexels/ingenieros-reunion.jpg";
+import fotoCielo from "../assets/pexels/torre-cielo-azul.jpg";
 
-interface DatosPlaza {
-  titulo: string;
-  ubicacion: string;
-  area: string;
-  tipo: string;
-  descripcion: string;
-  fechaPublicacion: Date;
-  activo: boolean;
-}
+const vacantes = await vacantesActivas();
+const areas = [...new Set(vacantes.map((vacante) => vacante.area))];
 
-interface Plaza {
-  id: string;
-  data: DatosPlaza;
-}
+/* Datos de prueba: se muestran mientras el campo del CMS (registro `oportunidades`) esté vacío.
+   Las vacantes salen siempre del módulo Vacantes. */
 
-const todasLasPlazas = (await getCollection("empleos")) as Plaza[];
+const heroPrueba: DatosHero = {
+  tipo: "dividido",
+  encabezado: {
+    etiqueta: "Únete a nuestro equipo",
+    titulo: "Tu talento puede ser parte",
+    destacado: "de lo que construimos.",
+    descripcion:
+      "Buscamos personas comprometidas, responsables y con ganas de crecer junto a un equipo que conecta personas, empresas y comunidades.",
+  },
+  imagen: { src: fotoEquipo, alt: "Equipo de ingenieros trabajando en un taller" },
+  boton: { texto: "Ver vacantes", url: "#vacantes" },
+  datos: [
+    { valor: `${vacantes.length} ${vacantes.length === 1 ? "plaza" : "plazas"}`, etiqueta: "Abiertas ahora" },
+    { valor: "6 países", etiqueta: "donde puedes crecer con nosotros" },
+    { valor: "+20", etiqueta: "años formando equipos técnicos" },
+    { valor: String(areas.length), etiqueta: "áreas con vacantes" },
+    { valor: "2005", etiqueta: "año de fundación" },
+  ],
+};
 
-const plazasOrdenadas: Plaza[] = todasLasPlazas
-  .filter((item: Plaza) => item.data.activo === true)
-  .sort(
-    (primera: Plaza, segunda: Plaza) =>
-      segunda.data.fechaPublicacion.getTime() -
-      primera.data.fechaPublicacion.getTime()
-  );
-  
-console.log("VACANTES ENCONTRADAS:", todasLasPlazas.length);
-console.log("VACANTES ACTIVAS:", plazasOrdenadas.length); 
+const beneficiosPrueba = {
+  encabezado: { titulo: "Construyamos tu carrera", destacado: "juntos" },
+  tarjetas: [
+    { titulo: "Capacitación continua", texto: "Formación técnica y certificaciones de trabajo en altura.", imagen: { src: fotoReunion, alt: "" } },
+    { titulo: "Crecimiento regional", texto: "Proyectos en seis países para ampliar tu experiencia.", imagen: { src: fotoAzotea, alt: "" } },
+    { titulo: "Seguridad primero", texto: "Equipo de protección y protocolos en cada obra.", imagen: { src: fotoOficina, alt: "" } },
+  ],
+};
+
+const listadoPrueba = {
+  encabezado: {
+    etiqueta: "Empleos",
+    titulo: "Posiciones",
+    destacado: "abiertas.",
+    descripcion: "Conoce nuestras posiciones abiertas y encuentra la oportunidad que mejor se adapte a tu experiencia.",
+  },
+  sinVacantes: {
+    titulo: "No hay vacantes disponibles",
+    descripcion: "En este momento no tenemos posiciones abiertas. Vuelve pronto o envíanos tu currículum.",
+  },
+};
+
+/* Contenido del CMS con respaldo campo por campo. */
+const [cms, cmsDetalle] = await Promise.all([obtenerPagina("oportunidades"), obtenerPagina("detalleVacante")]);
+const hero = heroDe(cms, heroPrueba);
+
+const lecturaBeneficios = seccion(cms, "beneficios");
+const beneficios = {
+  encabezado: lecturaBeneficios.uno("encabezado", "encabezado") ?? beneficiosPrueba.encabezado,
+  tarjetas: (lecturaBeneficios.lista("tarjetas", "tarjeta") ?? beneficiosPrueba.tarjetas) as Tarjeta[],
+};
+
+const lecturaListado = seccion(cms, "listado");
+const listado = {
+  encabezado: lecturaListado.uno("encabezado", "encabezado") ?? listadoPrueba.encabezado,
+  sinVacantes: lecturaListado.uno("sinVacantes", "encabezado") ?? listadoPrueba.sinVacantes,
+};
+
+const correoRrhh = seccion(cmsDetalle, "postulacion").uno("correo", "texto") ?? correoRrhhPrueba;
+const envioCv = cierreDe(
+  cms,
+  {
+    titulo: "¿No encontraste",
+    destacado: "tu vacante?",
+    texto: "Envíanos tu currículum y te tendremos en cuenta para futuras oportunidades.",
+    boton: { texto: "Enviar mi CV", url: enlaceCorreo(correoRrhh, "Currículum - Oportunidades laborales") },
+    imagen: { src: fotoCielo, alt: "" },
+  },
+  "envioCv",
+);
+
+// Íconos por posición: el contenido viene del CMS, la forma la decide el diseño.
+const iconosBeneficio = [GraduationCap, Plane, HardHat];
+
+const formatoFecha = new Intl.DateTimeFormat("es", { day: "numeric", month: "long" });
+const tonos = ["acento", "claro", "claro", "claro"] as const;
+const claseFiltro =
+  "rounded-full border border-navy-900/15 px-4 py-2 text-[13px] font-semibold text-navy-900 transition-colors aria-pressed:border-navy-900 aria-pressed:bg-navy-900 aria-pressed:text-white";
 ---
-
 
 <MainLayout
   title="Oportunidades Laborales | Reddcom"
   description="Conoce las oportunidades laborales disponibles en Reddcom y forma parte de nuestro equipo."
 >
-  <main class="min-h-screen bg-[#f7f9fb] font-['Montserrat']">
+  <HeroPagina {...hero} />
 
-    <!-- =====================================================
-         HERO
-    ====================================================== -->
-
-    <section
-      class="
-        relative
-        overflow-hidden
-        px-6
-        pb-20
-        pt-[160px]
-        md:px-8
-        lg:px-12
-        lg:pb-24
-        lg:pt-[180px]
-      "
-    >
-
-      <!-- DECORACIÓN DERECHA -->
-
-      <div
-        class="
-          pointer-events-none
-          absolute
-          -right-[180px]
-          top-[40px]
-          hidden
-          h-[520px]
-          w-[520px]
-          rounded-full
-          border
-          border-[#1595d3]/10
-          lg:block
-        "
-      ></div>
-
-      <div
-        class="
-          pointer-events-none
-          absolute
-          -right-[50px]
-          top-[170px]
-          hidden
-          h-[280px]
-          w-[280px]
-          rounded-full
-          border
-          border-[#1595d3]/10
-          lg:block
-        "
-      ></div>
-
-      <div
-        class="
-          pointer-events-none
-          absolute
-          right-[150px]
-          top-[250px]
-          hidden
-          h-[8px]
-          w-[8px]
-          rounded-full
-          bg-[#1595d3]
-          lg:block
-        "
-      ></div>
-
-
-      <div class="relative mx-auto max-w-[1320px]">
-
-        <!-- ETIQUETA -->
-
-        <div class="flex items-center gap-5">
-
-          <span
-            class="
-              h-[2px]
-              w-[48px]
-              bg-[#1595d3]
-            "
-          ></span>
-
-          <span
-            class="
-              text-[9px]
-              font-semibold
-              uppercase
-              tracking-[0.38em]
-              text-[#102f4d]
-            "
-          >
-            Únete a nuestro equipo
-          </span>
-
-        </div>
-
-
-        <!-- CONTENIDO -->
-
-        <div
-          class="
-            mt-8
-            grid
-            gap-12
-            lg:grid-cols-[1fr_400px]
-            lg:items-end
-          "
-        >
-
-          <!-- IZQUIERDA -->
-
-          <div>
-
-           <h1
-  class="
-    max-w-[800px]
-    text-[48px]
-    font-semibold
-    leading-[0.98]
-    tracking-[-0.05em]
-    text-[#102f4d]
-    md:text-[64px]
-    lg:text-[72px]
-  "
->
-  Tu talento puede ser parte
-
-  <span class="block text-[#1595d3]">
-    de lo que construimos.
-  </span>
-</h1>
-
-
-            <p
-              class="
-                mt-7
-                max-w-[620px]
-                text-[14px]
-                leading-[1.8]
-                text-[#647486]
-                md:text-[15px]
-              "
-            >
-              En Reddcom buscamos personas comprometidas, responsables
-              y dispuestas a crecer junto a un equipo que conecta
-              personas, empresas y comunidades.
-            </p>
-
-          </div>
-
-
-          <!-- DERECHA -->
-
-          <div
-            class="
-              border-l
-              border-[#102f4d]/15
-              pl-7
-            "
-          >
-
-            <span
-              class="
-                text-[9px]
-                font-semibold
-                uppercase
-                tracking-[0.30em]
-                text-[#1595d3]
-              "
-            >
-              Talento Reddcom
-            </span>
-
-
-            <p
-              class="
-                mt-4
-                text-[13px]
-                leading-[1.75]
-                text-[#526577]
-              "
-            >
-              Explora nuestras oportunidades laborales y encuentra
-              una posición donde puedas aportar tu experiencia,
-              conocimiento y talento.
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         BARRA DE ESTADO
-    ====================================================== -->
-
-    <section
-      class="
-        bg-[#073b68]
-        px-6
-        py-7
-        text-white
-        md:px-8
-        lg:px-12
-      "
-    >
-
-      <div
-        class="
-          mx-auto
-          flex
-          max-w-[1320px]
-          flex-col
-          gap-6
-          sm:flex-row
-          sm:items-center
-          sm:justify-between
-        "
-      >
-
-        <!-- IZQUIERDA -->
-
-        <div class="flex items-center gap-4">
-
-          <div
-            class="
-              flex
-              h-[46px]
-              w-[46px]
-              shrink-0
-              items-center
-              justify-center
-              rounded-full
-              bg-white/10
-              text-[#5bc1ed]
-            "
-          >
-
-            <svg
-              viewBox="0 0 24 24"
+  <!-- =====================================================
+       BENEFICIOS  (ref. Supervity "Let's build your AI workforce — together": tarjetas altas sobre fondo oscuro)
+  ====================================================== -->
+  <section id="beneficios" class="bg-surface px-3 py-3 font-['Montserrat'] md:px-5">
+    <div class="relative isolate overflow-hidden rounded-[32px] bg-navy-950 px-6 py-16 md:px-10 lg:py-20">
+      <!-- Líneas onduladas de fondo -->
+      <svg aria-hidden="true" viewBox="0 0 800 400" preserveAspectRatio="none" class="absolute inset-0 -z-10 h-full w-full text-white/5">
+        {
+          Array.from({ length: 14 }, (_, i) => (
+            <path
+              d={`M0 ${120 + i * 18} C 200 ${40 + i * 18}, 400 ${220 + i * 18}, 800 ${100 + i * 18}`}
               fill="none"
-              class="h-5 w-5"
-            >
-              <path
-                d="M9 6V5C9 3.9 9.9 3 11 3H13C14.1 3 15 3.9 15 5V6"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          ))
+        }
+      </svg>
 
-              <rect
-                x="4"
-                y="6"
-                width="16"
-                height="14"
-                rx="2"
-                stroke="currentColor"
-                stroke-width="1.6"
-              />
-
-              <path
-                d="M4 11H20M10 11V13H14V11"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-            </svg>
-
-          </div>
-
-
-          <div>
-
-            <p
-              class="
-                text-[9px]
-                font-semibold
-                uppercase
-                tracking-[0.30em]
-                text-[#5bc1ed]
-              "
-            >
-              Oportunidades laborales
-            </p>
-
-            <p
-              class="
-                mt-1
-                text-[12px]
-                text-white/60
-              "
-            >
-              Posiciones actualmente abiertas en Reddcom.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <!-- CONTADOR -->
-
-        <div class="flex items-center gap-4">
-
-          <span
-            class="
-              text-[38px]
-              font-semibold
-              tracking-[-0.05em]
-              text-white
-            "
-          >
-            {plazasOrdenadas.length}
-          </span>
-
-          <span
-            class="
-              text-[8px]
-              font-semibold
-              uppercase
-              leading-[1.6]
-              tracking-[0.25em]
-              text-white/60
-            "
-          >
-            {
-              plazasOrdenadas.length === 1
-                ? "Plaza activa"
-                : "Plazas activas"
-            }
-          </span>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         VACANTES
-    ====================================================== -->
-
-    <section
-      class="
-        bg-white
-        px-6
-        py-20
-        md:px-8
-        lg:px-12
-        lg:py-24
-      "
-    >
-
-      <div class="mx-auto max-w-[1320px]">
-
-        <!-- ENCABEZADO -->
-
-        <div
-          class="
-            flex
-            flex-col
-            gap-6
-            border-b
-            border-[#102f4d]/10
-            pb-8
-            md:flex-row
-            md:items-end
-            md:justify-between
-          "
+      <div class="mx-auto grid max-w-[1240px] gap-5 lg:grid-cols-4">
+        <h2
+          data-anim="titulo"
+          data-cms="beneficios.encabezado"
+          class="text-[38px] font-semibold leading-[1.08] tracking-[-0.045em] text-white md:text-[48px]"
         >
-
-          <div>
-
-            <div class="flex items-center gap-4">
-
-              <span
-                class="
-                  h-[2px]
-                  w-[38px]
-                  bg-[#1595d3]
-                "
-              ></span>
-
-              <span
-                class="
-                  text-[9px]
-                  font-semibold
-                  uppercase
-                  tracking-[0.35em]
-                  text-[#102f4d]
-                "
-              >
-                Empleos
-              </span>
-
-            </div>
-
-
-            <h2
-              class="
-                mt-5
-                text-[34px]
-                font-semibold
-                tracking-[-0.04em]
-                text-[#102f4d]
-                md:text-[44px]
-              "
-            >
-              Posiciones
-
-              <span class="text-[#1595d3]">
-                disponibles.
-              </span>
-            </h2>
-
-          </div>
-
-
-          <p
-            class="
-              max-w-[390px]
-              text-[12px]
-              leading-[1.7]
-              text-[#647486]
-            "
-          >
-            Conoce nuestras posiciones abiertas y encuentra la
-            oportunidad que mejor se adapte a tu experiencia.
-          </p>
-
-        </div>
-
-
-        <!-- =================================================
-             SI HAY VACANTES
-        ================================================== -->
+          {beneficios.encabezado.titulo} —
+          <span class="rounded-full bg-primary-300 px-3 text-navy-950">{beneficios.encabezado.destacado}</span>
+        </h2>
 
         {
-          plazasOrdenadas.length > 0 ? (
-
-            <div
-              class="
-                mt-12
-                grid
-                gap-5
-                md:grid-cols-2
-                xl:grid-cols-3
-              "
-            >
-
-              {
-                plazasOrdenadas.map((item) => (
-
-               <article
-  class="
-    group
-    relative
-    flex
-    min-h-[370px]
-    flex-col
-    overflow-hidden
-    rounded-[24px]
-    border
-    border-[#0b4d7a]/10
-    bg-white
-    shadow-[0_14px_40px_rgba(16,47,77,0.08)]
-
-    transition-all
-    duration-300
-
-    hover:-translate-y-1
-    hover:shadow-[0_22px_55px_rgba(16,47,77,0.15)]
-  "
->
-
-  <!-- ==========================================
-       CABECERA AZUL
-  =========================================== -->
-
-  <div
-    class="
-      relative
-      overflow-hidden
-      bg-gradient-to-r
-      from-[#073b68]
-      to-[#087fc1]
-      px-7
-      pb-7
-      pt-6
-      text-white
-    "
-  >
-
-    <!-- DECORACIÓN -->
-
-    <div
-      class="
-        pointer-events-none
-        absolute
-        -right-[55px]
-        -top-[65px]
-        h-[160px]
-        w-[160px]
-        rounded-full
-        border
-        border-white/10
-      "
-    ></div>
-
-    <div
-      class="
-        pointer-events-none
-        absolute
-        -right-[10px]
-        -top-[20px]
-        h-[85px]
-        w-[85px]
-        rounded-full
-        border
-        border-white/10
-      "
-    ></div>
-
-
-    <!-- ESTADO + ÁREA -->
-
-    <div
-      class="
-        relative
-        z-10
-        flex
-        items-center
-        justify-between
-        gap-4
-      "
-    >
-
-      <span
-        class="
-          inline-flex
-          items-center
-          gap-2
-          rounded-full
-          bg-white/12
-          px-3
-          py-2
-          text-[8px]
-          font-semibold
-          uppercase
-          tracking-[0.18em]
-          text-[#7bd1f3]
-        "
-      >
-        <span
-          class="
-            h-[6px]
-            w-[6px]
-            rounded-full
-            bg-[#61c9f1]
-          "
-        ></span>
-
-        Activa
-      </span>
-
-
-      <span
-        class="
-          text-[9px]
-          font-medium
-          text-white/65
-        "
-      >
-        {item.data.area}
-      </span>
-
-    </div>
-
-
-    <!-- PUESTO -->
-
-    <h3
-      class="
-        relative
-        z-10
-        mt-7
-        max-w-[310px]
-        text-[25px]
-        font-semibold
-        leading-[1.15]
-        tracking-[-0.035em]
-        text-white
-      "
-    >
-      {item.data.titulo}
-    </h3>
-
-  </div>
-
-
-  <!-- ==========================================
-       CUERPO
-  =========================================== -->
-
-  <div
-    class="
-      flex
-      flex-1
-      flex-col
-      px-7
-      pb-7
-      pt-6
-    "
-  >
-
-    <!-- DATOS -->
-
-    <div
-      class="
-        flex
-        flex-wrap
-        gap-x-6
-        gap-y-3
-      "
-    >
-
-      <!-- UBICACIÓN -->
-
-      <span
-        class="
-          flex
-          items-center
-          gap-2
-          text-[11px]
-          font-medium
-          text-[#526577]
-        "
-      >
-
-        <span
-          class="
-            flex
-            h-7
-            w-7
-            items-center
-            justify-center
-            rounded-full
-            bg-[#e8f6fc]
-            text-[#1595d3]
-          "
-        >
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            class="h-[14px] w-[14px]"
-          >
-            <path
-              d="M20 10C20 15 12 21 12 21C12 21 4 15 4 10C4 5.6 7.6 2 12 2C16.4 2 20 5.6 20 10Z"
-              stroke="currentColor"
-              stroke-width="1.7"
-              stroke-linejoin="round"
-            />
-
-            <circle
-              cx="12"
-              cy="10"
-              r="2.5"
-              stroke="currentColor"
-              stroke-width="1.7"
-            />
-          </svg>
-
-        </span>
-
-        {item.data.ubicacion}
-
-      </span>
-
-
-      <!-- TIPO -->
-
-      <span
-        class="
-          flex
-          items-center
-          gap-2
-          text-[11px]
-          font-medium
-          text-[#526577]
-        "
-      >
-
-        <span
-          class="
-            flex
-            h-7
-            w-7
-            items-center
-            justify-center
-            rounded-full
-            bg-[#e8f6fc]
-            text-[#1595d3]
-          "
-        >
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            class="h-[14px] w-[14px]"
-          >
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              stroke="currentColor"
-              stroke-width="1.7"
-            />
-
-            <path
-              d="M12 7V12L15.5 14"
-              stroke="currentColor"
-              stroke-width="1.7"
-              stroke-linecap="round"
-            />
-          </svg>
-
-        </span>
-
-        {item.data.tipo}
-
-      </span>
-
-    </div>
-
-
-    <!-- DESCRIPCIÓN -->
-
-    <p
-      class="
-        mt-6
-        max-w-[340px]
-        text-[12px]
-        leading-[1.8]
-        text-[#526577]
-      "
-    >
-      {item.data.descripcion}
-    </p>
-
-
-    <!-- SEPARADOR -->
-
-    <div
-      class="
-        mt-auto
-        pt-7
-      "
-    >
-
-      <div
-        class="
-          mb-5
-          h-px
-          w-full
-          bg-[#102f4d]/10
-        "
-      ></div>
-
-
-      <!-- BOTÓN -->
-
-      <a
-        href={`/oportunidades/${item.id}`}
-        class="
-          flex
-          h-[46px]
-          w-full
-          items-center
-          justify-between
-          rounded-full
-          bg-[#eef7fb]
-          px-5
-          text-[10px]
-          font-semibold
-          text-[#087fc1]
-          no-underline
-
-          transition-all
-          duration-300
-
-          hover:bg-[#1595d3]
-          hover:text-white
-        "
-      >
-        Ver oportunidad
-
-        <span
-          class="
-            flex
-            h-7
-            w-7
-            items-center
-            justify-center
-            rounded-full
-            bg-white
-            text-[15px]
-            text-[#087fc1]
-
-            transition-transform
-            duration-300
-
-            group-hover:translate-x-1
-          "
-        >
-          →
-        </span>
-
-      </a>
-
-    </div>
-
-  </div>
-
-</article>
-
-                ))
-              }
-
-            </div>
-
-          ) : (
-
-            <div
-              class="
-                relative
-                mt-12
-                flex
-                min-h-[390px]
-                flex-col
-                items-center
-                justify-center
-                overflow-hidden
-                rounded-[28px]
-                border
-                border-[#102f4d]/10
-                bg-[#f8fafc]
-                px-6
-                py-16
-                text-center
-              "
-            >
-
-              <!-- DECORACIÓN -->
-
-              <div
-                class="
-                  pointer-events-none
-                  absolute
-                  -right-[100px]
-                  -top-[100px]
-                  h-[250px]
-                  w-[250px]
-                  rounded-full
-                  border
-                  border-[#1595d3]/10
-                "
-              ></div>
-
-
-              <div
-                class="
-                  pointer-events-none
-                  absolute
-                  -bottom-[100px]
-                  -left-[100px]
-                  h-[250px]
-                  w-[250px]
-                  rounded-full
-                  border
-                  border-[#1595d3]/10
-                "
-              ></div>
-
-
-              <div
-                class="
-                  relative
-                  z-10
-                  flex
-                  max-w-[520px]
-                  flex-col
-                  items-center
-                "
+          beneficios.tarjetas.map((tarjeta, indice) => {
+            const acento = indice === beneficios.tarjetas.length - 1;
+            const Icono = iconosBeneficio[indice % iconosBeneficio.length];
+            return (
+              <article
+                data-anim="revelar"
+                data-cms="beneficios.tarjetas"
+                class:list={[
+                  "relative flex min-h-[260px] flex-col overflow-hidden rounded-[24px] p-6 lg:min-h-[380px]",
+                  acento ? "bg-primary-300 text-navy-950" : "bg-white/[0.06] text-white",
+                ]}
               >
-
-                <!-- ICONO -->
-
-                <div
-                  class="
-                    flex
-                    h-[84px]
-                    w-[84px]
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-white
-                    text-[#102f4d]/20
-                    shadow-[0_10px_30px_rgba(16,47,77,0.06)]
-                  "
-                >
-
-                  <svg
-                    viewBox="0 0 64 64"
-                    fill="none"
-                    class="h-[50px] w-[50px]"
-                  >
-                    <circle
-                      cx="32"
-                      cy="32"
-                      r="25"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    />
-
-                    <circle
-                      cx="24"
-                      cy="27"
-                      r="2.5"
-                      fill="currentColor"
-                    />
-
-                    <circle
-                      cx="40"
-                      cy="27"
-                      r="2.5"
-                      fill="currentColor"
-                    />
-
-                    <path
-                      d="M23 43C28 37 36 37 41 43"
-                      stroke="currentColor"
-                      stroke-width="4"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-
-                </div>
-
-
+                {!acento && tarjeta.imagen && (
+                  <Foto
+                    src={tarjeta.imagen.src}
+                    alt=""
+                    widths={[320, 480]}
+                    sizes="280px"
+                    class="absolute inset-0 -z-10 h-full w-full object-cover opacity-25 grayscale"
+                  />
+                )}
                 <span
-                  class="
-                    mt-7
-                    text-[8px]
-                    font-semibold
-                    uppercase
-                    tracking-[0.32em]
-                    text-[#1595d3]
-                  "
-                >
-                  Actualmente
-                </span>
-
-
-                <h3
-                  class="
-                    mt-3
-                    text-[23px]
-                    font-semibold
-                    tracking-[-0.03em]
-                    text-[#102f4d]
-                    md:text-[28px]
-                  "
-                >
-                  No hay Vacantes disponibles
-                </h3>
-
-
-                <p
-                  class="
-                    mt-3
-                    max-w-[430px]
-                    text-[13px]
-                    leading-[1.75]
-                    text-[#647486]
-                  "
-                >
-                  En este momento no contamos con posiciones abiertas.
-                  Vuelve pronto para conocer nuevas oportunidades
-                  laborales en Reddcom.
-                </p>
-
-
-                <div
-                  class="
-                    mt-8
-                    flex
-                    items-center
-                    gap-4
-                  "
-                >
-
-                  <span
-                    class="
-                      h-[1px]
-                      w-[45px]
-                      bg-[#1595d3]/40
-                    "
-                  ></span>
-
-                  <span
-                    class="
-                      text-[8px]
-                      font-semibold
-                      uppercase
-                      tracking-[0.28em]
-                      text-[#102f4d]/50
-                    "
-                  >
-                    Reddcom
+                  aria-hidden="true"
+                  class:list={[
+                    "absolute -right-8 -top-8 -z-10 size-40 rounded-full blur-2xl",
+                    acento ? "bg-white/50" : "bg-primary-300/40",
+                  ]}
+                />
+                {acento ? (
+                  <Icono size={110} stroke-width={1.2} aria-hidden="true" class="mx-auto mt-6" />
+                ) : (
+                  <span class="flex size-10 items-center justify-center rounded-full bg-white text-navy-950">
+                    <Icono size={18} aria-hidden="true" />
                   </span>
+                )}
+                <h3 class="mt-auto text-[20px] font-semibold">{tarjeta.titulo}</h3>
+                <p class:list={["mt-2 text-[14px] leading-6", acento ? "text-navy-950/80" : "text-white/75"]}>{tarjeta.texto}</p>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
 
-                  <span
-                    class="
-                      h-[1px]
-                      w-[45px]
-                      bg-[#1595d3]/40
-                    "
-                  ></span>
+  <!-- =====================================================
+       VACANTES  (ref. "Our Classes": tarjetas con muesca y flecha, filtro por área)
+  ====================================================== -->
+  <section id="vacantes" data-vacantes class="bg-surface py-20 font-['Montserrat'] lg:py-28">
+    <div class="mx-auto max-w-[1320px] px-6 md:px-8 lg:px-12">
+      <EncabezadoSeccion {...listado.encabezado} alineacion="dividido" cms="listado.encabezado" />
 
-                </div>
-
-              </div>
-
+      {
+        vacantes.length > 0 ? (
+          <>
+            <div class="mt-10 flex flex-wrap gap-2" role="group" aria-label="Filtrar por área">
+              <button type="button" data-filtro="" aria-pressed="true" class={claseFiltro}>
+                Todas ({vacantes.length})
+              </button>
+              {areas.map((area) => (
+                <button type="button" data-filtro={area} aria-pressed="false" class={claseFiltro}>
+                  {area}
+                </button>
+              ))}
             </div>
 
-          )
-        }
+            <ul class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {vacantes.map((vacante, indice) => (
+                <li data-area={vacante.area}>
+                  <TarjetaMuesca
+                    href={`/oportunidades/${vacante.slug}`}
+                    etiqueta={`Ver vacante ${vacante.titulo}`}
+                    tono={tonos[indice % tonos.length]}
+                    class="h-full"
+                  >
+                    <span class="w-fit rounded-full bg-navy-950/[0.07] px-3 py-1 text-[12px] font-semibold">
+                      {vacante.area}
+                    </span>
+                    <h3 class="mt-6 pr-10 text-[28px] font-semibold leading-[1.05] tracking-[-0.04em]">
+                      {vacante.titulo}
+                    </h3>
+                    <p class="mt-3 text-[14px] leading-6 opacity-75">{vacante.resumen}</p>
+                    <dl class="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-8 text-[13px] opacity-80">
+                      <div class="flex items-center gap-1.5">
+                        <dt class="sr-only">Ubicación</dt>
+                        <MapPin size={14} aria-hidden="true" />
+                        <dd>{ubicacionDe(vacante)}</dd>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <dt class="sr-only">Jornada</dt>
+                        <BriefcaseBusiness size={14} aria-hidden="true" />
+                        <dd>{jornadaLegible(vacante)}</dd>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <dt class="sr-only">Publicada</dt>
+                        <Clock size={14} aria-hidden="true" />
+                        <dd>{formatoFecha.format(vacante.fechaPublicacion)}</dd>
+                      </div>
+                    </dl>
+                  </TarjetaMuesca>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <div class="mt-12 flex flex-col items-center rounded-[28px] bg-white px-6 py-16 text-center" data-cms="listado.sinVacantes">
+            <span class="flex size-14 items-center justify-center rounded-full bg-surface-tint text-primary-700">
+              <Sparkles size={22} aria-hidden="true" />
+            </span>
+            <h3 class="mt-6 text-[24px] font-semibold text-navy-900">{listado.sinVacantes.titulo}</h3>
+            <p class="mt-2 max-w-[420px] text-[15px] leading-7 text-body">{listado.sinVacantes.descripcion}</p>
+          </div>
+        )
+      }
+    </div>
+  </section>
 
-      </div>
-
-    </section>
-
-<!-- =====================================================
-     ENVÍO DE CV - SIEMPRE VISIBLE
-====================================================== -->
-
-<section
-  class="
-    bg-white
-    px-6
-    pb-20
-    md:px-8
-    lg:px-12
-    lg:pb-24
-  "
->
-  <div
-    class="
-      relative
-      mx-auto
-      grid
-      max-w-[1320px]
-      overflow-hidden
-      rounded-[24px]
-      bg-[#073b68]
-      px-8
-      py-9
-      shadow-[0_18px_45px_rgba(7,59,104,0.15)]
-
-      md:px-10
-
-      lg:grid-cols-[1fr_1px_0.9fr_auto]
-      lg:items-center
-      lg:gap-10
-      lg:px-12
-    "
-  >
-
-    <!-- DECORACIÓN DE FONDO -->
-
-    <div
-      class="
-        pointer-events-none
-        absolute
-        -right-[90px]
-        -top-[140px]
-        h-[300px]
-        w-[300px]
-        rounded-full
-        border
-        border-white/10
-      "
-    ></div>
-
-    <div
-      class="
-        pointer-events-none
-        absolute
-        -right-[20px]
-        -top-[70px]
-        h-[160px]
-        w-[160px]
-        rounded-full
-        border
-        border-white/10
-      "
-    ></div>
-
-
-    <!-- TITULO -->
-
-    <h2
-      class="
-        relative
-        z-10
-        max-w-[390px]
-        text-[25px]
-        font-semibold
-        leading-[1.08]
-        tracking-[-0.04em]
-        text-white
-        md:text-[30px]
-      "
-    >
-      ¿No encontraste una vacante
-
-      <span class="block text-[#65c7ef]">
-        para tu perfil?
-      </span>
-    </h2>
-
-
-    <!-- DIVISOR -->
-
-    <div
-      class="
-        relative
-        z-10
-        hidden
-        h-[52px]
-        w-px
-        bg-white/25
-        lg:block
-      "
-    ></div>
-
-
-    <!-- TEXTO -->
-
-    <p
-      class="
-        relative
-        z-10
-        max-w-[360px]
-        text-[12px]
-        leading-[1.8]
-        text-white/70
-      "
-    >
-      Puedes enviarnos tu currículum para ser considerado
-      en futuras oportunidades.
-    </p>
-
-
-    <!-- BOTÓN -->
-
-    <a
-      href="mailto:rrhh.auxiliart2@reddcomca.com?subject=Currículum%20-%20Oportunidades%20Laborales"
-      class="
-        relative
-        z-10
-        inline-flex
-        h-[52px]
-        items-center
-        justify-center
-        gap-6
-        whitespace-nowrap
-        rounded-full
-        bg-[#1595d3]
-        px-7
-        text-[10px]
-        font-semibold
-        text-white
-        no-underline
-
-        transition-all
-        duration-300
-
-        hover:-translate-y-[2px]
-        hover:bg-[#20a8e6]
-        hover:shadow-[0_10px_30px_rgba(0,0,0,0.15)]
-      "
-    >
-      Enviar mi CV
-
-      <span
-        class="
-          flex
-          h-7
-          w-7
-          items-center
-          justify-center
-          rounded-full
-          bg-white
-          text-[15px]
-          text-[#087fc1]
-        "
-      >
-        →
-      </span>
-    </a>
-
-  </div>
-</section>
-
-
-  </main>
+  <BannerCta {...envioCv} seccion="envioCv" />
 </MainLayout>
+
+<script>
+  // Filtro por área: oculta las vacantes de otras áreas sin recargar.
+  document.addEventListener("astro:page-load", () => {
+    const seccion = document.querySelector<HTMLElement>("[data-vacantes]");
+    if (!seccion) return;
+
+    const filtros = [...seccion.querySelectorAll<HTMLButtonElement>("[data-filtro]")];
+    const vacantes = [...seccion.querySelectorAll<HTMLElement>("[data-area]")];
+
+    filtros.forEach((filtro) =>
+      filtro.addEventListener("click", () => {
+        const area = filtro.dataset.filtro;
+        filtros.forEach((otro) => otro.setAttribute("aria-pressed", String(otro === filtro)));
+        vacantes.forEach((vacante) => (vacante.hidden = Boolean(area) && vacante.dataset.area !== area));
+      }),
+    );
+  });
+</script>

@@ -1,0 +1,8 @@
+packages:
+  - "api/*"
+  - "apps/*"
+
+allowBuilds:
+  # Dependencia de jsPDF; su script solo imprime un mensaje de donación.
+  core-js: false
+  esbuild: true

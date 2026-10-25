@@ -1,0 +1,46 @@
+---
+import Foto from "../ui/Foto.astro";
+import { MapPin } from "@lucide/astro";
+import type { Proyecto } from "../../data/proyectos";
+
+/* Tarjeta de proyecto (ref. "Popular Destination": foto redondeada, título,
+   ubicación y una píldora azul a la derecha). Toda la tarjeta es el enlace. */
+interface Props {
+  proyecto: Proyecto;
+  class?: string;
+}
+
+const { proyecto, class: clase } = Astro.props;
+---
+
+<a
+  href={`/proyectos/${proyecto.slug}`}
+  data-anim="revelar"
+  class:list={["group block text-navy-900 no-underline", clase]}
+>
+  <div class="overflow-hidden rounded-[22px]">
+    {proyecto.imagen && (
+    <Foto
+      src={proyecto.imagen.src}
+      alt={proyecto.imagen.alt}
+      widths={[400, 720]}
+      sizes="(min-width: 768px) 380px, 90vw"
+      class="aspect-[16/11] w-full object-cover transition-[filter] duration-500 group-hover:brightness-110"
+    />
+    )}
+  </div>
+  <div class="mt-4 flex items-start justify-between gap-4 px-1">
+    <div>
+      <h3 class="text-[18px] font-semibold leading-snug transition-colors group-hover:text-primary-700">
+        {proyecto.titulo}
+      </h3>
+      <p class="mt-1 flex items-center gap-1.5 text-[12px] text-body">
+        <MapPin size={13} aria-hidden="true" />
+        {proyecto.ciudad}, {proyecto.pais}
+      </p>
+    </div>
+    <span class="shrink-0 rounded-full bg-primary-600 px-3 py-1 text-[12px] font-semibold text-white">
+      {proyecto.anio}
+    </span>
+  </div>
+</a>

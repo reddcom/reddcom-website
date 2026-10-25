@@ -1,0 +1,13 @@
+# Lo que no se sube a Vercel (misma idea que .gitignore)
+.env*
+!.env.example
+node_modules/
+dist/
+.astro/
+.vercel/
+.idea/
+.DS_Store
+
+# Backend de Convex: se despliega con `convex deploy`, no en Vercel. Sin esto,
+# Vercel toma cada archivo de /api como una función serverless.
+/api/

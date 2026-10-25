@@ -1,8 +1,28 @@
 ---
+import { getImage } from "astro:assets";
 import heroImage from "../assets/Landing/reddcom-hero.png";
+import { obtenerPagina, seccion } from "../lib/cms";
+
+/* Hero de Inicio: cada campo del CMS (registro `inicio` → Hero) reemplaza
+   al texto de prueba solo si tiene contenido. */
+const hero = seccion(await obtenerPagina("inicio"), "hero");
+const encabezado = hero.uno("encabezado", "encabezado") ?? {
+  etiqueta: "TELECOMUNICACIONES QUE CONECTAN",
+  titulo: "Infraestructura para un mejor",
+  destacado: "mañana.",
+  descripcion:
+    "Diseño, construcción y mantenimiento de redes telefónicas y soluciones de telecomunicaciones que conectan personas, empresas y comunidades.",
+};
+// Fondo CSS: no pasa por <Image>, así que getImage entrega el respaldo local en WebP.
+const imagen = hero.uno("imagen", "imagen")?.src ?? (await getImage({ src: heroImage })).src;
+const botonPrincipal = hero.uno("botonPrincipal", "enlace") ?? { texto: "Conoce nuestros servicios", url: "#servicios" };
+const botonSecundario = hero.uno("botonSecundario", "enlace") ?? { texto: "Conoce Reddcom", url: "/nosotros/nuestra-empresa" };
+const textoLateral = hero.lista("textoLateral", "texto") ?? ["MÁS CONEXIONES", "MÁS OPORTUNIDADES"];
 ---
 
 <section
+  id="hero"
+  data-cms="hero.imagen"
   class="
     relative
     min-h-[760px]
@@ -13,7 +33,7 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
     lg:min-h-[780px]
     lg:bg-[position:66%_center]
   "
-  style={`background-image: url('${heroImage.src}')`}
+  style={`background-image: url('${imagen}')`}
 >
   <!-- DEGRADADO IZQUIERDO -->
   <div
@@ -22,6 +42,9 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
       bg-[linear-gradient(90deg,rgba(247,250,252,0.98)_0%,rgba(247,250,252,0.93)_24%,rgba(247,250,252,0.65)_42%,rgba(247,250,252,0.15)_59%,rgba(247,250,252,0)_72%)]
     "
   ></div>
+
+  <!-- VELO MÓVIL: en pantallas angostas el texto cae sobre la foto -->
+  <div class="absolute inset-0 bg-surface/80 md:hidden"></div>
 
   <!-- DEGRADADO SUPERIOR -->
   <div
@@ -52,14 +75,14 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
       lg:pt-40
     "
   >
-    <div class="max-w-[610px]">
+    <div class="max-w-[610px]" data-cms="hero.encabezado">
 
       <!-- LABEL -->
       <div class="mb-6 flex items-center gap-4">
         <span
           class="
             h-px w-9
-            bg-[#087fc1]
+            bg-primary-700
           "
         ></span>
 
@@ -74,7 +97,7 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
             md:text-[11px]
           "
         >
-          TELECOMUNICACIONES QUE CONECTAN
+          {encabezado.etiqueta}
         </span>
       </div>
 
@@ -87,17 +110,14 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
           font-semibold
           leading-[1.02]
           tracking-[-0.045em]
-          text-[#123d68]
+          text-navy-800
 
           sm:text-[58px]
           md:text-[66px]
           lg:text-[72px]
         "
       >
-        Infraestructura
-        <br />
-
-        para un mejor
+        {encabezado.titulo}
 
         <span
           class="
@@ -106,7 +126,7 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
             text-[#72a4c9]
           "
         >
-          mañana.
+          {encabezado.destacado}
         </span>
       </h1>
 
@@ -124,9 +144,7 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
           md:text-[14px]
         "
       >
-        Diseño, construcción y mantenimiento de redes telefónicas
-        y soluciones de telecomunicaciones que conectan personas,
-        empresas y comunidades.
+        {encabezado.descripcion}
       </p>
 
       <!-- BOTONES -->
@@ -142,45 +160,38 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
       >
         <!-- PRINCIPAL -->
         <a
-          href="#servicios"
+          href={botonPrincipal.url}
+          data-cms="hero.botonPrincipal"
           class="
             group
             inline-flex
-            h-[52px]
+            h-12
             items-center
             justify-center
-            gap-5
-            rounded-full
+            gap-3
+            rounded-sm
             bg-[#0b4778]
-            px-7
+            px-6
             font-['Montserrat']
-            text-[11px]
+            text-sm
             font-semibold
             text-white
             no-underline
-            shadow-[0_10px_30px_rgba(11,71,120,0.18)]
-            transition-all
-            duration-300
+            transition-colors
+            duration-200
 
-            hover:-translate-y-0.5
-            hover:bg-[#087fc1]
+            hover:bg-primary-700
           "
         >
-          Conoce nuestros servicios
+          {botonPrincipal.texto}
 
           <span
+            aria-hidden="true"
             class="
-              flex
-              h-7 w-7
-              items-center
-              justify-center
-              rounded-full
-              bg-white/15
-              text-base
               transition-transform
-              duration-300
+              duration-200
 
-              group-hover:translate-x-1
+              group-hover:translate-x-0.5
             "
           >
             →
@@ -189,38 +200,38 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
 
         <!-- SECUNDARIO -->
         <a
-          href="#nosotros"
+          href={botonSecundario.url}
+          data-cms="hero.botonSecundario"
           class="
             inline-flex
-            h-[52px]
+            h-12
             items-center
             justify-center
-            rounded-full
+            rounded-sm
             border
-            border-[#173f64]/30
-            bg-white/30
-            px-7
+            border-[#173f64]/40
+            bg-white
+            px-6
             font-['Montserrat']
-            text-[11px]
+            text-sm
             font-semibold
             text-[#173f64]
             no-underline
-            backdrop-blur-sm
-            transition-all
-            duration-300
+            transition-colors
+            duration-200
 
-            hover:border-[#087fc1]
-            hover:bg-white/70
-            hover:text-[#087fc1]
+            hover:border-primary-700
+            hover:text-primary-700
           "
         >
-          Conoce Reddcom
+          {botonSecundario.texto}
         </a>
       </div>
     </div>
 
     <!-- TEXTO LATERAL -->
     <div
+      data-cms="hero.textoLateral"
       class="
         absolute
         right-12
@@ -238,14 +249,13 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
         xl:flex
       "
     >
-      <span>MÁS CONEXIONES</span>
-      <span>MÁS OPORTUNIDADES</span>
+      {textoLateral.map((linea) => <span>{linea}</span>)}
 
       <span
         class="
           mt-4
           h-px w-10
-          bg-[#087fc1]/70
+          bg-primary-700/70
         "
       ></span>
     </div>
@@ -259,7 +269,7 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
         right-6
         hidden
         items-end
-        justify-between
+        justify-end
 
         md:flex
         md:left-8
@@ -269,33 +279,9 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
         lg:right-12
       "
     >
-      <!-- INDICADOR -->
-      <div
-        class="
-          flex
-          items-center
-          gap-7
-          font-['Montserrat']
-          text-[9px]
-          font-semibold
-          tracking-wider
-          text-[#476b88]
-        "
-      >
-        <span class="text-[#087fc1]">
-          01
-        </span>
-
-        <span class="h-px w-14 bg-[#087fc1]"></span>
-
-        <span>02</span>
-
-        <span>03</span>
-      </div>
-
       <!-- SCROLL -->
       <a
-        href="#nosotros"
+        href="#servicios"
         class="
           group
           flex
@@ -314,12 +300,11 @@ import heroImage from "../assets/Landing/reddcom-hero.png";
             h-9 w-9
             items-center
             justify-center
-            rounded-full
+            rounded-sm
             border border-white/70
-            backdrop-blur-sm
-            transition
+            transition-colors
             group-hover:bg-white
-            group-hover:text-[#123d68]
+            group-hover:text-navy-800
           "
         >
           ↓

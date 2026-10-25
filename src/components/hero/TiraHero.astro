@@ -1,0 +1,24 @@
+---
+/* Tira bajo el hero (ref. fila de logos "airbnb · Booking · trivago"): una píldora
+   y las especialidades en gris grande, como si fueran marcas. */
+interface Props {
+  etiqueta?: string;
+  palabras: string[];
+  cms?: string; // campos del CMS que se pintan aquí (resaltado en la vista previa)
+}
+
+const { etiqueta = "Especialidades", palabras, cms } = Astro.props;
+---
+
+<div
+  data-anim="revelar"
+  data-cms={cms}
+  class="mx-auto flex max-w-[1320px] flex-wrap items-center gap-x-10 gap-y-4 px-6 py-9 md:px-8 lg:justify-between lg:px-12"
+>
+  <span
+    class="rounded-full border border-navy-900/15 bg-white px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-navy-900"
+  >
+    {etiqueta}
+  </span>
+  {palabras.map((palabra) => <span class="text-[19px] font-semibold tracking-[-0.03em] text-navy-900/35">{palabra}</span>)}
+</div>
